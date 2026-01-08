@@ -1,0 +1,408 @@
+{
+  "_comment": "Era-specific cards for Equilibrium: A Durkheim Solidarity Game",
+  "_instructions": "Cards are organized by era. 'traditional' cards appear in mechanical solidarity societies, 'transitional' during the shift, 'modern' in organic solidarity societies, and 'universal' can appear anytime.",
+  "traditional": [
+    {
+      "character": "Village Elder",
+      "text": "The harvest festival has always united our community. Some young people want to skip the rituals and focus on trade instead.",
+      "choiceA": { "text": "Preserve the festival", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Allow individual choice", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -5, "innovation": 10 } }
+    },
+    {
+      "character": "Religious Leader",
+      "text": "The sacred texts have guided our laws for generations. A merchant class is emerging that wants secular commercial codes.",
+      "choiceA": { "text": "Religious law remains supreme", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 15, "innovation": -15 } },
+      "choiceB": { "text": "Allow commercial codes", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -10, "innovation": 15 } }
+    },
+    {
+      "character": "Guild Master",
+      "text": "Our craft guilds have maintained quality and brotherhood for centuries. Some apprentices want to leave and start their own workshops.",
+      "choiceA": { "text": "Enforce guild membership", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -15 } },
+      "choiceB": { "text": "Allow free enterprise", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": -10, "innovation": 20 } }
+    },
+    {
+      "character": "Community Matriarch",
+      "text": "Marriages have always been arranged by families to strengthen community bonds. Young people are demanding to choose their own partners.",
+      "choiceA": { "text": "Families decide marriages", "effects": { "solidarity": 15, "productivity": 0, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Individual choice in marriage", "effects": { "solidarity": -15, "productivity": 5, "legitimacy": -10, "innovation": 15 } }
+    },
+    {
+      "character": "Tribal Chief",
+      "text": "Punishment for crimes has always been public and severe - it reinforces our shared values. Some argue for more private, proportional justice.",
+      "choiceA": { "text": "Maintain public punishment", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 15, "innovation": -15 } },
+      "choiceB": { "text": "Reform to proportional justice", "effects": { "solidarity": -10, "productivity": 5, "legitimacy": -10, "innovation": 15 } }
+    },
+    {
+      "character": "Temple Priest",
+      "text": "Every family must contribute labor to build the new temple. Some wealthy families want to pay money instead of working alongside others.",
+      "choiceA": { "text": "All must labor equally", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 15, "innovation": -10 } },
+      "choiceB": { "text": "Allow monetary contributions", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -5, "innovation": 10 } }
+    },
+    {
+      "character": "Council of Elders",
+      "text": "Outsiders wish to settle in our community. They bring useful skills but different customs and beliefs.",
+      "choiceA": { "text": "Require full assimilation", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Welcome diverse practices", "effects": { "solidarity": -20, "productivity": 10, "legitimacy": -10, "innovation": 20 } }
+    },
+    {
+      "character": "Village Healer",
+      "text": "Healing has always combined herbal remedies with spiritual rituals. A traveling physician offers medicine without the sacred elements.",
+      "choiceA": { "text": "Traditional healing only", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -15 } },
+      "choiceB": { "text": "Allow secular medicine", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -5, "innovation": 15 } }
+    },
+    {
+      "character": "Clan Patriarch",
+      "text": "Land has always been held communally by the clan. Some families want individual ownership to improve their plots.",
+      "choiceA": { "text": "Maintain communal land", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Allow private ownership", "effects": { "solidarity": -25, "productivity": 20, "legitimacy": -15, "innovation": 15 } }
+    },
+    {
+      "character": "Master Craftsman",
+      "text": "Our techniques have been passed down for generations, taught only to those who complete the sacred apprenticeship. Outsiders want to learn.",
+      "choiceA": { "text": "Protect sacred knowledge", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -15 } },
+      "choiceB": { "text": "Share techniques openly", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -10, "innovation": 20 } }
+    },
+    {
+      "character": "Shepherd Elder",
+      "text": "The mountain pastures have always been shared by all herders following ancient customs. Some want to fence off sections for themselves.",
+      "choiceA": { "text": "Keep commons open", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -5 } },
+      "choiceB": { "text": "Allow enclosures", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": -15, "innovation": 10 } }
+    },
+    {
+      "character": "Oral Historian",
+      "text": "Our stories and laws live in memory, passed down through recitation. Scholars want to write them down, but this would change who controls knowledge.",
+      "choiceA": { "text": "Keep oral tradition", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": 10, "innovation": -15 } },
+      "choiceB": { "text": "Create written records", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -5, "innovation": 20 } }
+    },
+    {
+      "character": "Feast Organizer",
+      "text": "Our communal meals ensure no one goes hungry and all share equally. Wealthy families want to host private banquets to display status.",
+      "choiceA": { "text": "Communal meals only", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Allow private feasts", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -10, "innovation": 10 } }
+    },
+    {
+      "character": "Youth Representative",
+      "text": "Young people have always learned by working alongside their parents. Some want to study with specialized teachers in distant towns.",
+      "choiceA": { "text": "Learn within family", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -15 } },
+      "choiceB": { "text": "Allow distant education", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -5, "innovation": 20 } }
+    },
+    {
+      "character": "Boundary Keeper",
+      "text": "Our territory has sacred boundaries marked by our ancestors. Neighboring communities propose redrawing lines for more efficient farming.",
+      "choiceA": { "text": "Sacred boundaries remain", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 15, "innovation": -10 } },
+      "choiceB": { "text": "Practical boundaries", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -10, "innovation": 10 } }
+    }
+  ],
+  "transitional": [
+    {
+      "character": "Factory Owner",
+      "text": "My textile mill can employ hundreds, but workers must leave their villages and work on schedules, not seasons. This will transform how people live.",
+      "choiceA": { "text": "Encourage factory work", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": -10, "innovation": 20 } },
+      "choiceB": { "text": "Protect cottage industry", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -15 } }
+    },
+    {
+      "character": "Railroad Entrepreneur",
+      "text": "Railways will connect distant regions, enabling trade and movement. But they will also disrupt local markets and traditional travel patterns.",
+      "choiceA": { "text": "Build the railways", "effects": { "solidarity": -15, "productivity": 25, "legitimacy": -5, "innovation": 20 } },
+      "choiceB": { "text": "Limit rail expansion", "effects": { "solidarity": 10, "productivity": -15, "legitimacy": -5, "innovation": -15 } }
+    },
+    {
+      "character": "Labor Organizer",
+      "text": "Factory workers are forming unions to protect their interests. This is a new form of association based on occupation, not family or village.",
+      "choiceA": { "text": "Recognize unions", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 10, "innovation": 10 } },
+      "choiceB": { "text": "Ban worker associations", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -15, "innovation": -5 } }
+    },
+    {
+      "character": "Education Reformer",
+      "text": "We propose universal public schooling. Children will learn standard curricula instead of family trades, creating shared national identity.",
+      "choiceA": { "text": "Establish public schools", "effects": { "solidarity": 5, "productivity": 10, "legitimacy": 15, "innovation": 15 } },
+      "choiceB": { "text": "Keep family-based learning", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": -10, "innovation": -15 } }
+    },
+    {
+      "character": "City Planner",
+      "text": "Migrants are flooding into cities seeking factory work. We can build dense housing efficiently, or try to recreate village-like neighborhoods.",
+      "choiceA": { "text": "Efficient high-density", "effects": { "solidarity": -20, "productivity": 20, "legitimacy": -5, "innovation": 15 } },
+      "choiceB": { "text": "Community-centered design", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -5 } }
+    },
+    {
+      "character": "Professional Association",
+      "text": "Doctors, lawyers, and engineers want to form professional bodies with their own ethical codes and standards. This creates new sources of authority.",
+      "choiceA": { "text": "Charter professional bodies", "effects": { "solidarity": 5, "productivity": 10, "legitimacy": 10, "innovation": 15 } },
+      "choiceB": { "text": "State controls professions", "effects": { "solidarity": -5, "productivity": -5, "legitimacy": 15, "innovation": -10 } }
+    },
+    {
+      "character": "Banking Reformer",
+      "text": "A central bank could standardize currency and enable large-scale investment. But it concentrates power away from local communities.",
+      "choiceA": { "text": "Establish central bank", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": 0, "innovation": 15 } },
+      "choiceB": { "text": "Keep local currencies", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": -10, "innovation": -10 } }
+    },
+    {
+      "character": "Newspaper Publisher",
+      "text": "The printing press allows mass communication. People can now form opinions from reading rather than community discussion.",
+      "choiceA": { "text": "Encourage free press", "effects": { "solidarity": -10, "productivity": 5, "legitimacy": -10, "innovation": 20 } },
+      "choiceB": { "text": "Restrict publications", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": 15, "innovation": -20 } }
+    },
+    {
+      "character": "Factory Inspector",
+      "text": "Working conditions in mills are dangerous. We could set safety standards, but this creates new bureaucratic oversight of private enterprise.",
+      "choiceA": { "text": "Implement safety laws", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 15, "innovation": 5 } },
+      "choiceB": { "text": "Let markets self-regulate", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -15, "innovation": 10 } }
+    },
+    {
+      "character": "Agricultural Scientist",
+      "text": "New farming techniques could double yields but require individual farms, not communal fields. The village system would end.",
+      "choiceA": { "text": "Modernize agriculture", "effects": { "solidarity": -25, "productivity": 25, "legitimacy": -10, "innovation": 20 } },
+      "choiceB": { "text": "Preserve village farming", "effects": { "solidarity": 20, "productivity": -20, "legitimacy": 10, "innovation": -15 } }
+    },
+    {
+      "character": "Civil Registrar",
+      "text": "We propose government registration of births, marriages, and deaths - currently handled by religious authorities. This secularizes key life events.",
+      "choiceA": { "text": "Civil registration", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": 15, "innovation": 10 } },
+      "choiceB": { "text": "Religious records only", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": -10, "innovation": -10 } }
+    },
+    {
+      "character": "Mutual Aid Founder",
+      "text": "Workers are forming friendly societies for insurance and support - replacing what families once provided. Should we encourage or regulate these?",
+      "choiceA": { "text": "Support mutual aid", "effects": { "solidarity": 15, "productivity": 5, "legitimacy": 5, "innovation": 10 } },
+      "choiceB": { "text": "State-run welfare only", "effects": { "solidarity": -5, "productivity": -5, "legitimacy": 20, "innovation": -5 } }
+    },
+    {
+      "character": "Telegraph Operator",
+      "text": "Instant communication across distances will transform commerce and government. Information will no longer be limited by geography.",
+      "choiceA": { "text": "Expand telegraph network", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": 0, "innovation": 20 } },
+      "choiceB": { "text": "Limit to government use", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": 15, "innovation": -10 } }
+    },
+    {
+      "character": "Social Reformer",
+      "text": "The old poor laws assumed tight-knit communities would care for their own. Urban poverty requires new, impersonal systems of relief.",
+      "choiceA": { "text": "Modern welfare system", "effects": { "solidarity": -5, "productivity": -10, "legitimacy": 15, "innovation": 10 } },
+      "choiceB": { "text": "Community-based charity", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": -10, "innovation": -10 } }
+    },
+    {
+      "character": "Contract Lawyer",
+      "text": "Commerce increasingly runs on written contracts between strangers, not handshake deals between neighbors. We need contract law reform.",
+      "choiceA": { "text": "Formalize contract law", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": 15, "innovation": 10 } },
+      "choiceB": { "text": "Trust local custom", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": -10, "innovation": -10 } }
+    },
+    {
+      "character": "Urban Missionary",
+      "text": "Traditional religion struggles in cities where people don't know their neighbors. New denominations offer community to the displaced.",
+      "choiceA": { "text": "Support new denominations", "effects": { "solidarity": 10, "productivity": 0, "legitimacy": -10, "innovation": 10 } },
+      "choiceB": { "text": "Strengthen state church", "effects": { "solidarity": 5, "productivity": 0, "legitimacy": 15, "innovation": -15 } }
+    },
+    {
+      "character": "Time Standardizer",
+      "text": "Every town keeps its own time based on the sun. Railways need standardized time zones. This will change how people experience daily life.",
+      "choiceA": { "text": "Standardize time", "effects": { "solidarity": -5, "productivity": 15, "legitimacy": 10, "innovation": 15 } },
+      "choiceB": { "text": "Keep local time", "effects": { "solidarity": 10, "productivity": -15, "legitimacy": -5, "innovation": -10 } }
+    },
+    {
+      "character": "Department Store Owner",
+      "text": "My store offers everything under one roof with fixed prices - no haggling, no personal relationships. Shopping becomes anonymous and efficient.",
+      "choiceA": { "text": "Encourage retail innovation", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": 0, "innovation": 15 } },
+      "choiceB": { "text": "Protect small shopkeepers", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 5, "innovation": -10 } }
+    }
+  ],
+  "modern": [
+    {
+      "character": "AI Ethicist",
+      "text": "Autonomous AI is developing rapidly. We should place a moratorium on its development until we understand the risks.",
+      "choiceA": { "text": "Pause AI research", "effects": { "solidarity": 5, "productivity": -15, "legitimacy": 10, "innovation": -25 } },
+      "choiceB": { "text": "Accelerate AI", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": -10, "innovation": 25 } }
+    },
+    {
+      "character": "Automation Engineer",
+      "text": "We can automate the entire manufacturing sector, leading to immense productivity gains but mass unemployment.",
+      "choiceA": { "text": "Fully automate", "effects": { "solidarity": -25, "productivity": 30, "legitimacy": -15, "innovation": 20 } },
+      "choiceB": { "text": "Tax automation", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -10 } }
+    },
+    {
+      "character": "Data Scientist",
+      "text": "We can use predictive policing algorithms to allocate police resources, but they may perpetuate existing biases.",
+      "choiceA": { "text": "Use predictive policing", "effects": { "solidarity": -15, "productivity": 5, "legitimacy": -5, "innovation": 10 } },
+      "choiceB": { "text": "Reject biased algorithms", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": -10, "innovation": -5 } }
+    },
+    {
+      "character": "Futurist",
+      "text": "Let's begin research into cybernetic enhancements for humans to transcend our biological limitations.",
+      "choiceA": { "text": "Fund cybernetics", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": -10, "innovation": 25 } },
+      "choiceB": { "text": "Remain purely human", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -20 } }
+    },
+    {
+      "character": "Longevity Researcher",
+      "text": "We are close to technology that could dramatically extend the human lifespan, but it will only be available to the ultra-rich at first.",
+      "choiceA": { "text": "Develop longevity tech", "effects": { "solidarity": -25, "productivity": 15, "legitimacy": -15, "innovation": 20 } },
+      "choiceB": { "text": "Focus on health for all", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -10 } }
+    },
+    {
+      "character": "Child Psychologist",
+      "text": "Social media is harming youth mental health. We should ban anyone under 16 from using these platforms.",
+      "choiceA": { "text": "Ban for under 16s", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -10 } },
+      "choiceB": { "text": "Promote digital literacy", "effects": { "solidarity": -10, "productivity": 0, "legitimacy": -5, "innovation": 10 } }
+    },
+    {
+      "character": "Privacy Advocate",
+      "text": "Corporations are collecting vast amounts of personal data. We should enact strict data privacy laws like GDPR.",
+      "choiceA": { "text": "Enact privacy laws", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 15, "innovation": -5 } },
+      "choiceB": { "text": "Allow data collection", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": -10, "innovation": 10 } }
+    },
+    {
+      "character": "Gig Economy Worker",
+      "text": "App-based gig workers lack benefits and job security. Should we classify them as employees, not independent contractors?",
+      "choiceA": { "text": "Classify as employees", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -5 } },
+      "choiceB": { "text": "Keep as contractors", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -5, "innovation": 5 } }
+    },
+    {
+      "character": "Remote Work Advocate",
+      "text": "Workers want to work from home permanently. This offers flexibility but may erode workplace community and mentorship.",
+      "choiceA": { "text": "Embrace remote work", "effects": { "solidarity": -20, "productivity": 10, "legitimacy": -5, "innovation": 10 } },
+      "choiceB": { "text": "Require office presence", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": -5, "innovation": -5 } }
+    },
+    {
+      "character": "Platform Economist",
+      "text": "Giant tech platforms dominate commerce, creating efficient markets but concentrating power in few hands.",
+      "choiceA": { "text": "Break up tech giants", "effects": { "solidarity": 10, "productivity": -15, "legitimacy": 15, "innovation": -10 } },
+      "choiceB": { "text": "Allow platform growth", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -15, "innovation": 15 } }
+    },
+    {
+      "character": "Cryptocurrency Advocate",
+      "text": "Decentralized currencies could free people from state monetary control, but also enable crime and instability.",
+      "choiceA": { "text": "Ban cryptocurrency", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": 20, "innovation": -20 } },
+      "choiceB": { "text": "Allow crypto markets", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -15, "innovation": 20 } }
+    },
+    {
+      "character": "Genetic Counselor",
+      "text": "Parents can now select embryos for desired traits. This could reduce disease but raises questions about designer babies.",
+      "choiceA": { "text": "Allow genetic selection", "effects": { "solidarity": -20, "productivity": 10, "legitimacy": -10, "innovation": 20 } },
+      "choiceB": { "text": "Ban embryo selection", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": 10, "innovation": -15 } }
+    },
+    {
+      "character": "Virtual Reality Developer",
+      "text": "Immersive virtual worlds offer new forms of community and experience, but people may retreat from physical society.",
+      "choiceA": { "text": "Invest in VR spaces", "effects": { "solidarity": -15, "productivity": 5, "legitimacy": -5, "innovation": 20 } },
+      "choiceB": { "text": "Prioritize physical spaces", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 5, "innovation": -10 } }
+    },
+    {
+      "character": "Climate Engineer",
+      "text": "Geoengineering could cool the planet, but the technology is untested and would affect all nations without their consent.",
+      "choiceA": { "text": "Deploy geoengineering", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": -20, "innovation": 25 } },
+      "choiceB": { "text": "Focus on emissions cuts", "effects": { "solidarity": 10, "productivity": -15, "legitimacy": 10, "innovation": -5 } }
+    },
+    {
+      "character": "Global Governance Expert",
+      "text": "Problems like climate and pandemics require global institutions with real power. Should we cede some national sovereignty?",
+      "choiceA": { "text": "Strengthen global bodies", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -15, "innovation": 15 } },
+      "choiceB": { "text": "Maintain national control", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 15, "innovation": -10 } }
+    }
+  ],
+  "universal": [
+    {
+      "character": "Education Advisor",
+      "text": "To boost our global standing, we propose a mandatory 'National Curriculum' focusing entirely on STEM fields. This will create a highly skilled workforce.",
+      "choiceA": { "text": "Implement STEM focus", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": 0, "innovation": 10 } },
+      "choiceB": { "text": "Keep balanced curriculum", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 0, "innovation": -5 } }
+    },
+    {
+      "character": "Treasury Secretary",
+      "text": "The economy is slowing. We need to act! We propose massive deregulation for all major industries to spur investment and growth immediately.",
+      "choiceA": { "text": "Deregulate industries", "effects": { "solidarity": -15, "productivity": 25, "legitimacy": -20, "innovation": 5 } },
+      "choiceB": { "text": "Maintain regulations", "effects": { "solidarity": 5, "productivity": -15, "legitimacy": 15, "innovation": 0 } }
+    },
+    {
+      "character": "Healthcare Reformer",
+      "text": "Let's implement a single-payer universal healthcare system. It ensures everyone is covered, but taxes will rise significantly.",
+      "choiceA": { "text": "Universal Healthcare", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 15, "innovation": 0 } },
+      "choiceB": { "text": "Private System", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -10, "innovation": 5 } }
+    },
+    {
+      "character": "Chief Justice",
+      "text": "Our prisons are overcrowded. Should we focus on harsh punishment to deter crime, or rehabilitation to reintegrate offenders?",
+      "choiceA": { "text": "Punishment focus", "effects": { "solidarity": -10, "productivity": 0, "legitimacy": 15, "innovation": -10 } },
+      "choiceB": { "text": "Rehabilitation focus", "effects": { "solidarity": 15, "productivity": 5, "legitimacy": -10, "innovation": 10 } }
+    },
+    {
+      "character": "Trade Negotiator",
+      "text": "A new global trade deal offers cheaper goods but will outsource thousands of domestic jobs. Do we sign it?",
+      "choiceA": { "text": "Sign the deal", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -10, "innovation": 5 } },
+      "choiceB": { "text": "Protect local jobs", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -5 } }
+    },
+    {
+      "character": "Union Representative",
+      "text": "Workers are demanding a universal basic income to ensure stability in an automated world. It will be costly but will increase social cohesion.",
+      "choiceA": { "text": "Implement UBI", "effects": { "solidarity": 25, "productivity": -20, "legitimacy": 10, "innovation": 0 } },
+      "choiceB": { "text": "Reject UBI", "effects": { "solidarity": -20, "productivity": 10, "legitimacy": -10, "innovation": 5 } }
+    },
+    {
+      "character": "Environmental Activist",
+      "text": "We must pass a stringent carbon tax to combat climate change. It will hurt industries in the short term but save the planet.",
+      "choiceA": { "text": "Pass the carbon tax", "effects": { "solidarity": 10, "productivity": -20, "legitimacy": 15, "innovation": 10 } },
+      "choiceB": { "text": "Subsidize green tech instead", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": -5, "innovation": 15 } }
+    },
+    {
+      "character": "Populist Leader",
+      "text": "We must severely restrict immigration to 'preserve our national culture and protect jobs.' The people demand it!",
+      "choiceA": { "text": "Restrict immigration", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -20 } },
+      "choiceB": { "text": "Keep borders open", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": -15, "innovation": 15 } }
+    },
+    {
+      "character": "University President",
+      "text": "Should university admissions be based purely on merit and test scores, or should we use affirmative action to promote diversity?",
+      "choiceA": { "text": "Pure meritocracy", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": 10, "innovation": 5 } },
+      "choiceB": { "text": "Affirmative action", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": -10, "innovation": 0 } }
+    },
+    {
+      "character": "Housing Advocate",
+      "text": "Let's implement strict rent control in major cities to make housing affordable.",
+      "choiceA": { "text": "Implement rent control", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -5 } },
+      "choiceB": { "text": "Let the market decide", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -10, "innovation": 0 } }
+    },
+    {
+      "character": "Energy CEO",
+      "text": "Nuclear power offers clean, abundant energy but carries the risk of a catastrophic accident and nuclear waste.",
+      "choiceA": { "text": "Invest in nuclear", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": -10, "innovation": 15 } },
+      "choiceB": { "text": "Focus on renewables", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": 10, "innovation": 10 } }
+    },
+    {
+      "character": "Public Transit Planner",
+      "text": "We should invest heavily in free, high-speed public transportation to reduce traffic and pollution.",
+      "choiceA": { "text": "Fund public transit", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": 5 } },
+      "choiceB": { "text": "Invest in roads", "effects": { "solidarity": -5, "productivity": 10, "legitimacy": -5, "innovation": 0 } }
+    },
+    {
+      "character": "Labor Organizer",
+      "text": "A mandatory 4-day work week would improve work-life balance and mental health, but may reduce overall productivity.",
+      "choiceA": { "text": "Mandate 4-day week", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": 5 } },
+      "choiceB": { "text": "Keep 5-day week", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -5, "innovation": 0 } }
+    },
+    {
+      "character": "Pharmaceutical CEO",
+      "text": "We can allow the sale of life-saving drugs at high prices to fund future research, or we can cap prices to make them affordable now.",
+      "choiceA": { "text": "High prices for R&D", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -10, "innovation": 20 } },
+      "choiceB": { "text": "Cap drug prices", "effects": { "solidarity": 20, "productivity": -10, "legitimacy": 15, "innovation": -15 } }
+    },
+    {
+      "character": "Foreign Diplomat",
+      "text": "We should increase foreign aid to developing nations to foster goodwill and stability, even if we have problems at home.",
+      "choiceA": { "text": "Increase foreign aid", "effects": { "solidarity": -10, "productivity": -10, "legitimacy": 15, "innovation": 5 } },
+      "choiceB": { "text": "Focus on domestic issues", "effects": { "solidarity": 10, "productivity": 5, "legitimacy": -10, "innovation": -5 } }
+    },
+    {
+      "character": "Historian",
+      "text": "A movement wants to tear down statues of controversial historical figures. Should we remove them or keep them as historical lessons?",
+      "choiceA": { "text": "Remove the statues", "effects": { "solidarity": 15, "productivity": 0, "legitimacy": -10, "innovation": 5 } },
+      "choiceB": { "text": "Preserve history", "effects": { "solidarity": -15, "productivity": 0, "legitimacy": 10, "innovation": -5 } }
+    },
+    {
+      "character": "Libertarian Thinker",
+      "text": "Taxation is theft. We should abolish all taxes and let the free market and charity handle societal needs.",
+      "choiceA": { "text": "Abolish taxes", "effects": { "solidarity": -30, "productivity": 25, "legitimacy": -30, "innovation": 5 } },
+      "choiceB": { "text": "Maintain tax system", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 15, "innovation": 0 } }
+    },
+    {
+      "character": "Animal Rights Activist",
+      "text": "We demand a complete ban on factory farming due to its cruelty and environmental impact.",
+      "choiceA": { "text": "Ban factory farming", "effects": { "solidarity": 15, "productivity": -20, "legitimacy": 10, "innovation": 5 } },
+      "choiceB": { "text": "Subsidize factory farms", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": -5, "innovation": -5 } }
+    }
+  ]
+}

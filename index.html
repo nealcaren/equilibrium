@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equilibrium: A Durkheim Solidarity Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+        .card {
+            transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+        .card-container.player-turn .choice-box:hover {
+            transform: translateY(-4px);
+            border-color: #22d3ee; /* cyan-400 */
+        }
+        .card-swipe-left {
+            transform: translateX(-150%) rotate(-15deg);
+            opacity: 0;
+        }
+        .card-swipe-right {
+            transform: translateX(150%) rotate(15deg);
+            opacity: 0;
+        }
+        .modal, .overlay {
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+        .status-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .status-icon.danger {
+            transform: scale(1.2);
+            color: #ef4444; /* red-500 */
+        }
+        .choice-box {
+             transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+             cursor: pointer;
+        }
+        .solidarity-spectrum {
+            background: linear-gradient(to right, #a855f7, #6366f1, #22d3ee, #22c55e);
+            position: relative;
+        }
+        .solidarity-marker {
+            transition: left 0.5s ease-in-out;
+        }
+        .anomie-warning {
+            animation: anomie-pulse 1s ease-in-out infinite;
+        }
+        @keyframes anomie-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .era-notification {
+            animation: era-slide-in 0.5s ease-out;
+        }
+        @keyframes era-slide-in {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-lg mx-auto p-4 md:p-6 relative">
+        <header class="text-center mb-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-cyan-400">Equilibrium</h1>
+            <p id="subtitle" class="text-gray-400">Observing a Society in Balance...</p>
+            <div class="mt-3 flex justify-center items-center gap-4">
+                <div class="text-xl font-semibold bg-gray-800 rounded-lg px-3 py-1">
+                    Year: <span id="year-counter">2024</span>
+                </div>
+                <div id="era-badge" class="text-sm font-semibold bg-purple-600 rounded-lg px-3 py-1">
+                    Traditional Era
+                </div>
+            </div>
+
+            <!-- Solidarity Type Spectrum -->
+            <div class="mt-4 bg-gray-800 rounded-lg p-3">
+                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                    <span>Mechanical Solidarity</span>
+                    <span>Organic Solidarity</span>
+                </div>
+                <div class="solidarity-spectrum h-3 rounded-full relative">
+                    <div id="solidarity-marker" class="solidarity-marker absolute w-4 h-4 bg-white rounded-full border-2 border-gray-900 -top-0.5" style="left: 25%;"></div>
+                </div>
+                <p id="solidarity-type-label" class="text-sm text-purple-400 mt-2 font-semibold">Mechanical Solidarity</p>
+                <p id="solidarity-description" class="text-xs text-gray-500 mt-1">Strong collective conscience, shared beliefs</p>
+            </div>
+
+            <!-- Anomie Warning -->
+            <div id="anomie-warning" class="hidden anomie-warning mt-3 bg-red-900 border border-red-500 rounded-lg p-2">
+                <p class="text-red-400 font-semibold text-sm">ANOMIE WARNING</p>
+                <p class="text-red-300 text-xs">Change is outpacing moral regulation - norms are breaking down faster than new ones can form</p>
+            </div>
+        </header>
+
+        <!-- Meters -->
+        <main class="space-y-2 mb-4">
+            <div id="meters-container" class="space-y-2">
+                <!-- Meters will be dynamically generated here -->
+            </div>
+        </main>
+
+        <!-- Card -->
+        <div id="card-container" class="relative h-56">
+            <div id="card" class="card absolute inset-0 bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl flex flex-col justify-between">
+                <div>
+                    <h3 id="card-character" class="font-semibold text-cyan-400 mb-2">Loading...</h3>
+                    <p id="card-text" class="text-gray-300">The simulation is preparing the first scenario.</p>
+                </div>
+                <div class="flex justify-between text-center mt-4">
+                    <div id="choice-a-div" class="w-1/2 pr-2">
+                        <div id="choice-a-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
+                    </div>
+                    <div id="choice-b-div" class="w-1/2 pl-2">
+                        <div id="choice-b-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Era Transition Notification -->
+    <div id="era-notification" class="fixed top-0 left-0 right-0 z-50 hidden">
+        <div class="era-notification bg-gradient-to-r from-purple-900 to-indigo-900 border-b-2 border-purple-500 p-4 text-center">
+            <h3 id="era-title" class="text-xl font-bold text-purple-300">Era Transition</h3>
+            <p id="era-description" class="text-gray-300 text-sm mt-1">Your society is changing...</p>
+            <p id="era-quote" class="text-purple-400 text-xs italic mt-2">"Quote from Durkheim"</p>
+        </div>
+    </div>
+
+    <!-- Start Game Overlay -->
+    <div id="start-overlay" class="overlay fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md w-full text-center transform scale-100 transition-transform">
+            <h2 class="text-4xl font-bold text-cyan-400 mb-4">Equilibrium</h2>
+            <p class="text-purple-400 font-semibold mb-2">A Durkheim Solidarity Game</p>
+            <p class="text-gray-300 mb-2">Guide your society through the great transition from <span class="text-purple-400">mechanical</span> to <span class="text-green-400">organic</span> solidarity.</p>
+            <p class="text-gray-400 text-sm mb-4">In mechanical solidarity, people are bound by <em>similarity</em>. In organic solidarity, they're bound by <em>interdependence</em>. Your challenge: increase specialization while maintaining social cohesion.</p>
+            <div class="bg-gray-700 rounded-lg p-3 mb-4 text-left text-sm">
+                <p class="text-cyan-400 font-semibold mb-1">Win Condition:</p>
+                <p class="text-gray-300 mb-1">Reach year 100 with:</p>
+                <ul class="text-gray-400 text-xs ml-3 list-disc">
+                    <li>High division of labor (specialization)</li>
+                    <li>Maintained social cohesion (new bonds replace old)</li>
+                    <li>Stable moral regulation (norms adapt to change)</li>
+                </ul>
+                <p class="text-red-400 text-xs mt-2">Beware anomie: when change outpaces moral regulation!</p>
+            </div>
+            <button id="start-player-game-btn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors w-full text-lg mb-3">
+                Begin the Transition
+            </button>
+            <button id="view-leaderboard-btn" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors w-full text-sm">
+                View Leaderboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal (Collapse) -->
+    <div id="game-over-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 opacity-0 invisible">
+        <div class="bg-gray-800 rounded-2xl shadow-xl p-6 max-w-md w-full text-center transform scale-95 transition-transform">
+            <h2 class="text-3xl font-bold text-red-500 mb-2" id="collapse-title">Societal Collapse!</h2>
+            <p class="text-gray-400 mb-2">You guided society for <span id="final-year" class="font-bold text-white">0</span> years.</p>
+            <p id="collapse-reason" class="text-lg text-cyan-400 font-semibold mb-3"></p>
+
+            <!-- Reflection Section -->
+            <div class="bg-gray-700 rounded-lg p-4 mb-4 text-left">
+                <p class="text-purple-400 font-semibold text-sm mb-2">Reflection:</p>
+                <p id="reflection-question" class="text-gray-300 text-sm mb-2"></p>
+                <p id="durkheim-quote" class="text-gray-400 text-xs italic border-l-2 border-purple-500 pl-3"></p>
+            </div>
+
+            <div class="flex gap-2">
+                <button id="play-again-btn" class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                    Try Again
+                </button>
+                <button id="collapse-leaderboard-btn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors">
+                    Leaderboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 opacity-0 invisible">
+        <div class="bg-gradient-to-b from-gray-800 to-green-900 rounded-2xl shadow-xl p-6 max-w-md w-full text-center transform scale-95 transition-transform border border-green-500">
+            <h2 class="text-3xl font-bold text-green-400 mb-2">Organic Solidarity Achieved!</h2>
+            <p class="text-gray-300 mb-2">You successfully navigated the great transformation!</p>
+            <p class="text-gray-400 mb-4">Final Year: <span id="victory-year" class="font-bold text-white">2100</span></p>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 mb-4 text-left">
+                <p class="text-green-400 font-semibold text-sm mb-2">What You Accomplished:</p>
+                <p class="text-gray-300 text-sm mb-2">Your society developed a complex division of labor while maintaining social cohesion. People are now bound together by their <em>interdependence</em> rather than their <em>similarity</em>.</p>
+                <p class="text-gray-400 text-xs italic">"The division of labor is the source of civilization... it creates among men a system of rights and duties which binds them together in a durable way." - Durkheim</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-gray-400 text-sm block mb-1">Enter your name for the leaderboard:</label>
+                <input type="text" id="winner-name" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-green-500 focus:outline-none" placeholder="Your name" maxlength="20">
+            </div>
+
+            <button id="submit-score-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full">
+                Submit Score & View Leaderboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 opacity-0 invisible">
+        <div class="bg-gray-800 rounded-2xl shadow-xl p-6 max-w-md w-full text-center transform scale-95 transition-transform">
+            <h2 class="text-2xl font-bold text-cyan-400 mb-4">Leaderboard</h2>
+            <div id="leaderboard-content" class="mb-4 max-h-64 overflow-y-auto">
+                <!-- Leaderboard entries will be inserted here -->
+            </div>
+            <button id="close-leaderboard-btn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM ELEMENTS ---
+        const yearCounterEl = document.getElementById('year-counter');
+        const metersContainerEl = document.getElementById('meters-container');
+        const cardContainerEl = document.getElementById('card-container');
+        const cardEl = document.getElementById('card');
+        const cardCharacterEl = document.getElementById('card-character');
+        const cardTextEl = document.getElementById('card-text');
+        const choiceADiv = document.getElementById('choice-a-div');
+        const choiceBDiv = document.getElementById('choice-b-div');
+        const choiceATextEl = document.getElementById('choice-a-text');
+        const choiceBTextEl = document.getElementById('choice-b-text');
+        const gameOverModalEl = document.getElementById('game-over-modal');
+        const finalYearEl = document.getElementById('final-year');
+        const collapseReasonEl = document.getElementById('collapse-reason');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const startOverlayEl = document.getElementById('start-overlay');
+        const startPlayerGameBtn = document.getElementById('start-player-game-btn');
+        const subtitleEl = document.getElementById('subtitle');
+
+        // New DOM Elements
+        const eraBadgeEl = document.getElementById('era-badge');
+        const solidarityMarkerEl = document.getElementById('solidarity-marker');
+        const solidarityTypeLabelEl = document.getElementById('solidarity-type-label');
+        const solidarityDescriptionEl = document.getElementById('solidarity-description');
+        const anomieWarningEl = document.getElementById('anomie-warning');
+        const eraNotificationEl = document.getElementById('era-notification');
+        const eraTitleEl = document.getElementById('era-title');
+        const eraDescriptionEl = document.getElementById('era-description');
+        const eraQuoteEl = document.getElementById('era-quote');
+        const reflectionQuestionEl = document.getElementById('reflection-question');
+        const durkheimQuoteEl = document.getElementById('durkheim-quote');
+        const victoryModalEl = document.getElementById('victory-modal');
+        const victoryYearEl = document.getElementById('victory-year');
+        const winnerNameEl = document.getElementById('winner-name');
+        const submitScoreBtn = document.getElementById('submit-score-btn');
+        const leaderboardModalEl = document.getElementById('leaderboard-modal');
+        const leaderboardContentEl = document.getElementById('leaderboard-content');
+        const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
+        const closeLeaderboardBtn = document.getElementById('close-leaderboard-btn');
+        const collapseLeaderboardBtn = document.getElementById('collapse-leaderboard-btn');
+
+        // --- API CONFIGURATION ---
+        // Auto-detect API URL: use relative path in production, localhost in development
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3001/api'
+            : '/api';
+
+        // --- GAME DATA ---
+        let cardData = null;
+        let cardsLoaded = false;
+
+        // Load cards from JSON files
+        async function loadCards() {
+            try {
+                // Load both card files
+                const [mainResponse, newResponse] = await Promise.all([
+                    fetch('cards.json'),
+                    fetch('new-cards.json')
+                ]);
+
+                const mainCards = await mainResponse.json();
+                const newCards = await newResponse.json();
+
+                // Merge the card arrays
+                cardData = {
+                    traditional: [...mainCards.traditional, ...newCards.traditional],
+                    transitional: [...mainCards.transitional, ...newCards.transitional],
+                    modern: [...mainCards.modern, ...newCards.modern],
+                    universal: [...mainCards.universal, ...newCards.universal]
+                };
+
+                cardsLoaded = true;
+                console.log('Cards loaded:', {
+                    traditional: cardData.traditional.length,
+                    transitional: cardData.transitional.length,
+                    modern: cardData.modern.length,
+                    universal: cardData.universal.length
+                });
+            } catch (error) {
+                console.error('Failed to load cards:', error);
+                // Fallback to empty arrays if load fails
+                cardData = { traditional: [], transitional: [], modern: [], universal: [] };
+            }
+        }
+
+        // Get available cards based on current era
+        function getAvailableCards() {
+            if (!cardData) return [];
+
+            const era = state.currentEra;
+            let available = [];
+
+            // Add era-appropriate cards
+            if (era === 'traditional') {
+                // Traditional era: only traditional cards (no modern concepts)
+                available = [...cardData.traditional];
+            } else if (era === 'transitional') {
+                // Transitional era: transitional + some traditional + universal
+                available = [...cardData.transitional];
+                available = available.concat(cardData.universal);
+                // Add some traditional cards (society remembers its past)
+                const traditionalSample = cardData.traditional.slice(0, Math.floor(cardData.traditional.length / 3));
+                available = available.concat(traditionalSample);
+            } else if (era === 'modern') {
+                // Modern era: modern + transitional + universal
+                available = [...cardData.modern];
+                available = available.concat(cardData.transitional);
+                available = available.concat(cardData.universal);
+            }
+
+            return available;
+        }
+
+        const meterDefinitions = {
+            solidarity: { name: "Social Cohesion", icon: "👥" },          // Collective bonds (transforms from similarity-based to interdependence-based)
+            productivity: { name: "Division of Labor", icon: "📈" },      // Specialization and economic complexity
+            legitimacy: { name: "Moral Regulation", icon: "🏛️" },        // Norms, rules, institutional trust
+            innovation: { name: "Social Differentiation", icon: "💡" }   // Individual difference, cultural diversity
+        };
+
+        // Era definitions for Durkheim's transition
+        const eras = {
+            traditional: {
+                name: "Traditional Era",
+                color: "bg-purple-600",
+                description: "Society based on similarity and shared beliefs"
+            },
+            transitional: {
+                name: "Transitional Era",
+                color: "bg-indigo-600",
+                description: "Old bonds weakening, new forms emerging"
+            },
+            modern: {
+                name: "Modern Era",
+                color: "bg-green-600",
+                description: "Interdependence through specialization"
+            }
+        };
+
+        // Era transition messages
+        const eraTransitions = {
+            toTransitional: {
+                title: "The Division of Labor Emerges",
+                description: "Specialization is increasing. The old bonds of similarity weaken as people take on different roles. New forms of interdependence must emerge - or anomie threatens.",
+                quote: "\"The division of labor varies in direct ratio with the volume and density of societies.\" - Durkheim"
+            },
+            toModern: {
+                title: "Organic Solidarity Developing",
+                description: "Specialized roles create mutual dependence. Society now coheres through difference, not sameness. Professional groups and contracts replace kinship and tradition.",
+                quote: "\"Each individual is the more closely dependent upon society the more divided labor is.\" - Durkheim"
+            },
+            toTraditional: {
+                title: "Return to Mechanical Solidarity",
+                description: "Society retreats to simpler organization. The collective conscience strengthens as individual differences diminish. Unity through similarity is restored.",
+                quote: "\"In mechanical solidarity, the collective conscience completely envelops our whole conscience.\" - Durkheim"
+            }
+        };
+
+        // --- GAME STATE ---
+        let state;
+        let simInterval;
+        const WIN_YEAR = 100;
+        const STARTING_YEAR = 0;
+
+        function initializeMeters() {
+            metersContainerEl.innerHTML = '';
+            Object.keys(meterDefinitions).forEach(key => {
+                const meterInfo = meterDefinitions[key];
+                const meterEl = document.createElement('div');
+                meterEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-0.5">
+                        <div class="flex items-center">
+                            <span id="icon-${key}" class="status-icon text-base mr-1">${meterInfo.icon}</span>
+                            <span class="font-semibold text-sm">${meterInfo.name}</span>
+                        </div>
+                        <span id="value-${key}" class="font-mono text-sm">50%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-3">
+                        <div id="bar-${key}" class="progress-bar-fill bg-cyan-500 h-3 rounded-full" style="width: 50%"></div>
+                    </div>
+                `;
+                metersContainerEl.appendChild(meterEl);
+            });
+        }
+
+        function resetGame(mode = 'sim') {
+            // Start as a mechanical solidarity society
+            state = {
+                year: STARTING_YEAR,
+                meters: {
+                    solidarity: 65,    // High solidarity (collective bonds)
+                    productivity: 40,  // Low productivity (pre-industrial)
+                    legitimacy: 55,    // Moderate legitimacy (traditional authority)
+                    innovation: 40     // Low innovation (traditional)
+                },
+                gameOver: false,
+                gameMode: mode,
+                usedCardKeys: [],      // Track cards by character+text key
+                currentEra: 'traditional',
+                hasReachedTransitional: false,
+                hasReachedModern: false,
+                inAnomie: false,
+                // Durkheimian mechanics
+                pendingLegitimacy: 0,      // Legitimacy changes slowly (inertia)
+                anomieTurns: 0,            // Sustained anomie leads to collapse
+                anomieResistance: 0        // Occupational groups stabilize modern society
+            };
+
+            gameOverModalEl.classList.add('opacity-0', 'invisible');
+            gameOverModalEl.querySelector('div').classList.add('scale-95');
+            victoryModalEl.classList.add('opacity-0', 'invisible');
+            victoryModalEl.querySelector('div').classList.add('scale-95');
+            anomieWarningEl.classList.add('hidden');
+
+            if (simInterval) clearInterval(simInterval);
+
+            if (mode === 'sim') {
+                subtitleEl.textContent = "Observing a Society in Balance...";
+                cardContainerEl.classList.remove('player-turn');
+                simInterval = setInterval(runSimTurn, 3500);
+            } else {
+                subtitleEl.textContent = "Guide your society through the transition.";
+                cardContainerEl.classList.add('player-turn');
+            }
+
+            updateUI();
+            updateSolidarityType();
+            updateEra();
+            setTimeout(displayCard, 500);
+        }
+
+        // Calculate solidarity type (0 = mechanical, 100 = organic)
+        // Key Durkheim insight: Organic solidarity requires BOTH high division of labor AND maintained social cohesion
+        // It's not about destroying old bonds, but transforming them
+        function calculateSolidarityScore() {
+            const { solidarity, productivity, innovation } = state.meters;
+
+            // Division of labor (specialization) - primary driver of organic solidarity
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // Organic solidarity emerges when:
+            // 1. High division of labor (specialization creates interdependence)
+            // 2. Social cohesion is maintained (new forms of integration replace old)
+            // You can't achieve organic solidarity by just destroying traditional bonds!
+
+            // Score based primarily on division of labor, but penalized if cohesion collapses
+            let score = divisionOfLabor;
+
+            // If cohesion is too low, you're not achieving organic solidarity - you're in anomie
+            // Organic solidarity requires interdependence to CREATE new bonds
+            if (solidarity < 30) {
+                // Low cohesion + high specialization = anomic, not organic
+                score = Math.min(score, 50 + (solidarity - 30));
+            }
+
+            return Math.min(100, Math.max(0, score));
+        }
+
+        function getSolidarityType() {
+            const score = calculateSolidarityScore();
+            const { solidarity, productivity, innovation } = state.meters;
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // Check for anomic condition (high specialization but low cohesion)
+            if (divisionOfLabor > 50 && solidarity < 30) {
+                return {
+                    type: 'anomic',
+                    label: 'Anomic State',
+                    color: 'text-red-400',
+                    description: 'Specialization without integration - normlessness threatens'
+                };
+            }
+
+            if (score < 35) return {
+                type: 'mechanical',
+                label: 'Mechanical Solidarity',
+                color: 'text-purple-400',
+                description: 'Unity through similarity - collective conscience dominates'
+            };
+            if (score < 50) return {
+                type: 'transitioning-from-mechanical',
+                label: 'Weakening Mechanical',
+                color: 'text-indigo-400',
+                description: 'Division of labor emerging, traditional bonds adapting'
+            };
+            if (score < 65) return {
+                type: 'transitional',
+                label: 'In Transition',
+                color: 'text-cyan-400',
+                description: 'Old and new forms of solidarity coexisting'
+            };
+            if (score < 80) return {
+                type: 'transitioning-to-organic',
+                label: 'Emerging Organic',
+                color: 'text-teal-400',
+                description: 'Interdependence creating new forms of social bonds'
+            };
+            return {
+                type: 'organic',
+                label: 'Organic Solidarity',
+                color: 'text-green-400',
+                description: 'Unity through difference - interdependence binds society'
+            };
+        }
+
+        function updateSolidarityType() {
+            const score = calculateSolidarityScore();
+            const typeInfo = getSolidarityType();
+
+            // Update marker position (adjust for marker width)
+            solidarityMarkerEl.style.left = `calc(${score}% - 8px)`;
+
+            // Update labels
+            solidarityTypeLabelEl.textContent = typeInfo.label;
+            solidarityTypeLabelEl.className = `text-sm mt-2 font-semibold ${typeInfo.color}`;
+            solidarityDescriptionEl.textContent = typeInfo.description;
+        }
+
+        // Check for anomie condition
+        // Durkheim's anomie = normlessness, when moral regulation fails to keep pace with social change
+        // Anomie is CORROSIVE, not instantly fatal - it builds over time
+        function checkAnomie() {
+            const { solidarity, productivity, legitimacy, innovation } = state.meters;
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // Anomie occurs when:
+            // 1. Rapid social change (high division of labor / differentiation) AND
+            // 2. Moral regulation (legitimacy) can't keep up AND/OR
+            // 3. Social cohesion has broken down without new integration
+
+            const rapidChange = divisionOfLabor > 50;
+            const lowMoralRegulation = legitimacy < 35;
+            const cohesionCollapse = solidarity < 30;
+
+            // Anomie when change outpaces regulation
+            const changeRegulationGap = divisionOfLabor - legitimacy;
+
+            // Base anomie check
+            const anomieConditions = (rapidChange && lowMoralRegulation) ||
+                                    (rapidChange && cohesionCollapse) ||
+                                    (changeRegulationGap > 35);
+
+            // Occupational groups provide resistance to anomie
+            const effectiveAnomie = anomieConditions && state.anomieResistance < 3;
+
+            const wasInAnomie = state.inAnomie;
+            state.inAnomie = effectiveAnomie;
+
+            // ANOMIE COUNTDOWN: Sustained anomie leads to collapse
+            if (state.inAnomie) {
+                state.anomieTurns++;
+                anomieWarningEl.classList.remove('hidden');
+                // Update warning text to show severity
+                const severity = state.anomieTurns >= 3 ? 'CRITICAL' : state.anomieTurns >= 2 ? 'SEVERE' : 'WARNING';
+                anomieWarningEl.querySelector('p.text-red-400').textContent = `ANOMIE ${severity}`;
+                if (state.anomieTurns >= 2) {
+                    anomieWarningEl.querySelector('p.text-red-300').textContent =
+                        `Normlessness persists (${state.anomieTurns} turns). Society is fragmenting.`;
+                }
+            } else {
+                // Recovery: anomie counter decreases when conditions improve
+                state.anomieTurns = Math.max(0, state.anomieTurns - 1);
+                if (state.anomieTurns === 0) {
+                    anomieWarningEl.classList.add('hidden');
+                } else {
+                    anomieWarningEl.querySelector('p.text-red-400').textContent = 'ANOMIE RECOVERING';
+                    anomieWarningEl.querySelector('p.text-red-300').textContent =
+                        'Conditions improving, but instability lingers...';
+                }
+            }
+
+            return state.inAnomie;
+        }
+
+        // Determine current era - ONE WAY PROGRESSION
+        // Once you advance to a new era, you can't go back
+        function determineEra() {
+            const solidarityScore = calculateSolidarityScore();
+            const { productivity, innovation } = state.meters;
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // Check if we should advance to next era (but never go back)
+            if (state.currentEra === 'traditional') {
+                // Advance to transitional when division of labor increases significantly
+                if (divisionOfLabor >= 50 || solidarityScore >= 45) {
+                    return 'transitional';
+                }
+                return 'traditional';
+            } else if (state.currentEra === 'transitional') {
+                // Advance to modern when organic solidarity conditions are met
+                if (divisionOfLabor >= 65 && state.meters.solidarity >= 40) {
+                    return 'modern';
+                }
+                return 'transitional';
+            }
+            // Once modern, stay modern
+            return 'modern';
+        }
+
+        function updateEra() {
+            const newEra = determineEra();
+            const previousEra = state.currentEra;
+
+            if (newEra !== previousEra) {
+                // Show era transition notification
+                let transitionKey = null;
+                if (newEra === 'transitional' && previousEra === 'traditional') {
+                    transitionKey = 'toTransitional';
+                    state.hasReachedTransitional = true;
+                } else if (newEra === 'modern' && previousEra === 'transitional') {
+                    transitionKey = 'toModern';
+                    state.hasReachedModern = true;
+                } else if (newEra === 'traditional') {
+                    transitionKey = 'toTraditional';
+                }
+
+                if (transitionKey) {
+                    showEraTransition(transitionKey);
+                }
+
+                state.currentEra = newEra;
+            }
+
+            // Update era badge
+            const eraInfo = eras[state.currentEra];
+            eraBadgeEl.textContent = eraInfo.name;
+            eraBadgeEl.className = `text-sm font-semibold ${eraInfo.color} rounded-lg px-3 py-1`;
+        }
+
+        function showEraTransition(transitionKey) {
+            const transition = eraTransitions[transitionKey];
+            eraTitleEl.textContent = transition.title;
+            eraDescriptionEl.textContent = transition.description;
+            eraQuoteEl.textContent = transition.quote;
+
+            eraNotificationEl.classList.remove('hidden');
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                eraNotificationEl.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Check win condition
+        // Durkheim's vision: A society with organic solidarity where specialization
+        // creates interdependence that binds people together, not apart
+        function checkWinCondition() {
+            if (state.year < WIN_YEAR) return false;
+
+            const { solidarity, productivity, legitimacy, innovation } = state.meters;
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // Win conditions reflect Durkheim's vision of successful organic solidarity:
+            // 1. High division of labor (specialization) - at least 60
+            // 2. Maintained social cohesion (not destroyed by change) - at least 35
+            // 3. Strong moral regulation (new norms have formed) - at least 40
+            // 4. Not in anomie
+
+            const highSpecialization = divisionOfLabor >= 60;
+            const maintainedCohesion = solidarity >= 35;
+            const stableRegulation = legitimacy >= 40;
+            const notInAnomie = !state.inAnomie;
+
+            // All meters must also be stable (not at extremes)
+            const noCollapse = solidarity > 10 && productivity > 10 &&
+                              legitimacy > 10 && innovation > 10;
+            const noOvergrowth = solidarity < 95 && productivity < 95 &&
+                                legitimacy < 95 && innovation < 95;
+
+            return highSpecialization && maintainedCohesion && stableRegulation &&
+                   notInAnomie && noCollapse && noOvergrowth;
+        }
+
+        function showVictory() {
+            state.gameOver = true;
+            if (simInterval) clearInterval(simInterval);
+            cardContainerEl.classList.remove('player-turn');
+
+            victoryYearEl.textContent = state.year;
+            victoryModalEl.classList.remove('opacity-0', 'invisible');
+            victoryModalEl.querySelector('div').classList.remove('scale-95');
+        }
+
+        // Leaderboard functions - Global API with localStorage fallback
+        async function fetchGlobalLeaderboard() {
+            try {
+                const response = await fetch(`${API_URL}/leaderboard?limit=10`);
+                if (!response.ok) throw new Error('API error');
+                const data = await response.json();
+                if (data.success) {
+                    return data.scores.map(s => ({
+                        name: s.name,
+                        score: s.score,
+                        won: s.won === 1,
+                        finalEra: s.final_era
+                    }));
+                }
+            } catch (error) {
+                console.warn('Failed to fetch global leaderboard, using local:', error);
+            }
+            // Fallback to localStorage
+            const stored = localStorage.getItem('equilibrium-leaderboard');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        async function submitToGlobalLeaderboard(entry) {
+            // Calculate a score based on year reached and win status
+            const score = entry.won ? 1000 + entry.year : entry.year;
+
+            try {
+                const response = await fetch(`${API_URL}/leaderboard`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: entry.name,
+                        score: score,
+                        cardsPlayed: Math.floor((entry.year - 2024) / 2),
+                        finalEra: state.currentEra,
+                        won: entry.won
+                    })
+                });
+                if (!response.ok) throw new Error('API error');
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Score submitted! Rank:', data.rank);
+                    return data;
+                }
+            } catch (error) {
+                console.warn('Failed to submit to global leaderboard, saving locally:', error);
+            }
+
+            // Fallback: save to localStorage
+            const leaderboard = JSON.parse(localStorage.getItem('equilibrium-leaderboard') || '[]');
+            leaderboard.push(entry);
+            leaderboard.sort((a, b) => {
+                if (a.won !== b.won) return b.won - a.won;
+                return b.year - a.year;
+            });
+            const trimmed = leaderboard.slice(0, 10);
+            localStorage.setItem('equilibrium-leaderboard', JSON.stringify(trimmed));
+            return { success: true, local: true };
+        }
+
+        async function renderLeaderboard() {
+            leaderboardContentEl.innerHTML = '<p class="text-gray-400">Loading leaderboard...</p>';
+
+            const leaderboard = await fetchGlobalLeaderboard();
+
+            if (leaderboard.length === 0) {
+                leaderboardContentEl.innerHTML = '<p class="text-gray-400">No entries yet. Be the first to make history!</p>';
+                return;
+            }
+
+            let html = '<div class="space-y-2 text-left">';
+            leaderboard.forEach((entry, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                const statusColor = entry.won ? 'text-green-400' : 'text-red-400';
+                const statusText = entry.won ? 'Victory' : 'Collapsed';
+                const yearDisplay = entry.year !== undefined ? `Year ${entry.year}` : `Score: ${entry.score}`;
+                html += `
+                    <div class="bg-gray-700 rounded-lg p-3 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">${medal}</span>
+                            <span class="font-semibold text-white">${escapeHtml(entry.name)}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="${statusColor} text-sm font-semibold">${statusText}</span>
+                            <span class="text-gray-400 text-sm ml-2">${yearDisplay}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            leaderboardContentEl.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function showLeaderboard() {
+            leaderboardModalEl.classList.remove('opacity-0', 'invisible');
+            leaderboardModalEl.querySelector('div').classList.remove('scale-95');
+            await renderLeaderboard();
+        }
+
+        function hideLeaderboard() {
+            leaderboardModalEl.classList.add('opacity-0', 'invisible');
+            leaderboardModalEl.querySelector('div').classList.add('scale-95');
+        }
+
+        function startPlayerGame() {
+            startOverlayEl.classList.add('opacity-0', 'invisible');
+            resetGame('player');
+        }
+
+        function updateUI() {
+            yearCounterEl.textContent = state.year;
+            for (const key in state.meters) {
+                const value = state.meters[key];
+                const barEl = document.getElementById(`bar-${key}`);
+                const valueEl = document.getElementById(`value-${key}`);
+                const iconEl = document.getElementById(`icon-${key}`);
+                
+                barEl.style.width = `${value}%`;
+                valueEl.textContent = `${Math.round(value)}%`;
+
+                if (value <= 15 || value >= 85) {
+                    barEl.classList.remove('bg-cyan-500', 'bg-yellow-500');
+                    barEl.classList.add('bg-red-500');
+                    iconEl.classList.add('danger');
+                } else if (value <= 30 || value >= 70) {
+                    barEl.classList.remove('bg-cyan-500', 'bg-red-500');
+                    barEl.classList.add('bg-yellow-500');
+                    iconEl.classList.remove('danger');
+                } else {
+                    barEl.classList.remove('bg-yellow-500', 'bg-red-500');
+                    barEl.classList.add('bg-cyan-500');
+                    iconEl.classList.remove('danger');
+                }
+            }
+        }
+
+        function displayCard() {
+            const availableCards = getAvailableCards();
+
+            if (availableCards.length === 0) {
+                console.error('No cards available!');
+                return;
+            }
+
+            // Filter out recently used cards (track by character+text to handle era changes)
+            const unseenCards = availableCards.filter(card => {
+                const cardKey = card.character + '|' + card.text;
+                return !state.usedCardKeys.includes(cardKey);
+            });
+
+            // Reset if we've seen all available cards
+            const cardsToChooseFrom = unseenCards.length > 0 ? unseenCards : availableCards;
+            if (unseenCards.length === 0) {
+                state.usedCardKeys = [];
+            }
+
+            // Pick a random card
+            const randomIndex = Math.floor(Math.random() * cardsToChooseFrom.length);
+            const selectedCard = cardsToChooseFrom[randomIndex];
+
+            // Track this card as used
+            const cardKey = selectedCard.character + '|' + selectedCard.text;
+            state.usedCardKeys.push(cardKey);
+
+            state.currentCard = selectedCard;
+
+            cardCharacterEl.textContent = selectedCard.character;
+            cardTextEl.textContent = selectedCard.text;
+            choiceATextEl.textContent = selectedCard.choiceA.text;
+            choiceBTextEl.textContent = selectedCard.choiceB.text;
+
+            cardEl.style.transform = 'translateX(0) rotate(0deg)';
+            cardEl.style.opacity = 1;
+            cardEl.classList.remove('card-swipe-left', 'card-swipe-right');
+        }
+
+        function handleChoice(choiceKey) {
+            const effects = { ...state.currentCard[choiceKey].effects };
+
+            // === DURKHEIMIAN MECHANICS ===
+
+            // 1. LEGITIMACY INERTIA: Moral regulation changes slowly
+            // Only 60% applies immediately; 40% is pending (requires stability)
+            if (effects.legitimacy) {
+                const immediate = effects.legitimacy * 0.6;
+                const pending = effects.legitimacy * 0.4;
+                state.meters.legitimacy += immediate;
+                state.pendingLegitimacy += pending;
+                delete effects.legitimacy; // Don't apply again below
+            }
+
+            // 2. INNOVATION SCALING: Differentiation requires integration
+            // Innovation gains are reduced when solidarity/legitimacy are fragile
+            if (effects.innovation && effects.innovation > 0) {
+                const integrationFactor = Math.min(
+                    state.meters.solidarity,
+                    state.meters.legitimacy
+                ) / 100;
+                effects.innovation = effects.innovation * (0.3 + 0.7 * integrationFactor);
+            }
+
+            // 3. ERA-SPECIFIC LEGITIMACY EFFECTS (Repressive vs Restitutive Law)
+            if (state.currentEra === 'traditional') {
+                // Repressive law: legitimacy gains also boost solidarity (shared punishment)
+                if (state.meters.legitimacy > state.meters.legitimacy) {
+                    // This activates on legitimacy increases (handled via pending)
+                }
+            }
+
+            // Apply remaining effects
+            for (const key in effects) {
+                state.meters[key] += effects[key];
+            }
+
+            // 4. PROCESS PENDING LEGITIMACY (gradual resolution)
+            // 20% of pending legitimacy resolves each turn
+            const resolving = state.pendingLegitimacy * 0.25;
+            state.meters.legitimacy += resolving;
+            state.pendingLegitimacy *= 0.75;
+
+            // 5. ERA-SPECIFIC SIDE EFFECTS
+            applyEraSideEffects();
+
+            // 6. OCCUPATIONAL DENSITY: Professional groups stabilize modern society
+            updateAnonieResistance();
+
+            // Clamp all meters
+            for (const key in state.meters) {
+                state.meters[key] = Math.max(0, Math.min(100, state.meters[key]));
+            }
+
+            state.year += Math.floor(Math.random() * 5) + 1;
+            updateUI();
+            updateSolidarityType();
+            updateEra();
+            checkAnomie();
+
+            // Check win condition first
+            if (checkWinCondition()) {
+                showVictory();
+                return;
+            }
+
+            checkGameOver();
+        }
+
+        // Era-specific side effects (Repressive vs Restitutive law)
+        function applyEraSideEffects() {
+            const { solidarity, legitimacy, productivity } = state.meters;
+
+            if (state.currentEra === 'traditional') {
+                // Repressive law: High legitimacy reinforces collective conscience
+                if (legitimacy > 60) {
+                    state.meters.solidarity += 2; // Shared punishment binds community
+                }
+            } else if (state.currentEra === 'modern') {
+                // Restitutive law: Legitimacy supports economic stability
+                if (legitimacy > 50) {
+                    // Contract law enables complex exchange
+                    state.meters.productivity += 1;
+                }
+            }
+        }
+
+        // Occupational groups as hidden stabilizer
+        function updateAnonieResistance() {
+            const { solidarity, productivity, innovation } = state.meters;
+            const divisionOfLabor = (productivity + innovation) / 2;
+
+            // When specialization rises WITH maintained solidarity,
+            // occupational groups form and resist anomie
+            if (divisionOfLabor > 55 && solidarity > 40) {
+                state.anomieResistance = Math.min(5, state.anomieResistance + 1);
+            } else if (state.anomieResistance > 0) {
+                state.anomieResistance -= 0.5;
+            }
+        }
+
+        // Era-specific collapse conditions based on Durkheim
+        const eraCollapseConditions = {
+            traditional: {
+                // Mechanical solidarity collapses
+                collectiveConscienceCollapse: {
+                    check: (m) => m.solidarity <= 0,
+                    reason: "The Collective Conscience Has Dissolved",
+                    explanation: "Your society did not fail through malice—the shared beliefs that once bound everyone together simply ceased to be believed. Without a collective conscience, there was nothing to be mechanical solidarity *of*.",
+                    quote: "\"The totality of beliefs and sentiments common to average citizens of the same society forms a determinate system which has its own life; one may call it the collective conscience.\" - Durkheim"
+                },
+                repressiveExcess: {
+                    check: (m) => m.legitimacy >= 100,
+                    reason: "Repression Devoured Its Own",
+                    explanation: "Punishment in mechanical solidarity reinforces shared values—but your society made punishment the purpose rather than the means. The community was crushed by its own need for conformity.",
+                    quote: "\"Repressive law corresponds to the heart of the collective conscience... but when punishment becomes the purpose rather than the means, society suffocates.\" - Durkheim"
+                },
+                sacredOrderViolated: {
+                    check: (m) => m.legitimacy <= 0,
+                    reason: "The Sacred Has Lost Its Power",
+                    explanation: "Traditional authority drew its force from shared sacred beliefs. When nothing remained sacred, there was no foundation for social order—not because people became wicked, but because they became strangers to each other.",
+                    quote: "\"Religion contains in itself from the very beginning all the elements which have given rise to the various manifestations of collective life.\" - Durkheim"
+                },
+                stagnation: {
+                    check: (m) => m.innovation <= 0,
+                    reason: "Society Became Its Own Museum",
+                    explanation: "By refusing all change, your society lost the capacity to respond to new conditions. Tradition became a prison rather than a home.",
+                    quote: "\"When the conscience collective becomes too rigid, it loses the plasticity required to adapt to changing circumstances.\" - Durkheim"
+                },
+                prematureModernization: {
+                    check: (m) => m.productivity >= 100,
+                    reason: "Change Outran Understanding",
+                    explanation: "The division of labor expanded before people could develop new forms of connection. They became interdependent strangers—needing each other but not knowing how to be together.",
+                    quote: "\"If the division of labor does not produce solidarity, it is because the relations between the organs are not regulated.\" - Durkheim"
+                }
+            },
+            transitional: {
+                // The danger zone - anomie is the key risk
+                anomicCrisis: {
+                    check: (m, s) => s.anomieTurns >= 4,
+                    reason: "Sustained Anomie - Normlessness Has Taken Hold",
+                    explanation: "Your society did not lack intelligence or goodwill—but its institutions no longer fit its structure. Old rules broke down faster than new ones could form.",
+                    quote: "\"Anomie is impossible wherever interdependent organs are sufficiently in contact and sufficiently extensive. If they are close enough, they are quickly aware of the need they have for one another.\" - Durkheim"
+                },
+                socialDisintegration: {
+                    check: (m) => m.solidarity <= 0,
+                    reason: "The Bonds Broke Before New Ones Formed",
+                    explanation: "Every society in transition walks a tightrope. Old forms of connection weaken as new ones emerge. Your society fell into the gap between—not from wickedness, but from a misalignment of pace.",
+                    quote: "\"Individuals are so busy with the functional task at hand that they lose sight of their collaborators, no longer sense their common solidarity.\" - Durkheim"
+                },
+                regulatoryCollapse: {
+                    check: (m) => m.legitimacy <= 0,
+                    reason: "Between Two Moral Orders",
+                    explanation: "The old rules lost their hold before new ones could form. This is not a failure of morality—it's a structural gap. Professional ethics and modern institutions take time to develop authority.",
+                    quote: "\"There is no society which can maintain itself without a minimum of moral regulation; the market alone cannot ensure order.\" - Durkheim"
+                },
+                forcedDivision: {
+                    check: (m) => m.productivity >= 100 && m.solidarity < 30,
+                    reason: "Forced Division of Labor",
+                    explanation: "The division of labor was imposed rather than grown. People were pushed into roles by circumstance or power rather than finding their natural place. Such a society is always unstable.",
+                    quote: "\"The forced division of labor is... a further source of anomie. Labor is divided spontaneously only if society is constituted in such a way that social inequalities exactly express natural inequalities.\" - Durkheim"
+                },
+                chaosOfChange: {
+                    check: (m) => m.innovation >= 100,
+                    reason: "Differentiation Without Direction",
+                    explanation: "Difference multiplied faster than society could make sense of it. Innovation is necessary—but only integration makes it meaningful. Your society had diversity without coherence.",
+                    quote: "\"It is not enough for there to be rules; they must also be just. The regulation must keep pace with the transformation.\" - Durkheim"
+                }
+            },
+            modern: {
+                // Organic solidarity failures
+                anomicDivisionOfLabor: {
+                    check: (m, s) => s.anomieTurns >= 4,
+                    reason: "Anomic Division of Labor",
+                    explanation: "Your society achieved remarkable specialization—but the moral framework didn't keep pace. Economic life became amoral, and interdependence bred resentment rather than solidarity.",
+                    quote: "\"In the economic order, the anomic division of labor has become chronic... industrial and commercial functions are almost entirely lacking in moral regulation.\" - Durkheim"
+                },
+                organicSolidarityFailure: {
+                    check: (m) => m.solidarity <= 0,
+                    reason: "Interdependence Without Integration",
+                    explanation: "People depended on each other economically, but never came to feel it as a bond. Functional necessity is not the same as social cohesion.",
+                    quote: "\"Each individual is the more closely dependent upon society the more divided labor is... but this dependence must become a felt bond.\" - Durkheim"
+                },
+                professionalEthicsCollapse: {
+                    check: (m) => m.legitimacy <= 0,
+                    reason: "The Moral Vacuum of Economic Life",
+                    explanation: "The occupational groups that should regulate modern life never developed adequate ethics. The market cannot moralize itself.",
+                    quote: "\"A group is not only a moral authority which dominates the life of its members; it is also a source of life sui generis.\" - Durkheim"
+                },
+                hyperSpecialization: {
+                    check: (m) => m.productivity >= 100,
+                    reason: "The Worker Becomes a Cog",
+                    explanation: "Specialization exceeded the point of meaningful integration. People became so narrowly defined by their function that they lost connection to the whole.",
+                    quote: "\"As work becomes more divided, the worker becomes weaker... he is no longer anything but an inert piece of machinery.\" - Durkheim"
+                },
+                homogenizationCollapse: {
+                    check: (m) => m.innovation <= 0,
+                    reason: "Individuality Crushed",
+                    explanation: "Organic solidarity requires that each person have their own sphere. By eliminating difference, society destroyed the very basis of modern integration.",
+                    quote: "\"Organic solidarity is possible only if each one has a sphere of action which is peculiar to him; that is, a personality.\" - Durkheim"
+                }
+            }
+        };
+
+        function checkGameOver() {
+            let collapseData = null;
+
+            // Get current era's collapse conditions
+            const conditions = eraCollapseConditions[state.currentEra];
+
+            // Check each condition for current era
+            for (const key in conditions) {
+                const condition = conditions[key];
+                if (condition.check(state.meters, state)) {
+                    collapseData = condition;
+                    break;
+                }
+            }
+
+            if (collapseData) {
+                state.gameOver = true;
+                if (simInterval) clearInterval(simInterval);
+
+                // Era-specific collapse titles
+                const eraTitles = {
+                    traditional: "Mechanical Solidarity Collapsed!",
+                    transitional: "The Transition Failed!",
+                    modern: "Organic Solidarity Collapsed!"
+                };
+
+                document.getElementById('collapse-title').textContent = eraTitles[state.currentEra];
+                finalYearEl.textContent = state.year;
+                collapseReasonEl.textContent = collapseData.reason;
+
+                // Set reflection content
+                reflectionQuestionEl.textContent = collapseData.explanation;
+                durkheimQuoteEl.textContent = collapseData.quote;
+
+                gameOverModalEl.classList.remove('opacity-0', 'invisible');
+                gameOverModalEl.querySelector('div').classList.remove('scale-95');
+                cardContainerEl.classList.remove('player-turn');
+            }
+        }
+
+        function runSimTurn() {
+            if (state.gameOver) return;
+            const choice = Math.random() > 0.5 ? 'choiceA' : 'choiceB';
+            cardEl.classList.add(choice === 'choiceA' ? 'card-swipe-left' : 'card-swipe-right');
+            
+            setTimeout(() => {
+                handleChoice(choice);
+                if (!state.gameOver) {
+                    displayCard();
+                }
+            }, 1000);
+        }
+
+        function handlePlayerChoice(choiceKey) {
+            if (state.gameOver || state.gameMode !== 'player') return;
+            
+            cardContainerEl.classList.remove('player-turn'); // Disable hover effects during animation
+            cardEl.classList.add(choiceKey === 'choiceA' ? 'card-swipe-left' : 'card-swipe-right');
+
+            setTimeout(() => {
+                handleChoice(choiceKey);
+                if (!state.gameOver) {
+                    displayCard();
+                    cardContainerEl.classList.add('player-turn'); // Re-enable hover effects
+                }
+            }, 1000);
+        }
+
+        // --- INITIALIZATION ---
+        startPlayerGameBtn.addEventListener('click', startPlayerGame);
+        playAgainBtn.addEventListener('click', () => {
+            gameOverModalEl.classList.add('opacity-0', 'invisible');
+            resetGame('player');
+        });
+        choiceADiv.addEventListener('click', () => handlePlayerChoice('choiceA'));
+        choiceBDiv.addEventListener('click', () => handlePlayerChoice('choiceB'));
+
+        // Leaderboard buttons
+        viewLeaderboardBtn.addEventListener('click', showLeaderboard);
+        collapseLeaderboardBtn.addEventListener('click', showLeaderboard);
+
+        closeLeaderboardBtn.addEventListener('click', () => {
+            hideLeaderboard();
+            // Show start overlay if game is over
+            if (state.gameOver) {
+                startOverlayEl.classList.remove('opacity-0', 'invisible');
+            }
+        });
+
+        // Victory submission
+        submitScoreBtn.addEventListener('click', async () => {
+            const name = winnerNameEl.value.trim() || 'Anonymous';
+            submitScoreBtn.disabled = true;
+            submitScoreBtn.textContent = 'Submitting...';
+
+            await submitToGlobalLeaderboard({
+                name: name,
+                year: state.year,
+                won: true,
+                date: new Date().toISOString()
+            });
+
+            victoryModalEl.classList.add('opacity-0', 'invisible');
+            submitScoreBtn.disabled = false;
+            submitScoreBtn.textContent = 'Submit Score & View Leaderboard';
+            showLeaderboard();
+        });
+
+        // Initialize game
+        async function initGame() {
+            await loadCards();
+            initializeMeters();
+            resetGame('sim');
+        }
+
+        initGame();
+
+    </script>
+</body>
+</html>

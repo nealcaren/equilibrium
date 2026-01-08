@@ -1,0 +1,19 @@
+# Render Blueprint for Equilibrium Game
+# Deploy with: Connect GitHub repo to Render and it will auto-detect this file
+
+services:
+  - type: web
+    name: equilibrium
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_PATH
+        value: /var/data
+    disk:
+      name: equilibrium-data
+      mountPath: /var/data
+      sizeGB: 1
