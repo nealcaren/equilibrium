@@ -1109,7 +1109,7 @@
                 state.meters[key] = Math.max(0, Math.min(100, state.meters[key]));
             }
 
-            state.year += Math.floor(Math.random() * 5) + 1;
+            state.year += 1;
             updateUI();
             updateSolidarityType();
             updateEra();
