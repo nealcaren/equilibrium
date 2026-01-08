@@ -68,6 +68,43 @@
             from { transform: translateY(-100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        /* Tutorial styles */
+        .tutorial-highlight {
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.6), 0 0 20px rgba(34, 211, 238, 0.4);
+            border-radius: 8px;
+        }
+        .tutorial-overlay {
+            backdrop-filter: blur(2px);
+        }
+        .tutorial-content {
+            line-height: 1.6;
+        }
+        .tutorial-content strong {
+            color: #22d3ee;
+        }
+        .tutorial-content em {
+            color: #a78bfa;
+        }
+        .tutorial-progress {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+        .tutorial-progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4b5563;
+            transition: background 0.3s;
+        }
+        .tutorial-progress-dot.active {
+            background: #22d3ee;
+        }
+        .tutorial-progress-dot.completed {
+            background: #10b981;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
@@ -242,6 +279,33 @@
         </div>
     </div>
 
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="tutorial-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300" style="z-index: 200;">
+        <div class="bg-gray-800 border border-cyan-500 rounded-2xl shadow-xl p-6 max-w-md w-full transform scale-95 transition-transform">
+            <div class="flex justify-between items-start mb-3">
+                <h3 id="tutorial-title" class="text-xl font-bold text-cyan-400">Tutorial</h3>
+                <div class="tutorial-progress" id="tutorial-progress">
+                    <div class="tutorial-progress-dot"></div>
+                    <div class="tutorial-progress-dot"></div>
+                    <div class="tutorial-progress-dot"></div>
+                    <div class="tutorial-progress-dot"></div>
+                    <div class="tutorial-progress-dot"></div>
+                </div>
+            </div>
+            <div id="tutorial-content" class="tutorial-content text-gray-300 text-sm mb-4">
+                <!-- Tutorial content inserted here -->
+            </div>
+            <div class="flex gap-2">
+                <button id="tutorial-skip-btn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                    Skip Tutorial
+                </button>
+                <button id="tutorial-continue-btn" class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                    Got it!
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- DOM ELEMENTS ---
         const yearCounterEl = document.getElementById('year-counter');
@@ -290,6 +354,14 @@
         const feedbackEffectsEl = document.getElementById('feedback-effects');
         const feedbackInsightEl = document.getElementById('feedback-insight');
         const closeFeedbackBtn = document.getElementById('close-feedback');
+
+        // Tutorial elements
+        const tutorialOverlayEl = document.getElementById('tutorial-overlay');
+        const tutorialTitleEl = document.getElementById('tutorial-title');
+        const tutorialContentEl = document.getElementById('tutorial-content');
+        const tutorialProgressEl = document.getElementById('tutorial-progress');
+        const tutorialSkipBtn = document.getElementById('tutorial-skip-btn');
+        const tutorialContinueBtn = document.getElementById('tutorial-continue-btn');
 
         // --- API CONFIGURATION ---
         // Auto-detect API URL: use relative path in production, localhost in development
@@ -370,6 +442,123 @@
             innovation: { name: "Social Differentiation", icon: "💡" }   // Individual difference, cultural diversity
         };
 
+        // --- TUTORIAL DATA ---
+        const tutorialCards = [
+            {
+                character: "Council Elder",
+                text: "Our village gathers for the first time under your guidance. The elders ask: how shall we strengthen our community?",
+                choiceA: {
+                    text: "Reinforce family traditions",
+                    effects: { solidarity: 5, legitimacy: 5, productivity: -3, innovation: -3 }
+                },
+                choiceB: {
+                    text: "Encourage new crafts and trades",
+                    effects: { solidarity: -3, legitimacy: -2, productivity: 5, innovation: 5 }
+                },
+                lesson: {
+                    title: "The Four Forces of Society",
+                    content: `Every choice affects four interconnected forces:
+
+<strong>👥 Social Cohesion</strong> - The bonds holding society together
+<strong>📈 Division of Labor</strong> - Economic specialization
+<strong>🏛️ Moral Regulation</strong> - Rules and institutions
+<strong>💡 Social Differentiation</strong> - Diversity of roles
+
+Watch how your choices shift these meters!`,
+                    highlight: "meters"
+                }
+            },
+            {
+                character: "Village Trader",
+                text: "Merchants from distant lands offer exotic goods. Some villagers are excited; others worry about outside influence.",
+                choiceA: {
+                    text: "Welcome the trade carefully",
+                    effects: { solidarity: -2, legitimacy: 3, productivity: 4, innovation: 3 }
+                },
+                choiceB: {
+                    text: "Protect local craftsmen",
+                    effects: { solidarity: 4, legitimacy: 2, productivity: -2, innovation: -2 }
+                },
+                lesson: {
+                    title: "Every Choice Has Trade-offs",
+                    content: `Notice there are no "right" answers. Each choice strengthens some forces while weakening others.
+
+This reflects Durkheim's insight: <em>social change always involves tension</em> between preservation and progress.
+
+The feedback panel shows exactly how each choice affected your society.`,
+                    highlight: "choices"
+                }
+            },
+            {
+                character: "Tribal Philosopher",
+                text: "The young ask why we follow the old ways. How do we explain the bonds that hold us together?",
+                choiceA: {
+                    text: "We are one family, one blood",
+                    effects: { solidarity: 6, legitimacy: 3, productivity: -2, innovation: -4 }
+                },
+                choiceB: {
+                    text: "Each person's work serves the whole",
+                    effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 4 }
+                },
+                lesson: {
+                    title: "Two Types of Solidarity",
+                    content: `The spectrum at the top shows your society's type of social bond:
+
+<strong class="text-purple-400">Mechanical Solidarity</strong> (left) - Unity through <em>similarity</em>. People are alike, share beliefs, follow tradition.
+
+<strong class="text-green-400">Organic Solidarity</strong> (right) - Unity through <em>interdependence</em>. People are different but need each other.
+
+<strong>Your goal:</strong> Guide society from mechanical to organic solidarity—the "great transition."`,
+                    highlight: "solidarity"
+                }
+            },
+            {
+                character: "Worried Elder",
+                text: "Change comes faster than our customs can adapt. Some abandon the old ways before new ones take hold.",
+                choiceA: {
+                    text: "Slow down, preserve traditions",
+                    effects: { solidarity: 4, legitimacy: 5, productivity: -3, innovation: -3 }
+                },
+                choiceB: {
+                    text: "Push forward, embrace the new",
+                    effects: { solidarity: -4, legitimacy: -4, productivity: 5, innovation: 5 }
+                },
+                lesson: {
+                    title: "The Danger of Anomie",
+                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness." It occurs when social change outpaces moral regulation.
+
+When Division of Labor and Differentiation grow too fast while Cohesion and Regulation fall behind, society destabilizes.
+
+<strong>Watch for the warning!</strong> If anomie persists too long, society collapses. Balance progress with stability.`,
+                    highlight: "anomie"
+                }
+            },
+            {
+                character: "The Path Ahead",
+                text: "Your society stands at a crossroads. The journey to organic solidarity will take 100 years. Are you ready?",
+                choiceA: {
+                    text: "Build strong institutions first",
+                    effects: { solidarity: 3, legitimacy: 4, productivity: 2, innovation: 1 }
+                },
+                choiceB: {
+                    text: "Let specialization lead the way",
+                    effects: { solidarity: 1, legitimacy: 2, productivity: 4, innovation: 3 }
+                },
+                lesson: {
+                    title: "Your Mission",
+                    content: `<strong>Win Condition:</strong> Reach Year 100 with organic solidarity achieved.
+
+This means high Division of Labor + maintained Social Cohesion + stable Moral Regulation.
+
+The transition is dangerous. You'll pass through three eras:
+• <span class="text-purple-400">Traditional</span> → <span class="text-blue-400">Transitional</span> → <span class="text-green-400">Modern</span>
+
+Each era has unique challenges and collapse conditions. Good luck!`,
+                    highlight: "none"
+                }
+            }
+        ];
+
         // Era definitions for Durkheim's transition
         const eras = {
             traditional: {
@@ -435,7 +624,7 @@
             });
         }
 
-        function resetGame(mode = 'sim') {
+        function resetGame(mode = 'sim', startTutorial = false) {
             // Start as a mechanical solidarity society
             state = {
                 year: STARTING_YEAR,
@@ -455,7 +644,10 @@
                 // Durkheimian mechanics
                 pendingLegitimacy: 0,      // Legitimacy changes slowly (inertia)
                 anomieTurns: 0,            // Sustained anomie leads to collapse
-                anomieResistance: 0        // Occupational groups stabilize modern society
+                anomieResistance: 0,       // Occupational groups stabilize modern society
+                // Tutorial state
+                inTutorial: startTutorial,
+                tutorialStep: 0            // Current tutorial card (0-4)
             };
 
             gameOverModalEl.classList.add('opacity-0', 'invisible');
@@ -478,7 +670,11 @@
             updateUI();
             updateSolidarityType();
             updateEra();
-            setTimeout(displayCard, 500);
+
+            // Only display card if not starting tutorial (tutorial handles its own card display)
+            if (!startTutorial) {
+                setTimeout(displayCard, 500);
+            }
         }
 
         // Calculate solidarity type (0 = mechanical, 100 = organic)
@@ -845,7 +1041,17 @@
 
         function startPlayerGame() {
             startOverlayEl.classList.add('opacity-0', 'invisible');
-            resetGame('player');
+
+            // Check if player needs tutorial
+            const tutorialCompleted = localStorage.getItem('equilibrium_tutorial_completed');
+            const needsTutorial = !tutorialCompleted;
+
+            resetGame('player', needsTutorial);
+
+            if (needsTutorial) {
+                // Start with tutorial card instead of regular card
+                setTimeout(displayTutorialCard, 500);
+            }
         }
 
         function updateUI() {
@@ -977,6 +1183,108 @@
         function getRandomInsight(key) {
             const insights = durkheimInsights[key];
             return insights[Math.floor(Math.random() * insights.length)];
+        }
+
+        // --- TUTORIAL FUNCTIONS ---
+        function showTutorialOverlay() {
+            if (!state.inTutorial || state.tutorialStep >= tutorialCards.length) return;
+
+            const tutorialCard = tutorialCards[state.tutorialStep];
+            const lesson = tutorialCard.lesson;
+
+            tutorialTitleEl.textContent = `${state.tutorialStep + 1}/5: ${lesson.title}`;
+            tutorialContentEl.innerHTML = lesson.content;
+
+            // Update progress dots
+            const dots = tutorialProgressEl.querySelectorAll('.tutorial-progress-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.remove('active', 'completed');
+                if (i < state.tutorialStep) {
+                    dot.classList.add('completed');
+                } else if (i === state.tutorialStep) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Apply highlight based on lesson type
+            removeAllHighlights();
+            if (lesson.highlight === 'meters') {
+                metersContainerEl.classList.add('tutorial-highlight');
+            } else if (lesson.highlight === 'solidarity') {
+                document.querySelector('.solidarity-spectrum')?.parentElement?.classList.add('tutorial-highlight');
+            } else if (lesson.highlight === 'choices') {
+                choiceADiv.classList.add('tutorial-highlight');
+                choiceBDiv.classList.add('tutorial-highlight');
+            }
+
+            // Show overlay
+            tutorialOverlayEl.classList.remove('opacity-0', 'invisible');
+            tutorialOverlayEl.querySelector('div').classList.remove('scale-95');
+        }
+
+        function hideTutorialOverlay() {
+            tutorialOverlayEl.classList.add('opacity-0', 'invisible');
+            tutorialOverlayEl.querySelector('div').classList.add('scale-95');
+            removeAllHighlights();
+        }
+
+        function removeAllHighlights() {
+            metersContainerEl.classList.remove('tutorial-highlight');
+            document.querySelector('.solidarity-spectrum')?.parentElement?.classList.remove('tutorial-highlight');
+            choiceADiv.classList.remove('tutorial-highlight');
+            choiceBDiv.classList.remove('tutorial-highlight');
+        }
+
+        function displayTutorialCard() {
+            if (!state.inTutorial || state.tutorialStep >= tutorialCards.length) return;
+
+            const tutorialCard = tutorialCards[state.tutorialStep];
+            state.currentCard = {
+                character: tutorialCard.character,
+                text: tutorialCard.text,
+                choiceA: tutorialCard.choiceA,
+                choiceB: tutorialCard.choiceB
+            };
+
+            cardCharacterEl.textContent = state.currentCard.character;
+            cardTextEl.textContent = state.currentCard.text;
+            choiceATextEl.textContent = state.currentCard.choiceA.text;
+            choiceBTextEl.textContent = state.currentCard.choiceB.text;
+
+            cardEl.style.transform = 'translateX(0) rotate(0deg)';
+            cardEl.style.opacity = 1;
+            cardEl.classList.remove('card-swipe-left', 'card-swipe-right');
+
+            // Show tutorial overlay for this step
+            setTimeout(showTutorialOverlay, 400);
+        }
+
+        function advanceTutorial() {
+            state.tutorialStep++;
+
+            if (state.tutorialStep >= tutorialCards.length) {
+                // Tutorial complete
+                state.inTutorial = false;
+                localStorage.setItem('equilibrium_tutorial_completed', 'true');
+                hideTutorialOverlay();
+                // Continue to regular game
+                setTimeout(displayCard, 500);
+            } else {
+                // Show next tutorial card
+                hideTutorialOverlay();
+                setTimeout(displayTutorialCard, 300);
+            }
+        }
+
+        function skipTutorial() {
+            state.inTutorial = false;
+            localStorage.setItem('equilibrium_tutorial_completed', 'true');
+            hideTutorialOverlay();
+            // Reset to Year 0 and start fresh
+            state.year = STARTING_YEAR;
+            state.tutorialStep = 0;
+            updateUI();
+            setTimeout(displayCard, 300);
         }
 
         function showChoiceFeedback(choiceText, effects, metersBefore) {
@@ -1319,14 +1627,19 @@
 
         function handlePlayerChoice(choiceKey) {
             if (state.gameOver || state.gameMode !== 'player') return;
-            
+
             cardContainerEl.classList.remove('player-turn'); // Disable hover effects during animation
             cardEl.classList.add(choiceKey === 'choiceA' ? 'card-swipe-left' : 'card-swipe-right');
 
             setTimeout(() => {
                 handleChoice(choiceKey);
                 if (!state.gameOver) {
-                    displayCard();
+                    if (state.inTutorial) {
+                        // In tutorial mode: advance to next tutorial step
+                        advanceTutorial();
+                    } else {
+                        displayCard();
+                    }
                     cardContainerEl.classList.add('player-turn'); // Re-enable hover effects
                 }
             }, 1000);
@@ -1357,6 +1670,14 @@
         closeFeedbackBtn.addEventListener('click', () => {
             feedbackPanelEl.classList.add('hidden');
         });
+
+        // Tutorial buttons
+        tutorialContinueBtn.addEventListener('click', () => {
+            hideTutorialOverlay();
+            // Player will make their choice, then advanceTutorial is called
+        });
+
+        tutorialSkipBtn.addEventListener('click', skipTutorial);
 
         // === MOBILE SWIPE SUPPORT ===
         let touchStartX = 0;
