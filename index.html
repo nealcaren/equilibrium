@@ -121,13 +121,27 @@
                 </div>
                 <div class="flex justify-between text-center mt-4">
                     <div id="choice-a-div" class="w-1/2 pr-2">
+                        <div class="text-xs text-gray-600 mb-1 md:hidden">← swipe left</div>
                         <div id="choice-a-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
                     </div>
                     <div id="choice-b-div" class="w-1/2 pl-2">
+                        <div class="text-xs text-gray-600 mb-1 md:hidden">swipe right →</div>
                         <div id="choice-b-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Choice Feedback Panel -->
+        <div id="feedback-panel" class="hidden mt-3 bg-gray-800 border border-gray-700 rounded-lg p-3 transition-all duration-300">
+            <div class="flex justify-between items-start mb-2">
+                <p id="feedback-choice" class="text-cyan-400 font-semibold text-sm">You chose: ...</p>
+                <button id="close-feedback" class="text-gray-500 hover:text-gray-300 text-xs">✕</button>
+            </div>
+            <div id="feedback-effects" class="grid grid-cols-2 gap-2 text-xs mb-2">
+                <!-- Effects will be inserted here -->
+            </div>
+            <p id="feedback-insight" class="text-gray-400 text-xs italic border-t border-gray-700 pt-2 mt-2"></p>
         </div>
     </div>
 
@@ -269,6 +283,13 @@
         const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
         const closeLeaderboardBtn = document.getElementById('close-leaderboard-btn');
         const collapseLeaderboardBtn = document.getElementById('collapse-leaderboard-btn');
+
+        // Feedback panel elements
+        const feedbackPanelEl = document.getElementById('feedback-panel');
+        const feedbackChoiceEl = document.getElementById('feedback-choice');
+        const feedbackEffectsEl = document.getElementById('feedback-effects');
+        const feedbackInsightEl = document.getElementById('feedback-insight');
+        const closeFeedbackBtn = document.getElementById('close-feedback');
 
         // --- API CONFIGURATION ---
         // Auto-detect API URL: use relative path in production, localhost in development
@@ -894,8 +915,147 @@
             cardEl.classList.remove('card-swipe-left', 'card-swipe-right');
         }
 
+        // Durkheimian insights based on choice effects
+        const durkheimInsights = {
+            // Solidarity effects
+            solidarity_up: [
+                "Strengthening collective bonds - Durkheim saw this as essential for any society.",
+                "Social cohesion increased. In Durkheim's terms, you're reinforcing the 'collective conscience.'",
+                "Bonds between members grow stronger. Whether mechanical or organic, solidarity is the glue of society."
+            ],
+            solidarity_down: [
+                "Weakening social bonds. Durkheim warned that without solidarity, anomie follows.",
+                "Cohesion decreases. The ties that bind people together are loosening.",
+                "Social integration weakens. Isolated individuals struggle to find meaning."
+            ],
+            // Productivity (Division of Labor) effects
+            productivity_up: [
+                "Division of labor increases. Durkheim saw this as the engine of modern solidarity.",
+                "Specialization grows. People become more interdependent through their different roles.",
+                "Economic complexity rises. This can create organic solidarity - or anomie, if unregulated."
+            ],
+            productivity_down: [
+                "Division of labor decreases. Society remains less specialized.",
+                "Economic activity slows. Less specialization means less interdependence.",
+                "Complexity reduces. Simpler economies may be more stable but less dynamic."
+            ],
+            // Legitimacy (Moral Regulation) effects
+            legitimacy_up: [
+                "Moral authority strengthens. Durkheim emphasized that norms must keep pace with change.",
+                "Institutions gain trust. Legitimate rules help prevent anomie.",
+                "Regulatory capacity grows. Note: full effect takes time (legitimacy has inertia)."
+            ],
+            legitimacy_down: [
+                "Moral authority weakens. When rules lose legitimacy, anomie threatens.",
+                "Institutional trust erodes. Without respected norms, desires become unlimited.",
+                "Regulation falters. Durkheim warned: the market alone cannot ensure order."
+            ],
+            // Innovation (Social Differentiation) effects
+            innovation_up: [
+                "Social differentiation increases. Individual roles become more distinct.",
+                "Diversity grows. Organic solidarity requires each person to have their own sphere.",
+                "Note: Innovation gains are reduced if integration (solidarity + legitimacy) is low."
+            ],
+            innovation_down: [
+                "Differentiation decreases. Society becomes more homogeneous.",
+                "Individuality constrained. Durkheim saw some differentiation as necessary for modern life.",
+                "Diversity shrinks. Too little difference undermines organic solidarity."
+            ],
+            // Mixed/balanced
+            balanced: [
+                "A balanced choice. Durkheim noted that healthy societies manage trade-offs carefully.",
+                "Mixed effects. The transition from mechanical to organic solidarity is never simple.",
+                "Trade-offs everywhere. Every choice shapes what kind of solidarity is possible."
+            ],
+            anomie_risk: [
+                "⚠️ This pushes toward anomie - change is outpacing moral regulation.",
+                "⚠️ Danger: growing gap between economic change and normative framework.",
+                "⚠️ Durkheim's warning: unregulated expansion leads to normlessness."
+            ]
+        };
+
+        function getRandomInsight(key) {
+            const insights = durkheimInsights[key];
+            return insights[Math.floor(Math.random() * insights.length)];
+        }
+
+        function showChoiceFeedback(choiceText, effects, metersBefore) {
+            feedbackChoiceEl.textContent = `You chose: "${choiceText}"`;
+
+            // Build effects display
+            let effectsHtml = '';
+            const meterNames = {
+                solidarity: 'Social Cohesion',
+                productivity: 'Division of Labor',
+                legitimacy: 'Moral Regulation',
+                innovation: 'Social Differentiation'
+            };
+
+            for (const key in effects) {
+                const value = effects[key];
+                if (value === 0) continue;
+
+                const sign = value > 0 ? '+' : '';
+                const color = value > 0 ? 'text-green-400' : 'text-red-400';
+                const arrow = value > 0 ? '↑' : '↓';
+
+                // Show actual change vs intended (due to mechanics like legitimacy inertia)
+                const actualChange = Math.round(state.meters[key] - metersBefore[key]);
+                const actualNote = key === 'legitimacy' && value !== 0
+                    ? ` (${Math.round(value * 0.6)} now, rest pending)`
+                    : '';
+
+                effectsHtml += `
+                    <div class="flex items-center gap-1">
+                        <span class="${color} font-semibold">${arrow} ${sign}${value}</span>
+                        <span class="text-gray-400">${meterNames[key]}${actualNote}</span>
+                    </div>
+                `;
+            }
+
+            feedbackEffectsEl.innerHTML = effectsHtml || '<span class="text-gray-500">No major effects</span>';
+
+            // Generate Durkheimian insight
+            let insightKey = 'balanced';
+            const solidarityEffect = effects.solidarity || 0;
+            const productivityEffect = effects.productivity || 0;
+            const legitimacyEffect = effects.legitimacy || 0;
+            const innovationEffect = effects.innovation || 0;
+
+            // Check for anomie risk
+            if ((productivityEffect > 10 || innovationEffect > 10) && legitimacyEffect < 0) {
+                insightKey = 'anomie_risk';
+            } else if (Math.abs(solidarityEffect) >= Math.abs(productivityEffect) &&
+                       Math.abs(solidarityEffect) >= Math.abs(legitimacyEffect) &&
+                       Math.abs(solidarityEffect) >= Math.abs(innovationEffect)) {
+                insightKey = solidarityEffect > 0 ? 'solidarity_up' : 'solidarity_down';
+            } else if (Math.abs(productivityEffect) >= Math.abs(legitimacyEffect) &&
+                       Math.abs(productivityEffect) >= Math.abs(innovationEffect)) {
+                insightKey = productivityEffect > 0 ? 'productivity_up' : 'productivity_down';
+            } else if (Math.abs(legitimacyEffect) >= Math.abs(innovationEffect)) {
+                insightKey = legitimacyEffect > 0 ? 'legitimacy_up' : 'legitimacy_down';
+            } else if (innovationEffect !== 0) {
+                insightKey = innovationEffect > 0 ? 'innovation_up' : 'innovation_down';
+            }
+
+            feedbackInsightEl.textContent = getRandomInsight(insightKey);
+
+            // Show the panel
+            feedbackPanelEl.classList.remove('hidden');
+
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+                if (!state.gameOver) {
+                    feedbackPanelEl.classList.add('hidden');
+                }
+            }, 8000);
+        }
+
         function handleChoice(choiceKey) {
-            const effects = { ...state.currentCard[choiceKey].effects };
+            const originalEffects = { ...state.currentCard[choiceKey].effects };
+            const choiceText = state.currentCard[choiceKey].text;
+            const metersBefore = { ...state.meters };
+            const effects = { ...originalEffects };
 
             // === DURKHEIMIAN MECHANICS ===
 
@@ -954,6 +1114,11 @@
             updateSolidarityType();
             updateEra();
             checkAnomie();
+
+            // Show feedback on the choice (only in player mode)
+            if (state.gameMode === 'player') {
+                showChoiceFeedback(choiceText, originalEffects, metersBefore);
+            }
 
             // Check win condition first
             if (checkWinCondition()) {
@@ -1187,6 +1352,85 @@
                 startOverlayEl.classList.remove('opacity-0', 'invisible');
             }
         });
+
+        // Close feedback panel
+        closeFeedbackBtn.addEventListener('click', () => {
+            feedbackPanelEl.classList.add('hidden');
+        });
+
+        // === MOBILE SWIPE SUPPORT ===
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let isSwiping = false;
+
+        cardEl.addEventListener('touchstart', (e) => {
+            if (state.gameMode !== 'player' || state.gameOver) return;
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            isSwiping = true;
+        }, { passive: true });
+
+        cardEl.addEventListener('touchmove', (e) => {
+            if (!isSwiping || state.gameMode !== 'player') return;
+            const currentX = e.changedTouches[0].screenX;
+            const diffX = currentX - touchStartX;
+
+            // Visual feedback during swipe
+            const rotation = diffX * 0.1;
+            const opacity = Math.max(0.5, 1 - Math.abs(diffX) / 500);
+            cardEl.style.transform = `translateX(${diffX}px) rotate(${rotation}deg)`;
+            cardEl.style.opacity = opacity;
+
+            // Highlight the choice being swiped toward
+            if (diffX < -30) {
+                choiceATextEl.parentElement.classList.add('border-cyan-500');
+                choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+            } else if (diffX > 30) {
+                choiceBTextEl.parentElement.classList.add('border-cyan-500');
+                choiceATextEl.parentElement.classList.remove('border-cyan-500');
+            } else {
+                choiceATextEl.parentElement.classList.remove('border-cyan-500');
+                choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+            }
+        }, { passive: true });
+
+        cardEl.addEventListener('touchend', (e) => {
+            if (!isSwiping || state.gameMode !== 'player' || state.gameOver) return;
+            isSwiping = false;
+
+            touchEndX = e.changedTouches[0].screenX;
+            const diffX = touchEndX - touchStartX;
+            const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+
+            // Reset visual highlights
+            choiceATextEl.parentElement.classList.remove('border-cyan-500');
+            choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+
+            // Only register swipe if horizontal movement > vertical and > threshold
+            const swipeThreshold = 80;
+            if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > diffY) {
+                if (diffX < 0) {
+                    // Swipe left = Choice A
+                    cardEl.classList.add('card-swipe-left');
+                    setTimeout(() => {
+                        handleChoice('choiceA');
+                        setTimeout(displayCard, 300);
+                    }, 200);
+                } else {
+                    // Swipe right = Choice B
+                    cardEl.classList.add('card-swipe-right');
+                    setTimeout(() => {
+                        handleChoice('choiceB');
+                        setTimeout(displayCard, 300);
+                    }, 200);
+                }
+            } else {
+                // Reset card position if swipe wasn't far enough
+                cardEl.style.transform = 'translateX(0) rotate(0deg)';
+                cardEl.style.opacity = 1;
+            }
+        }, { passive: true });
 
         // Victory submission
         submitScoreBtn.addEventListener('click', async () => {
