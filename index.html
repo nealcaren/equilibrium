@@ -79,7 +79,12 @@
             backdrop-filter: blur(2px);
         }
         .tutorial-content {
-            line-height: 1.6;
+            line-height: 1.5;
+        }
+        @media (max-width: 640px) {
+            .tutorial-content {
+                line-height: 1.4;
+            }
         }
         .tutorial-content strong {
             color: #22d3ee;
@@ -280,10 +285,10 @@
     </div>
 
     <!-- Tutorial Overlay -->
-    <div id="tutorial-overlay" class="tutorial-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300" style="z-index: 200;">
-        <div class="bg-gray-800 border border-cyan-500 rounded-2xl shadow-xl p-6 max-w-md w-full transform scale-95 transition-transform">
-            <div class="flex justify-between items-start mb-3">
-                <h3 id="tutorial-title" class="text-xl font-bold text-cyan-400">Tutorial</h3>
+    <div id="tutorial-overlay" class="tutorial-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-2 md:p-4 opacity-0 invisible transition-all duration-300" style="z-index: 200;">
+        <div class="bg-gray-800 border border-cyan-500 rounded-xl shadow-xl p-4 md:p-6 max-w-md w-full transform scale-95 transition-transform">
+            <div class="flex justify-between items-center mb-2 md:mb-3">
+                <h3 id="tutorial-title" class="text-base md:text-xl font-bold text-cyan-400">Tutorial</h3>
                 <div class="tutorial-progress" id="tutorial-progress">
                     <div class="tutorial-progress-dot"></div>
                     <div class="tutorial-progress-dot"></div>
@@ -292,15 +297,15 @@
                     <div class="tutorial-progress-dot"></div>
                 </div>
             </div>
-            <div id="tutorial-content" class="tutorial-content text-gray-300 text-sm mb-4">
+            <div id="tutorial-content" class="tutorial-content text-gray-300 text-xs md:text-sm mb-3 md:mb-4 max-h-48 md:max-h-64 overflow-y-auto">
                 <!-- Tutorial content inserted here -->
             </div>
             <div class="flex gap-2">
-                <button id="tutorial-skip-btn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
-                    Skip Tutorial
+                <button id="tutorial-skip-btn" class="bg-gray-700 hover:bg-gray-600 text-gray-400 py-2 px-3 rounded-lg transition-colors text-xs">
+                    Skip
                 </button>
-                <button id="tutorial-continue-btn" class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                    Got it!
+                <button id="tutorial-continue-btn" class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm md:text-base">
+                    Continue →
                 </button>
             </div>
         </div>
@@ -456,15 +461,13 @@
                     effects: { solidarity: -3, legitimacy: -2, productivity: 5, innovation: 5 }
                 },
                 lesson: {
-                    title: "The Four Forces of Society",
-                    content: `Every choice affects four interconnected forces:
+                    title: "The Four Forces",
+                    content: `Every choice affects four forces:
 
-<strong>👥 Social Cohesion</strong> - The bonds holding society together
+<strong>👥 Social Cohesion</strong> - Bonds holding society together
 <strong>📈 Division of Labor</strong> - Economic specialization
 <strong>🏛️ Moral Regulation</strong> - Rules and institutions
-<strong>💡 Social Differentiation</strong> - Diversity of roles
-
-Watch how your choices shift these meters!`,
+<strong>💡 Social Differentiation</strong> - Diversity of roles`,
                     highlight: "meters"
                 }
             },
@@ -480,12 +483,10 @@ Watch how your choices shift these meters!`,
                     effects: { solidarity: 4, legitimacy: 2, productivity: -2, innovation: -2 }
                 },
                 lesson: {
-                    title: "Every Choice Has Trade-offs",
-                    content: `Notice there are no "right" answers. Each choice strengthens some forces while weakening others.
+                    title: "Trade-offs",
+                    content: `There are no "right" answers. Each choice strengthens some forces while weakening others.
 
-This reflects Durkheim's insight: <em>social change always involves tension</em> between preservation and progress.
-
-The feedback panel shows exactly how each choice affected your society.`,
+Durkheim's insight: <em>social change always involves tension</em> between preservation and progress.`,
                     highlight: "choices"
                 }
             },
@@ -501,14 +502,12 @@ The feedback panel shows exactly how each choice affected your society.`,
                     effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 4 }
                 },
                 lesson: {
-                    title: "Two Types of Solidarity",
-                    content: `The spectrum at the top shows your society's type of social bond:
+                    title: "Solidarity Types",
+                    content: `<strong class="text-purple-400">Mechanical</strong> (left) - Unity through <em>similarity</em>. Shared beliefs, tradition.
 
-<strong class="text-purple-400">Mechanical Solidarity</strong> (left) - Unity through <em>similarity</em>. People are alike, share beliefs, follow tradition.
+<strong class="text-green-400">Organic</strong> (right) - Unity through <em>interdependence</em>. Different but need each other.
 
-<strong class="text-green-400">Organic Solidarity</strong> (right) - Unity through <em>interdependence</em>. People are different but need each other.
-
-<strong>Your goal:</strong> Guide society from mechanical to organic solidarity—the "great transition."`,
+<strong>Your goal:</strong> Guide society from mechanical → organic solidarity.`,
                     highlight: "solidarity"
                 }
             },
@@ -524,12 +523,12 @@ The feedback panel shows exactly how each choice affected your society.`,
                     effects: { solidarity: -4, legitimacy: -4, productivity: 5, innovation: 5 }
                 },
                 lesson: {
-                    title: "The Danger of Anomie",
-                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness." It occurs when social change outpaces moral regulation.
+                    title: "Anomie",
+                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change outpaces moral regulation.
 
-When Division of Labor and Differentiation grow too fast while Cohesion and Regulation fall behind, society destabilizes.
+If Division of Labor grows too fast while Cohesion and Regulation fall behind, society destabilizes.
 
-<strong>Watch for the warning!</strong> If anomie persists too long, society collapses. Balance progress with stability.`,
+<strong>Watch for the warning!</strong> Sustained anomie causes collapse.`,
                     highlight: "anomie"
                 }
             },
@@ -546,14 +545,13 @@ When Division of Labor and Differentiation grow too fast while Cohesion and Regu
                 },
                 lesson: {
                     title: "Your Mission",
-                    content: `<strong>Win Condition:</strong> Reach Year 100 with organic solidarity achieved.
+                    content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.
 
-This means high Division of Labor + maintained Social Cohesion + stable Moral Regulation.
+You need high Division of Labor + maintained Cohesion + stable Regulation.
 
-The transition is dangerous. You'll pass through three eras:
-• <span class="text-purple-400">Traditional</span> → <span class="text-blue-400">Transitional</span> → <span class="text-green-400">Modern</span>
+Three eras: <span class="text-purple-400">Traditional</span> → <span class="text-blue-400">Transitional</span> → <span class="text-green-400">Modern</span>
 
-Each era has unique challenges and collapse conditions. Good luck!`,
+Each has unique collapse conditions. Good luck!`,
                     highlight: "none"
                 }
             }
