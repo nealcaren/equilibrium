@@ -451,63 +451,64 @@
         const tutorialCards = [
             {
                 character: "Council Elder",
-                text: "Our village gathers for the first time under your guidance. The elders ask: how shall we strengthen our community?",
+                text: "Our village gathers for the first time. The elders ask: what makes us a community?",
                 choiceA: {
-                    text: "Reinforce family traditions",
-                    effects: { solidarity: 5, legitimacy: 5, productivity: -3, innovation: -3 }
+                    text: "Our shared traditions",
+                    effects: { solidarity: 8, legitimacy: 3, productivity: -2, innovation: -2 }
                 },
                 choiceB: {
-                    text: "Encourage new crafts and trades",
-                    effects: { solidarity: -3, legitimacy: -2, productivity: 5, innovation: 5 }
+                    text: "Working together",
+                    effects: { solidarity: 5, legitimacy: 2, productivity: 3, innovation: 2 }
                 },
                 lesson: {
-                    title: "The Four Forces",
-                    content: `Every choice affects four forces:
+                    title: "Social Cohesion",
+                    content: `<strong>👥 Social Cohesion</strong> measures the bonds holding your society together.
 
-<strong>👥 Social Cohesion</strong> - Bonds holding society together
-<strong>📈 Division of Labor</strong> - Economic specialization
-<strong>🏛️ Moral Regulation</strong> - Rules and institutions
-<strong>💡 Social Differentiation</strong> - Diversity of roles`,
+Too low → society fragments. Too high → resistance to change.
+
+This is your most important meter. Watch it closely!`,
                     highlight: "meters"
                 }
             },
             {
-                character: "Village Trader",
-                text: "Merchants from distant lands offer exotic goods. Some villagers are excited; others worry about outside influence.",
+                character: "Village Craftsman",
+                text: "Should everyone farm, or should some specialize in pottery, weaving, and metalwork?",
                 choiceA: {
-                    text: "Welcome the trade carefully",
-                    effects: { solidarity: -2, legitimacy: 3, productivity: 4, innovation: 3 }
+                    text: "Everyone should farm first",
+                    effects: { solidarity: 3, legitimacy: 2, productivity: -3, innovation: -2 }
                 },
                 choiceB: {
-                    text: "Protect local craftsmen",
-                    effects: { solidarity: 4, legitimacy: 2, productivity: -2, innovation: -2 }
+                    text: "Let people specialize",
+                    effects: { solidarity: -2, legitimacy: 1, productivity: 6, innovation: 4 }
                 },
                 lesson: {
-                    title: "Trade-offs",
-                    content: `There are no "right" answers. Each choice strengthens some forces while weakening others.
+                    title: "Division of Labor",
+                    content: `<strong>📈 Division of Labor</strong> measures economic specialization.
 
-Durkheim's insight: <em>social change always involves tension</em> between preservation and progress.`,
-                    highlight: "choices"
+As people take different jobs, they become <em>interdependent</em> - they need each other.
+
+This is the engine of social change!`,
+                    highlight: "meters"
                 }
             },
             {
                 character: "Tribal Philosopher",
-                text: "The young ask why we follow the old ways. How do we explain the bonds that hold us together?",
+                text: "The young ask: what truly binds us together?",
                 choiceA: {
                     text: "We are one family, one blood",
-                    effects: { solidarity: 6, legitimacy: 3, productivity: -2, innovation: -4 }
+                    effects: { solidarity: 6, legitimacy: 3, productivity: -2, innovation: -3 }
                 },
                 choiceB: {
-                    text: "Each person's work serves the whole",
-                    effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 4 }
+                    text: "Each person's work serves all",
+                    effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 3 }
                 },
                 lesson: {
-                    title: "Solidarity Types",
-                    content: `<strong class="text-purple-400">Mechanical</strong> (left) - Unity through <em>similarity</em>. Shared beliefs, tradition.
+                    title: "The Great Transition",
+                    content: `<strong class="text-purple-400">Mechanical solidarity</strong> = unity through <em>similarity</em>.
 
-<strong class="text-green-400">Organic</strong> (right) - Unity through <em>interdependence</em>. Different but need each other.
+<strong class="text-green-400">Organic solidarity</strong> = unity through <em>interdependence</em>.
 
-<strong>Your goal:</strong> Guide society from mechanical → organic solidarity.`,
+<strong>Your goal:</strong> Transform society from one to the other.`,
                     highlight: "solidarity"
                 }
             },
@@ -516,42 +517,42 @@ Durkheim's insight: <em>social change always involves tension</em> between prese
                 text: "Change comes faster than our customs can adapt. Some abandon the old ways before new ones take hold.",
                 choiceA: {
                     text: "Slow down, preserve traditions",
-                    effects: { solidarity: 4, legitimacy: 5, productivity: -3, innovation: -3 }
+                    effects: { solidarity: 4, legitimacy: 5, productivity: -3, innovation: -2 }
                 },
                 choiceB: {
-                    text: "Push forward, embrace the new",
-                    effects: { solidarity: -4, legitimacy: -4, productivity: 5, innovation: 5 }
+                    text: "Push forward, embrace change",
+                    effects: { solidarity: -3, legitimacy: -3, productivity: 5, innovation: 4 }
                 },
                 lesson: {
-                    title: "Anomie",
-                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change outpaces moral regulation.
+                    title: "Danger: Anomie",
+                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change is too fast.
 
-If Division of Labor grows too fast while Cohesion and Regulation fall behind, society destabilizes.
+If the warning appears, a new meter (<strong>🏛️ Moral Regulation</strong>) will be revealed to help you stabilize.
 
-<strong>Watch for the warning!</strong> Sustained anomie causes collapse.`,
+Balance progress with stability!`,
                     highlight: "anomie"
                 }
             },
             {
                 character: "The Path Ahead",
-                text: "Your society stands at a crossroads. The journey to organic solidarity will take 100 years. Are you ready?",
+                text: "Your society stands at a crossroads. The journey to organic solidarity will take 100 years.",
                 choiceA: {
-                    text: "Build strong institutions first",
-                    effects: { solidarity: 3, legitimacy: 4, productivity: 2, innovation: 1 }
+                    text: "Build strong foundations",
+                    effects: { solidarity: 4, legitimacy: 4, productivity: 2, innovation: 1 }
                 },
                 choiceB: {
-                    text: "Let specialization lead the way",
-                    effects: { solidarity: 1, legitimacy: 2, productivity: 4, innovation: 3 }
+                    text: "Embrace specialization",
+                    effects: { solidarity: 1, legitimacy: 2, productivity: 5, innovation: 4 }
                 },
                 lesson: {
                     title: "Your Mission",
                     content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.
 
-You need high Division of Labor + maintained Cohesion + stable Regulation.
+As society grows complex, new meters will appear:
+• <strong>🏛️ Moral Regulation</strong> - when anomie threatens
+• <strong>💡 Social Differentiation</strong> - in the Transitional era
 
-Three eras: <span class="text-purple-400">Traditional</span> → <span class="text-blue-400">Transitional</span> → <span class="text-green-400">Modern</span>
-
-Each has unique collapse conditions. Good luck!`,
+Good luck!`,
                     highlight: "none"
                 }
             }
@@ -606,6 +607,8 @@ Each has unique collapse conditions. Good luck!`,
             Object.keys(meterDefinitions).forEach(key => {
                 const meterInfo = meterDefinitions[key];
                 const meterEl = document.createElement('div');
+                meterEl.id = `meter-${key}`;
+                meterEl.className = 'meter-container transition-all duration-500';
                 meterEl.innerHTML = `
                     <div class="flex justify-between items-center mb-0.5">
                         <div class="flex items-center">
@@ -622,8 +625,51 @@ Each has unique collapse conditions. Good luck!`,
             });
         }
 
+        // Progressive meter reveal system
+        function updateMeterVisibility() {
+            const meters = ['solidarity', 'productivity', 'legitimacy', 'innovation'];
+            meters.forEach(key => {
+                const meterEl = document.getElementById(`meter-${key}`);
+                if (meterEl) {
+                    if (state.visibleMeters[key]) {
+                        meterEl.classList.remove('hidden');
+                    } else {
+                        meterEl.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function revealMeter(meterKey, showNotification = true) {
+            if (state.visibleMeters[meterKey]) return; // Already visible
+
+            state.visibleMeters[meterKey] = true;
+            updateMeterVisibility();
+
+            if (showNotification && state.gameMode === 'player') {
+                const meterInfo = meterDefinitions[meterKey];
+                showMeterRevealNotification(meterInfo.name, meterInfo.icon);
+            }
+        }
+
+        function showMeterRevealNotification(name, icon) {
+            // Create a brief notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-pulse';
+            notification.innerHTML = `<span class="text-lg mr-2">${icon}</span> New meter: <strong>${name}</strong>`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 2500);
+        }
+
         function resetGame(mode = 'sim', startTutorial = false) {
             // Start as a mechanical solidarity society
+            // For player mode: start with only core meters visible
+            const showAllMeters = (mode === 'sim');
             state = {
                 year: STARTING_YEAR,
                 meters: {
@@ -631,6 +677,12 @@ Each has unique collapse conditions. Good luck!`,
                     productivity: 40,  // Low productivity (pre-industrial)
                     legitimacy: 55,    // Moderate legitimacy (traditional authority)
                     innovation: 40     // Low innovation (traditional)
+                },
+                visibleMeters: {
+                    solidarity: true,                    // Always visible (core)
+                    productivity: true,                  // Always visible (core)
+                    legitimacy: showAllMeters,           // Revealed with anomie warning
+                    innovation: showAllMeters            // Revealed in transitional era
                 },
                 gameOver: false,
                 gameMode: mode,
@@ -668,6 +720,7 @@ Each has unique collapse conditions. Good luck!`,
             updateUI();
             updateSolidarityType();
             updateEra();
+            updateMeterVisibility();
 
             // Only display card if not starting tutorial (tutorial handles its own card display)
             if (!startTutorial) {
@@ -796,6 +849,10 @@ Each has unique collapse conditions. Good luck!`,
             if (state.inAnomie) {
                 state.anomieTurns++;
                 anomieWarningEl.classList.remove('hidden');
+                // Reveal Moral Regulation meter when anomie first appears
+                if (!wasInAnomie) {
+                    revealMeter('legitimacy');
+                }
                 // Update warning text to show severity
                 const severity = state.anomieTurns >= 3 ? 'CRITICAL' : state.anomieTurns >= 2 ? 'SEVERE' : 'WARNING';
                 anomieWarningEl.querySelector('p.text-red-400').textContent = `ANOMIE ${severity}`;
@@ -853,6 +910,8 @@ Each has unique collapse conditions. Good luck!`,
                 if (newEra === 'transitional' && previousEra === 'traditional') {
                     transitionKey = 'toTransitional';
                     state.hasReachedTransitional = true;
+                    // Reveal Social Differentiation meter when entering transitional era
+                    revealMeter('innovation');
                 } else if (newEra === 'modern' && previousEra === 'transitional') {
                     transitionKey = 'toModern';
                     state.hasReachedModern = true;
