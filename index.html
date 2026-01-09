@@ -558,6 +558,141 @@ Good luck!`,
             }
         ];
 
+        // --- QUESTLINE CARDS ---
+        // Follow-up cards triggered by previous choices
+        // These show that social change is a process, not a single event
+        const triggeredCards = {
+            // Professional Bodies questline
+            "guild_formation_success": {
+                character: "Guild Master",
+                text: "The professional associations you sanctioned have flourished. They now seek official recognition and the power to set standards for their trades.",
+                questline: "professional_bodies",
+                choiceA: {
+                    text: "Grant them regulatory power",
+                    effects: { solidarity: 5, legitimacy: 8, productivity: 3, innovation: -2 },
+                    triggers: [{ cardId: "guild_monopoly", delay: 8 }]
+                },
+                choiceB: {
+                    text: "Keep them advisory only",
+                    effects: { solidarity: 2, legitimacy: 3, productivity: 5, innovation: 4 }
+                }
+            },
+            "guild_monopoly": {
+                character: "Young Entrepreneur",
+                text: "The guilds have become gatekeepers. Talented outsiders cannot practice their crafts without guild approval. Innovation suffers as new methods are blocked.",
+                questline: "professional_bodies",
+                choiceA: {
+                    text: "Break the guild monopolies",
+                    effects: { solidarity: -6, legitimacy: -4, productivity: 5, innovation: 8 }
+                },
+                choiceB: {
+                    text: "Reform from within",
+                    effects: { solidarity: 2, legitimacy: 4, productivity: 2, innovation: 3 }
+                }
+            },
+
+            // Factory System questline
+            "factory_conditions": {
+                character: "Factory Inspector",
+                text: "The factories you permitted have grown. Reports emerge of dangerous conditions - long hours, child labor, injuries. Workers organize in secret.",
+                questline: "factory_system",
+                choiceA: {
+                    text: "Mandate safety regulations",
+                    effects: { solidarity: 4, legitimacy: 6, productivity: -3, innovation: 2 },
+                    triggers: [{ cardId: "factory_compliance", delay: 6 }]
+                },
+                choiceB: {
+                    text: "Let the market self-regulate",
+                    effects: { solidarity: -5, legitimacy: -3, productivity: 6, innovation: 3 },
+                    triggers: [{ cardId: "factory_strike", delay: 4 }]
+                }
+            },
+            "factory_strike": {
+                character: "Strike Leader",
+                text: "Workers have walked out! Production halts across the industrial district. They demand better conditions or they won't return.",
+                questline: "factory_system",
+                choiceA: {
+                    text: "Negotiate with workers",
+                    effects: { solidarity: 6, legitimacy: 4, productivity: -2, innovation: 2 }
+                },
+                choiceB: {
+                    text: "Bring in replacement workers",
+                    effects: { solidarity: -8, legitimacy: -5, productivity: 3, innovation: -2 }
+                }
+            },
+            "factory_compliance": {
+                character: "Factory Owner",
+                text: "Your safety regulations have reduced injuries, but owners complain of costs. Some factories have moved to unregulated territories.",
+                questline: "factory_system",
+                choiceA: {
+                    text: "Strengthen enforcement",
+                    effects: { solidarity: 3, legitimacy: 5, productivity: -4, innovation: 1 }
+                },
+                choiceB: {
+                    text: "Offer compliance incentives",
+                    effects: { solidarity: 2, legitimacy: 3, productivity: 2, innovation: 3 }
+                }
+            },
+
+            // Education Reform questline
+            "education_results": {
+                character: "School Inspector",
+                text: "A generation has passed since your education reforms. Literacy has spread, but so have new ideas that challenge traditional authority.",
+                questline: "education",
+                choiceA: {
+                    text: "Embrace the enlightened citizenry",
+                    effects: { solidarity: -2, legitimacy: 3, productivity: 5, innovation: 7 },
+                    triggers: [{ cardId: "education_division", delay: 10 }]
+                },
+                choiceB: {
+                    text: "Refocus on moral instruction",
+                    effects: { solidarity: 5, legitimacy: 4, productivity: 2, innovation: -3 }
+                }
+            },
+            "education_division": {
+                character: "University Dean",
+                text: "Education has created a divide. The educated elite speak differently, dress differently, think differently. Are they still part of the same society?",
+                questline: "education",
+                choiceA: {
+                    text: "Expand education to all",
+                    effects: { solidarity: 4, legitimacy: 5, productivity: 4, innovation: 5 }
+                },
+                choiceB: {
+                    text: "Preserve educational hierarchy",
+                    effects: { solidarity: -3, legitimacy: 2, productivity: 3, innovation: 2 }
+                }
+            },
+
+            // Migration questline
+            "migrant_community": {
+                character: "Migrant Elder",
+                text: "The workers who came to your factories have formed their own neighborhood. They maintain their old customs but their children speak the local tongue.",
+                questline: "migration",
+                choiceA: {
+                    text: "Support cultural integration",
+                    effects: { solidarity: 5, legitimacy: 3, productivity: 3, innovation: 4 }
+                },
+                choiceB: {
+                    text: "Encourage distinct communities",
+                    effects: { solidarity: -2, legitimacy: 2, productivity: 4, innovation: 6 },
+                    triggers: [{ cardId: "migrant_tension", delay: 7 }]
+                }
+            },
+            "migrant_tension": {
+                character: "Local Merchant",
+                text: "Tensions rise between old residents and newer communities. A dispute over market stalls threatens to turn violent.",
+                questline: "migration",
+                choiceA: {
+                    text: "Create shared civic institutions",
+                    effects: { solidarity: 6, legitimacy: 5, productivity: 2, innovation: 2 }
+                },
+                choiceB: {
+                    text: "Let communities govern themselves",
+                    effects: { solidarity: -4, legitimacy: -2, productivity: 3, innovation: 4 }
+                }
+            }
+        };
+
         // Era definitions for Durkheim's transition
         const eras = {
             traditional: {
@@ -697,7 +832,10 @@ Good luck!`,
                 anomieResistance: 0,       // Occupational groups stabilize modern society
                 // Tutorial state
                 inTutorial: startTutorial,
-                tutorialStep: 0            // Current tutorial card (0-4)
+                tutorialStep: 0,           // Current tutorial card (0-4)
+                // Questline system
+                pendingCards: [],          // Cards triggered by previous choices [{cardId, triggerYear}]
+                questlineHistory: []       // Track which questlines have been triggered
             };
 
             gameOverModalEl.classList.add('opacity-0', 'invisible');
@@ -1139,32 +1277,52 @@ Good luck!`,
         }
 
         function displayCard() {
-            const availableCards = getAvailableCards();
+            let selectedCard = null;
 
-            if (availableCards.length === 0) {
-                console.error('No cards available!');
-                return;
+            // QUESTLINE SYSTEM: Check for triggered cards first
+            const dueCards = state.pendingCards.filter(p => p.triggerYear <= state.year);
+            if (dueCards.length > 0) {
+                // Pick the first due triggered card
+                const triggeredCardInfo = dueCards[0];
+                const triggeredCard = triggeredCards[triggeredCardInfo.cardId];
+
+                if (triggeredCard) {
+                    selectedCard = triggeredCard;
+                    // Remove from pending and add to history
+                    state.pendingCards = state.pendingCards.filter(p => p.cardId !== triggeredCardInfo.cardId);
+                    state.questlineHistory.push(triggeredCardInfo.cardId);
+                }
             }
 
-            // Filter out recently used cards (track by character+text to handle era changes)
-            const unseenCards = availableCards.filter(card => {
-                const cardKey = card.character + '|' + card.text;
-                return !state.usedCardKeys.includes(cardKey);
-            });
+            // If no triggered card, pick from regular cards
+            if (!selectedCard) {
+                const availableCards = getAvailableCards();
 
-            // Reset if we've seen all available cards
-            const cardsToChooseFrom = unseenCards.length > 0 ? unseenCards : availableCards;
-            if (unseenCards.length === 0) {
-                state.usedCardKeys = [];
+                if (availableCards.length === 0) {
+                    console.error('No cards available!');
+                    return;
+                }
+
+                // Filter out recently used cards (track by character+text to handle era changes)
+                const unseenCards = availableCards.filter(card => {
+                    const cardKey = card.character + '|' + card.text;
+                    return !state.usedCardKeys.includes(cardKey);
+                });
+
+                // Reset if we've seen all available cards
+                const cardsToChooseFrom = unseenCards.length > 0 ? unseenCards : availableCards;
+                if (unseenCards.length === 0) {
+                    state.usedCardKeys = [];
+                }
+
+                // Pick a random card
+                const randomIndex = Math.floor(Math.random() * cardsToChooseFrom.length);
+                selectedCard = cardsToChooseFrom[randomIndex];
+
+                // Track this card as used
+                const cardKey = selectedCard.character + '|' + selectedCard.text;
+                state.usedCardKeys.push(cardKey);
             }
-
-            // Pick a random card
-            const randomIndex = Math.floor(Math.random() * cardsToChooseFrom.length);
-            const selectedCard = cardsToChooseFrom[randomIndex];
-
-            // Track this card as used
-            const cardKey = selectedCard.character + '|' + selectedCard.text;
-            state.usedCardKeys.push(cardKey);
 
             state.currentCard = selectedCard;
 
@@ -1483,6 +1641,22 @@ Good luck!`,
             // Show feedback on the choice (only in player mode)
             if (state.gameMode === 'player') {
                 showChoiceFeedback(choiceText, originalEffects, metersBefore);
+            }
+
+            // 7. QUESTLINE TRIGGERS: Check if this choice triggers future cards
+            const choiceData = state.currentCard[choiceKey];
+            if (choiceData.triggers && Array.isArray(choiceData.triggers)) {
+                choiceData.triggers.forEach(trigger => {
+                    // Only add if not already pending and not already triggered
+                    const alreadyPending = state.pendingCards.some(p => p.cardId === trigger.cardId);
+                    const alreadyTriggered = state.questlineHistory.includes(trigger.cardId);
+                    if (!alreadyPending && !alreadyTriggered) {
+                        state.pendingCards.push({
+                            cardId: trigger.cardId,
+                            triggerYear: state.year + trigger.delay
+                        });
+                    }
+                });
             }
 
             // Check win condition first

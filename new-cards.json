@@ -121,6 +121,30 @@
       "text": "Anonymous credit will allow people to start businesses without knowing the lender. This replaces trust with contracts.",
       "choiceA": { "text": "Expand modern credit", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": 5, "innovation": 20 } },
       "choiceB": { "text": "Trust local lenders", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -15 } }
+    },
+    {
+      "character": "Labor Commissioner",
+      "text": "Craftsmen and professionals want to form associations to set standards and protect their trades. Merchants fear this will create monopolies.",
+      "choiceA": { "text": "Allow professional bodies", "effects": { "solidarity": 5, "productivity": 5, "legitimacy": 8, "innovation": 3 }, "triggers": [{ "cardId": "guild_formation_success", "delay": 6 }] },
+      "choiceB": { "text": "Keep trades open", "effects": { "solidarity": -3, "productivity": 8, "legitimacy": -2, "innovation": 6 } }
+    },
+    {
+      "character": "Factory Investor",
+      "text": "A consortium wants to build large factories outside town. This would transform our economy but concentrate workers in new ways.",
+      "choiceA": { "text": "Permit the factories", "effects": { "solidarity": -8, "productivity": 15, "legitimacy": -5, "innovation": 10 }, "triggers": [{ "cardId": "factory_conditions", "delay": 8 }] },
+      "choiceB": { "text": "Protect small workshops", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 5, "innovation": -3 } }
+    },
+    {
+      "character": "Education Minister",
+      "text": "We could establish public schools to teach reading and arithmetic to all children. Some fear this will give common folk dangerous ideas.",
+      "choiceA": { "text": "Build public schools", "effects": { "solidarity": -5, "productivity": 8, "legitimacy": 5, "innovation": 12 }, "triggers": [{ "cardId": "education_results", "delay": 12 }] },
+      "choiceB": { "text": "Education for elites only", "effects": { "solidarity": 5, "productivity": -3, "legitimacy": 3, "innovation": -8 } }
+    },
+    {
+      "character": "Border Official",
+      "text": "Workers from distant regions seek jobs in our growing factories. They bring skills but also unfamiliar customs.",
+      "choiceA": { "text": "Welcome migrant workers", "effects": { "solidarity": -6, "productivity": 10, "legitimacy": -3, "innovation": 8 }, "triggers": [{ "cardId": "migrant_community", "delay": 7 }] },
+      "choiceB": { "text": "Restrict immigration", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -5 } }
     }
   ],
   "modern": [
