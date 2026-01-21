@@ -1963,9 +1963,10 @@
             // 6. OCCUPATIONAL DENSITY: Professional groups stabilize modern society
             updateAnonieResistance();
 
-            // Clamp all meters
+            // Clamp all meters with soft limits (5-95) to give recovery room
+            // Absolute collapse only happens if player truly pushes to extremes
             for (const key in state.meters) {
-                state.meters[key] = Math.max(0, Math.min(100, state.meters[key]));
+                state.meters[key] = Math.max(5, Math.min(95, state.meters[key]));
             }
 
             state.year += 1;
@@ -2055,7 +2056,7 @@
                     quote: "\"The totality of beliefs and sentiments common to average citizens of the same society forms a determinate system which has its own life; one may call it the collective conscience.\" - Durkheim"
                 },
                 repressiveExcess: {
-                    check: (m) => m.legitimacy >= 100,
+                    check: (m) => m.legitimacy >= 100 && m.innovation < 25,
                     reason: "Repression Devoured Its Own",
                     explanation: "Punishment in mechanical solidarity reinforces shared values—but your society made punishment the purpose rather than the means. The community was crushed by its own need for conformity.",
                     quote: "\"Repressive law corresponds to the heart of the collective conscience... but when punishment becomes the purpose rather than the means, society suffocates.\" - Durkheim"
@@ -2073,7 +2074,7 @@
                     quote: "\"When the conscience collective becomes too rigid, it loses the plasticity required to adapt to changing circumstances.\" - Durkheim"
                 },
                 prematureModernization: {
-                    check: (m) => m.productivity >= 100 && m.solidarity < 40,
+                    check: (m) => m.productivity >= 100 && m.solidarity < 30,
                     reason: "Change Outran Understanding",
                     explanation: "The division of labor expanded before people could develop new forms of connection. They became interdependent strangers—needing each other but not knowing how to be together.",
                     quote: "\"If the division of labor does not produce solidarity, it is because the relations between the organs are not regulated.\" - Durkheim"
@@ -2133,7 +2134,7 @@
                     quote: "\"A group is not only a moral authority which dominates the life of its members; it is also a source of life sui generis.\" - Durkheim"
                 },
                 hyperSpecialization: {
-                    check: (m) => m.productivity >= 100 && m.solidarity < 35,
+                    check: (m) => m.productivity >= 100 && m.solidarity < 30,
                     reason: "The Worker Becomes a Cog",
                     explanation: "Specialization exceeded the point of meaningful integration. People became so narrowly defined by their function that they lost connection to the whole.",
                     quote: "\"As work becomes more divided, the worker becomes weaker... he is no longer anything but an inert piece of machinery.\" - Durkheim"
