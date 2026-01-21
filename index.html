@@ -110,6 +110,50 @@
         .tutorial-progress-dot.completed {
             background: #10b981;
         }
+        /* Contextual tips - non-blocking floating hints */
+        .contextual-tip {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 90%;
+            width: 320px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            animation: tip-appear 0.3s ease-out;
+            pointer-events: none;
+        }
+        .contextual-tip.tip-top {
+            top: 80px;
+        }
+        .contextual-tip.tip-bottom {
+            bottom: 100px;
+        }
+        .contextual-tip.tip-info {
+            background: linear-gradient(135deg, #1e3a5f, #1e293b);
+            border: 1px solid #3b82f6;
+        }
+        .contextual-tip.tip-warning {
+            background: linear-gradient(135deg, #5c4813, #1e293b);
+            border: 1px solid #eab308;
+        }
+        .contextual-tip.tip-danger {
+            background: linear-gradient(135deg, #5c1313, #1e293b);
+            border: 1px solid #ef4444;
+        }
+        .contextual-tip.tip-success {
+            background: linear-gradient(135deg, #134e2a, #1e293b);
+            border: 1px solid #22c55e;
+        }
+        @keyframes tip-appear {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes tip-fade {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
@@ -120,15 +164,25 @@
             <p id="subtitle" class="text-gray-400">Observing a Society in Balance...</p>
             <div class="mt-3 flex justify-center items-center gap-4">
                 <div class="text-xl font-semibold bg-gray-800 rounded-lg px-3 py-1">
-                    Year: <span id="year-counter">2024</span>
+                    Year: <span id="year-counter">0</span>
                 </div>
                 <div id="era-badge" class="text-sm font-semibold bg-purple-600 rounded-lg px-3 py-1">
                     Traditional Era
                 </div>
             </div>
+            <!-- Year Progress Bar -->
+            <div class="mt-2 px-2">
+                <div class="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>Year 0</span>
+                    <span>Year 100</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div id="year-progress-bar" class="bg-gradient-to-r from-purple-500 via-indigo-500 to-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
 
             <!-- Solidarity Type Spectrum -->
-            <div class="mt-4 bg-gray-800 rounded-lg p-3">
+            <div class="mt-4 bg-gray-800 rounded-lg p-3 cursor-help" title="This spectrum shows your society's type of solidarity. Mechanical (left) = unity through similarity. Organic (right) = unity through interdependence. Your goal is to move right while maintaining cohesion.">
                 <div class="flex justify-between text-xs text-gray-400 mb-1">
                     <span>Mechanical Solidarity</span>
                     <span>Organic Solidarity</span>
@@ -138,6 +192,7 @@
                 </div>
                 <p id="solidarity-type-label" class="text-sm text-purple-400 mt-2 font-semibold">Mechanical Solidarity</p>
                 <p id="solidarity-description" class="text-xs text-gray-500 mt-1">Strong collective conscience, shared beliefs</p>
+                <p id="solidarity-basis" class="text-xs text-gray-600 mt-1 italic">Basis: <span id="basis-indicator" class="text-purple-400">Similarity</span></p>
             </div>
 
             <!-- Anomie Warning -->
@@ -155,35 +210,44 @@
         </main>
 
         <!-- Card -->
-        <div id="card-container" class="relative h-56">
-            <div id="card" class="card absolute inset-0 bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl flex flex-col justify-between">
+        <div id="card-container" class="relative min-h-56">
+            <div id="card" class="card bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl flex flex-col justify-between min-h-56">
                 <div>
                     <h3 id="card-character" class="font-semibold text-cyan-400 mb-2">Loading...</h3>
                     <p id="card-text" class="text-gray-300">The simulation is preparing the first scenario.</p>
                 </div>
-                <div class="flex justify-between text-center mt-4">
-                    <div id="choice-a-div" class="w-1/2 pr-2">
-                        <div class="text-xs text-gray-600 mb-1 md:hidden">← swipe left</div>
-                        <div id="choice-a-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
+                <div class="flex justify-between text-center mt-4 gap-3">
+                    <div id="choice-a-div" class="choice-box w-1/2 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 hover:border-cyan-500 rounded-lg p-3 min-h-16 flex flex-col justify-center transition-all">
+                        <div class="text-xs text-gray-500 mb-1 md:hidden">← swipe</div>
+                        <div id="choice-a-text" class="text-sm md:text-base text-gray-200 font-semibold"></div>
                     </div>
-                    <div id="choice-b-div" class="w-1/2 pl-2">
-                        <div class="text-xs text-gray-600 mb-1 md:hidden">swipe right →</div>
-                        <div id="choice-b-text" class="choice-box text-sm text-gray-400 font-semibold p-2 border-2 border-transparent rounded-lg h-full flex items-center justify-center"></div>
+                    <div id="choice-b-div" class="choice-box w-1/2 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 hover:border-cyan-500 rounded-lg p-3 min-h-16 flex flex-col justify-center transition-all">
+                        <div class="text-xs text-gray-500 mb-1 md:hidden">swipe →</div>
+                        <div id="choice-b-text" class="text-sm md:text-base text-gray-200 font-semibold"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Choice Feedback Panel -->
-        <div id="feedback-panel" class="hidden mt-3 bg-gray-800 border border-gray-700 rounded-lg p-3 transition-all duration-300">
-            <div class="flex justify-between items-start mb-2">
-                <p id="feedback-choice" class="text-cyan-400 font-semibold text-sm">You chose: ...</p>
-                <button id="close-feedback" class="text-gray-500 hover:text-gray-300 text-xs">✕</button>
-            </div>
-            <div id="feedback-effects" class="grid grid-cols-2 gap-2 text-xs mb-2">
+    </div>
+
+    <!-- Choice Feedback Splash -->
+    <div id="feedback-splash" class="fixed inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300 cursor-pointer" style="z-index: 150;">
+        <div class="bg-gray-900 bg-opacity-95 border border-gray-700 rounded-xl p-5 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300 shadow-2xl">
+            <p id="feedback-choice" class="text-cyan-400 font-semibold text-center mb-3"></p>
+            <div id="feedback-effects" class="flex flex-wrap justify-center gap-3 mb-3">
                 <!-- Effects will be inserted here -->
             </div>
-            <p id="feedback-insight" class="text-gray-400 text-xs italic border-t border-gray-700 pt-2 mt-2"></p>
+            <p id="feedback-insight" class="text-gray-400 text-sm italic text-center"></p>
+            <!-- Tap to continue hint (normal mode) -->
+            <p id="feedback-tap-hint" class="text-gray-600 text-xs text-center mt-3 hidden">tap anywhere to continue</p>
+            <!-- Tutorial explanation (hidden in normal play) -->
+            <div id="feedback-tutorial-section" class="hidden mt-4 pt-4 border-t border-gray-700">
+                <p id="feedback-tutorial-text" class="text-gray-300 text-sm text-center mb-4"></p>
+                <button id="feedback-next-btn" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                    Next →
+                </button>
+            </div>
         </div>
     </div>
 
@@ -217,7 +281,7 @@
                 Begin the Transition
             </button>
             <button id="view-leaderboard-btn" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors w-full text-sm">
-                View Leaderboard
+                Your Scores
             </button>
         </div>
     </div>
@@ -241,7 +305,7 @@
                     Try Again
                 </button>
                 <button id="collapse-leaderboard-btn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-4 rounded-lg transition-colors">
-                    Leaderboard
+                    Your Scores
                 </button>
             </div>
         </div>
@@ -261,22 +325,22 @@
             </div>
 
             <div class="mb-4">
-                <label class="text-gray-400 text-sm block mb-1">Enter your name for the leaderboard:</label>
+                <label class="text-gray-400 text-sm block mb-1">Enter your name to save your score:</label>
                 <input type="text" id="winner-name" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:border-green-500 focus:outline-none" placeholder="Your name" maxlength="20">
             </div>
 
             <button id="submit-score-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full">
-                Submit Score & View Leaderboard
+                Save Score
             </button>
         </div>
     </div>
 
-    <!-- Leaderboard Modal -->
+    <!-- Your Scores Modal -->
     <div id="leaderboard-modal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 opacity-0 invisible">
         <div class="bg-gray-800 rounded-2xl shadow-xl p-6 max-w-md w-full text-center transform scale-95 transition-transform">
-            <h2 class="text-2xl font-bold text-cyan-400 mb-4">Leaderboard</h2>
+            <h2 class="text-2xl font-bold text-cyan-400 mb-4">Your Scores</h2>
             <div id="leaderboard-content" class="mb-4 max-h-64 overflow-y-auto">
-                <!-- Leaderboard entries will be inserted here -->
+                <!-- Score entries will be inserted here -->
             </div>
             <button id="close-leaderboard-btn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-colors w-full">
                 Close
@@ -353,12 +417,14 @@
         const closeLeaderboardBtn = document.getElementById('close-leaderboard-btn');
         const collapseLeaderboardBtn = document.getElementById('collapse-leaderboard-btn');
 
-        // Feedback panel elements
-        const feedbackPanelEl = document.getElementById('feedback-panel');
+        // Feedback splash elements
+        const feedbackSplashEl = document.getElementById('feedback-splash');
         const feedbackChoiceEl = document.getElementById('feedback-choice');
         const feedbackEffectsEl = document.getElementById('feedback-effects');
         const feedbackInsightEl = document.getElementById('feedback-insight');
-        const closeFeedbackBtn = document.getElementById('close-feedback');
+        const feedbackTutorialSection = document.getElementById('feedback-tutorial-section');
+        const feedbackTutorialText = document.getElementById('feedback-tutorial-text');
+        const feedbackNextBtn = document.getElementById('feedback-next-btn');
 
         // Tutorial elements
         const tutorialOverlayEl = document.getElementById('tutorial-overlay');
@@ -441,10 +507,42 @@
         }
 
         const meterDefinitions = {
-            solidarity: { name: "Social Cohesion", icon: "👥" },          // Collective bonds (transforms from similarity-based to interdependence-based)
-            productivity: { name: "Division of Labor", icon: "📈" },      // Specialization and economic complexity
-            legitimacy: { name: "Moral Regulation", icon: "🏛️" },        // Norms, rules, institutional trust
-            innovation: { name: "Social Differentiation", icon: "💡" }   // Individual difference, cultural diversity
+            solidarity: {
+                name: "Social Cohesion",
+                icon: "👥",
+                tooltip: "The bonds holding society together. In mechanical solidarity, this comes from similarity. In organic solidarity, from interdependence. Too low = fragmentation. Too high = resistance to change."
+            },
+            productivity: {
+                name: "Division of Labor",
+                icon: "📈",
+                tooltip: "Economic specialization and complexity. As people take different jobs, they become interdependent. This is the engine of social change - but it must be balanced with cohesion."
+            },
+            legitimacy: {
+                name: "Moral Regulation",
+                icon: "🏛️",
+                tooltip: "The strength of norms and institutional trust. When change outpaces regulation, anomie (normlessness) emerges. New rules must form to match new social structures."
+            },
+            innovation: {
+                name: "Social Differentiation",
+                icon: "💡",
+                tooltip: "Individual difference and cultural diversity. Organic solidarity requires each person to have their own sphere. Too little = stagnation. Too much without integration = chaos."
+            }
+        };
+
+        // Era-specific labels for the solidarity meter - teaches that the NATURE of cohesion changes
+        const solidarityMeterByEra = {
+            traditional: {
+                name: "Collective Conscience",
+                tooltip: "Shared beliefs and values binding your people together. In Durkheim's terms, the collective conscience 'envelops' individual identity. This is the foundation of mechanical solidarity."
+            },
+            transitional: {
+                name: "Social Bonds",
+                tooltip: "The ties holding society together are transforming. Old bonds of similarity weaken while new bonds of interdependence form. A precarious but necessary passage."
+            },
+            modern: {
+                name: "Interdependence",
+                tooltip: "People are bound together by mutual reliance - they need each other's specialized contributions. This functional interdependence IS organic solidarity."
+            }
         };
 
         // --- TUTORIAL DATA ---
@@ -454,19 +552,17 @@
                 text: "Our village gathers for the first time. The elders ask: what makes us a community?",
                 choiceA: {
                     text: "Our shared traditions",
-                    effects: { solidarity: 8, legitimacy: 3, productivity: -2, innovation: -2 }
+                    effects: { solidarity: 8, legitimacy: 3, productivity: -2, innovation: -2 },
+                    feedback: "Emphasizing shared traditions strengthens bonds but may limit economic growth. This is <strong>mechanical solidarity</strong> - unity through similarity."
                 },
                 choiceB: {
                     text: "Working together",
-                    effects: { solidarity: 5, legitimacy: 2, productivity: 3, innovation: 2 }
+                    effects: { solidarity: 5, legitimacy: 2, productivity: 3, innovation: 2 },
+                    feedback: "Focusing on cooperation opens the door to specialization. You're planting seeds for <strong>organic solidarity</strong> - unity through interdependence."
                 },
                 lesson: {
                     title: "Social Cohesion",
-                    content: `<strong>👥 Social Cohesion</strong> measures the bonds holding your society together.
-
-Too low → society fragments. Too high → resistance to change.
-
-This is your most important meter. Watch it closely!`,
+                    content: `<strong>👥 Social Cohesion</strong> measures the bonds holding your society together.<br><br>Too low → society fragments. Too high → resistance to change.<br><br>This is your most important meter. Watch it closely!`,
                     highlight: "meters"
                 }
             },
@@ -475,19 +571,17 @@ This is your most important meter. Watch it closely!`,
                 text: "Should everyone farm, or should some specialize in pottery, weaving, and metalwork?",
                 choiceA: {
                     text: "Everyone should farm first",
-                    effects: { solidarity: 3, legitimacy: 2, productivity: -3, innovation: -2 }
+                    effects: { solidarity: 3, legitimacy: 2, productivity: -3, innovation: -2 },
+                    feedback: "Keeping everyone in the same role maintains similarity and cohesion, but slows the <strong>division of labor</strong> that drives social evolution."
                 },
                 choiceB: {
                     text: "Let people specialize",
-                    effects: { solidarity: -2, legitimacy: 1, productivity: 6, innovation: 4 }
+                    effects: { solidarity: -2, legitimacy: 1, productivity: 6, innovation: 4 },
+                    feedback: "Specialization increases productivity and innovation! But notice: solidarity dropped slightly. As people become different, old bonds weaken."
                 },
                 lesson: {
                     title: "Division of Labor",
-                    content: `<strong>📈 Division of Labor</strong> measures economic specialization.
-
-As people take different jobs, they become <em>interdependent</em> - they need each other.
-
-This is the engine of social change!`,
+                    content: `<strong>📈 Division of Labor</strong> measures economic specialization.<br><br>As people take different jobs, they become <em>interdependent</em> - they need each other.<br><br>This is the engine of social change!`,
                     highlight: "meters"
                 }
             },
@@ -496,19 +590,17 @@ This is the engine of social change!`,
                 text: "The young ask: what truly binds us together?",
                 choiceA: {
                     text: "We are one family, one blood",
-                    effects: { solidarity: 6, legitimacy: 3, productivity: -2, innovation: -3 }
+                    effects: { solidarity: 6, legitimacy: 3, productivity: -2, innovation: -3 },
+                    feedback: "This reinforces <strong class='text-purple-400'>mechanical solidarity</strong>. Strong collective conscience, but it may resist the changes needed for modernization."
                 },
                 choiceB: {
                     text: "Each person's work serves all",
-                    effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 3 }
+                    effects: { solidarity: 2, legitimacy: 2, productivity: 4, innovation: 3 },
+                    feedback: "This points toward <strong class='text-green-400'>organic solidarity</strong>! People are bound not by sameness, but by needing each other's different contributions."
                 },
                 lesson: {
                     title: "The Great Transition",
-                    content: `<strong class="text-purple-400">Mechanical solidarity</strong> = unity through <em>similarity</em>.
-
-<strong class="text-green-400">Organic solidarity</strong> = unity through <em>interdependence</em>.
-
-<strong>Your goal:</strong> Transform society from one to the other.`,
+                    content: `<strong class="text-purple-400">Mechanical solidarity</strong> = unity through <em>similarity</em>.<br><br><strong class="text-green-400">Organic solidarity</strong> = unity through <em>interdependence</em>.<br><br><strong>Your goal:</strong> Transform society from one to the other.`,
                     highlight: "solidarity"
                 }
             },
@@ -517,19 +609,17 @@ This is the engine of social change!`,
                 text: "Change comes faster than our customs can adapt. Some abandon the old ways before new ones take hold.",
                 choiceA: {
                     text: "Slow down, preserve traditions",
-                    effects: { solidarity: 4, legitimacy: 5, productivity: -3, innovation: -2 }
+                    effects: { solidarity: 4, legitimacy: 5, productivity: -3, innovation: -2 },
+                    feedback: "Preserving traditions strengthens <strong>moral regulation</strong> - the rules and norms that guide behavior. This protects against anomie, but slows progress."
                 },
                 choiceB: {
                     text: "Push forward, embrace change",
-                    effects: { solidarity: -3, legitimacy: -3, productivity: 5, innovation: 4 }
+                    effects: { solidarity: -3, legitimacy: -3, productivity: 5, innovation: 4 },
+                    feedback: "Rapid change boosts productivity but weakens both solidarity AND legitimacy. This is exactly how <strong class='text-red-400'>anomie</strong> develops!"
                 },
                 lesson: {
                     title: "Danger: Anomie",
-                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change is too fast.
-
-If the warning appears, a new meter (<strong>🏛️ Moral Regulation</strong>) will be revealed to help you stabilize.
-
-Balance progress with stability!`,
+                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change is too fast.<br><br>If the warning appears, a new meter (<strong>🏛️ Moral Regulation</strong>) will be revealed to help you stabilize.<br><br>Balance progress with stability!`,
                     highlight: "anomie"
                 }
             },
@@ -538,21 +628,17 @@ Balance progress with stability!`,
                 text: "Your society stands at a crossroads. The journey to organic solidarity will take 100 years.",
                 choiceA: {
                     text: "Build strong foundations",
-                    effects: { solidarity: 4, legitimacy: 4, productivity: 2, innovation: 1 }
+                    effects: { solidarity: 4, legitimacy: 4, productivity: 2, innovation: 1 },
+                    feedback: "A balanced start! Strong foundations help weather the turbulent transition period ahead. You're ready for the journey."
                 },
                 choiceB: {
                     text: "Embrace specialization",
-                    effects: { solidarity: 1, legitimacy: 2, productivity: 5, innovation: 4 }
+                    effects: { solidarity: 1, legitimacy: 2, productivity: 5, innovation: 4 },
+                    feedback: "An ambitious start toward organic solidarity! Higher risk, but faster progress. Watch your cohesion carefully."
                 },
                 lesson: {
                     title: "Your Mission",
-                    content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.
-
-As society grows complex, new meters will appear:
-• <strong>🏛️ Moral Regulation</strong> - when anomie threatens
-• <strong>💡 Social Differentiation</strong> - in the Transitional era
-
-Good luck!`,
+                    content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.<br><br>As society grows complex, new meters will appear:<br>• <strong>🏛️ Moral Regulation</strong> - when anomie threatens<br>• <strong>💡 Social Differentiation</strong> - in the Transitional era<br><br>Good luck!`,
                     highlight: "none"
                 }
             }
@@ -743,12 +829,14 @@ Good luck!`,
                 const meterInfo = meterDefinitions[key];
                 const meterEl = document.createElement('div');
                 meterEl.id = `meter-${key}`;
-                meterEl.className = 'meter-container transition-all duration-500';
+                meterEl.className = 'meter-container transition-all duration-500 overflow-hidden cursor-help';
+                meterEl.title = meterInfo.tooltip;
                 meterEl.innerHTML = `
                     <div class="flex justify-between items-center mb-0.5">
                         <div class="flex items-center">
                             <span id="icon-${key}" class="status-icon text-base mr-1">${meterInfo.icon}</span>
                             <span class="font-semibold text-sm">${meterInfo.name}</span>
+                            <span class="text-gray-500 text-xs ml-1 hidden md:inline">ⓘ</span>
                         </div>
                         <span id="value-${key}" class="font-mono text-sm">50%</span>
                     </div>
@@ -767,9 +855,13 @@ Good luck!`,
                 const meterEl = document.getElementById(`meter-${key}`);
                 if (meterEl) {
                     if (state.visibleMeters[key]) {
-                        meterEl.classList.remove('hidden');
+                        meterEl.style.maxHeight = '60px';
+                        meterEl.style.opacity = '1';
+                        meterEl.style.marginBottom = '';
                     } else {
-                        meterEl.classList.add('hidden');
+                        meterEl.style.maxHeight = '0';
+                        meterEl.style.opacity = '0';
+                        meterEl.style.marginBottom = '0';
                     }
                 }
             });
@@ -799,6 +891,52 @@ Good luck!`,
                 notification.style.transition = 'opacity 0.5s';
                 setTimeout(() => notification.remove(), 500);
             }, 2500);
+        }
+
+        // Contextual tip system - non-blocking hints that appear when relevant
+        const contextualTips = {
+            meterWarning: {
+                solidarity: { icon: '👥', title: 'Cohesion Weakening', text: 'Social bonds are straining. In Durkheim\'s terms, your collective conscience is fragmenting.' },
+                productivity: { icon: '📈', title: 'Rapid Specialization', text: 'Division of labor is accelerating. This creates interdependence—but can outpace moral regulation.' },
+                legitimacy: { icon: '🏛️', title: 'Norms Under Pressure', text: 'Moral regulation is struggling. When rules lose legitimacy, anomie threatens.' },
+                innovation: { icon: '💡', title: 'Differentiation Spreading', text: 'Individual differences are multiplying. Diversity needs integration to become solidarity.' }
+            },
+            meterDanger: {
+                solidarity: { icon: '👥', title: 'Solidarity Critical!', text: 'Society is fragmenting. Without bonds—mechanical or organic—collapse follows.' },
+                productivity: { icon: '📈', title: 'Runaway Specialization!', text: 'Change is outpacing society\'s ability to integrate. The worker becomes a cog.' },
+                legitimacy: { icon: '🏛️', title: 'Moral Vacuum!', text: 'Norms have lost their force. Durkheim warned: the market alone cannot ensure order.' },
+                innovation: { icon: '💡', title: 'Chaos of Difference!', text: 'Differentiation without direction. Society has diversity but no coherence.' }
+            },
+            firstChoice: {
+                icon: '🎯', title: 'Your First Decision', text: 'Each choice shapes your society. Watch how the meters respond—and remember, balance is key.'
+            },
+            anomie: {
+                icon: '⚠️', title: 'Anomie Emerging', text: 'Durkheim\'s key concept: when change outpaces moral regulation, norms break down. Stabilize or face collapse.'
+            }
+        };
+
+        function showContextualTip(tipData, type = 'info', position = 'top', duration = 4000) {
+            // Don't show tips in sim mode
+            if (state.gameMode !== 'player') return;
+
+            const tip = document.createElement('div');
+            tip.className = `contextual-tip tip-${position} tip-${type}`;
+            tip.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">${tipData.icon}</span>
+                    <div>
+                        <p class="font-semibold text-white text-sm">${tipData.title}</p>
+                        <p class="text-gray-300 text-xs mt-1">${tipData.text}</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(tip);
+
+            // Auto-remove after duration
+            setTimeout(() => {
+                tip.style.animation = 'tip-fade 0.3s ease-out forwards';
+                setTimeout(() => tip.remove(), 300);
+            }, duration);
         }
 
         function resetGame(mode = 'sim', startTutorial = false) {
@@ -835,7 +973,16 @@ Good luck!`,
                 tutorialStep: 0,           // Current tutorial card (0-4)
                 // Questline system
                 pendingCards: [],          // Cards triggered by previous choices [{cardId, triggerYear}]
-                questlineHistory: []       // Track which questlines have been triggered
+                questlineHistory: [],      // Track which questlines have been triggered
+                // Contextual first-time hints (replaces blocking tutorial)
+                firstTimeHints: {
+                    meterWarning: { solidarity: false, productivity: false, legitimacy: false, innovation: false },
+                    meterDanger: { solidarity: false, productivity: false, legitimacy: false, innovation: false },
+                    anomie: false,
+                    eraTransitional: false,
+                    eraModern: false,
+                    firstChoice: false
+                }
             };
 
             gameOverModalEl.classList.add('opacity-0', 'invisible');
@@ -843,6 +990,11 @@ Good luck!`,
             victoryModalEl.classList.add('opacity-0', 'invisible');
             victoryModalEl.querySelector('div').classList.add('scale-95');
             anomieWarningEl.classList.add('hidden');
+
+            // Reset feedback splash
+            hideFeedbackSplash();
+            feedbackTutorialSection.classList.add('hidden');
+            feedbackInsightEl.classList.remove('hidden');
 
             if (simInterval) clearInterval(simInterval);
 
@@ -859,6 +1011,7 @@ Good luck!`,
             updateSolidarityType();
             updateEra();
             updateMeterVisibility();
+            updateSolidarityMeterLabel(); // Set era-appropriate label for solidarity meter
 
             // Only display card if not starting tutorial (tutorial handles its own card display)
             if (!startTutorial) {
@@ -951,6 +1104,21 @@ Good luck!`,
             solidarityTypeLabelEl.textContent = typeInfo.label;
             solidarityTypeLabelEl.className = `text-sm mt-2 font-semibold ${typeInfo.color}`;
             solidarityDescriptionEl.textContent = typeInfo.description;
+
+            // Update basis indicator - shows WHAT cohesion is based on
+            const basisEl = document.getElementById('basis-indicator');
+            if (basisEl) {
+                if (score < 40) {
+                    basisEl.textContent = 'Similarity';
+                    basisEl.className = 'text-purple-400';
+                } else if (score < 60) {
+                    basisEl.textContent = 'Similarity → Interdependence';
+                    basisEl.className = 'text-indigo-400';
+                } else {
+                    basisEl.textContent = 'Interdependence';
+                    basisEl.className = 'text-green-400';
+                }
+            }
         }
 
         // Check for anomie condition
@@ -990,6 +1158,11 @@ Good luck!`,
                 // Reveal Moral Regulation meter when anomie first appears
                 if (!wasInAnomie) {
                     revealMeter('legitimacy');
+                    // First-time anomie tip
+                    if (state.firstTimeHints && !state.firstTimeHints.anomie) {
+                        state.firstTimeHints.anomie = true;
+                        setTimeout(() => showContextualTip(contextualTips.anomie, 'danger', 'bottom', 6000), 1000);
+                    }
                 }
                 // Update warning text to show severity
                 const severity = state.anomieTurns >= 3 ? 'CRITICAL' : state.anomieTurns >= 2 ? 'SEVERE' : 'WARNING';
@@ -1062,12 +1235,33 @@ Good luck!`,
                 }
 
                 state.currentEra = newEra;
+
+                // Update solidarity meter label to reflect era-specific meaning
+                updateSolidarityMeterLabel();
             }
 
             // Update era badge
             const eraInfo = eras[state.currentEra];
             eraBadgeEl.textContent = eraInfo.name;
             eraBadgeEl.className = `text-sm font-semibold ${eraInfo.color} rounded-lg px-3 py-1`;
+        }
+
+        // Update the solidarity meter's name and tooltip based on current era
+        function updateSolidarityMeterLabel() {
+            const eraLabels = solidarityMeterByEra[state.currentEra];
+            if (!eraLabels) return;
+
+            const meterEl = document.getElementById('meter-solidarity');
+            if (!meterEl) return;
+
+            // Update the meter name
+            const nameSpan = meterEl.querySelector('.font-semibold');
+            if (nameSpan) {
+                nameSpan.textContent = eraLabels.name;
+            }
+
+            // Update the tooltip
+            meterEl.title = eraLabels.tooltip;
         }
 
         function showEraTransition(transitionKey) {
@@ -1185,12 +1379,12 @@ Good luck!`,
         }
 
         async function renderLeaderboard() {
-            leaderboardContentEl.innerHTML = '<p class="text-gray-400">Loading leaderboard...</p>';
+            leaderboardContentEl.innerHTML = '<p class="text-gray-400">Loading scores...</p>';
 
             const leaderboard = await fetchGlobalLeaderboard();
 
             if (leaderboard.length === 0) {
-                leaderboardContentEl.innerHTML = '<p class="text-gray-400">No entries yet. Be the first to make history!</p>';
+                leaderboardContentEl.innerHTML = '<p class="text-gray-400">No scores yet. Complete a game to save your first score!</p>';
                 return;
             }
 
@@ -1235,22 +1429,29 @@ Good luck!`,
         }
 
         function startPlayerGame() {
+            // IMMEDIATELY stop simulation to prevent auto-choices during transition
+            if (simInterval) {
+                clearInterval(simInterval);
+                simInterval = null;
+            }
+
             startOverlayEl.classList.add('opacity-0', 'invisible');
 
-            // Check if player needs tutorial
-            const tutorialCompleted = localStorage.getItem('equilibrium_tutorial_completed');
-            const needsTutorial = !tutorialCompleted;
+            // Tutorial disabled - using contextual first-time hints instead
+            const needsTutorial = false;
 
-            resetGame('player', needsTutorial);
-
-            if (needsTutorial) {
-                // Start with tutorial card instead of regular card
-                setTimeout(displayTutorialCard, 500);
-            }
+            // Wait for start overlay to fade out before initializing
+            setTimeout(() => {
+                resetGame('player', needsTutorial);
+            }, 400);
         }
 
         function updateUI() {
             yearCounterEl.textContent = state.year;
+            // Update year progress bar
+            const progressPercent = Math.min(100, (state.year / WIN_YEAR) * 100);
+            document.getElementById('year-progress-bar').style.width = `${progressPercent}%`;
+
             for (const key in state.meters) {
                 const value = state.meters[key];
                 const barEl = document.getElementById(`bar-${key}`);
@@ -1264,10 +1465,20 @@ Good luck!`,
                     barEl.classList.remove('bg-cyan-500', 'bg-yellow-500');
                     barEl.classList.add('bg-red-500');
                     iconEl.classList.add('danger');
+                    // First-time danger tip
+                    if (state.firstTimeHints && !state.firstTimeHints.meterDanger[key] && state.visibleMeters[key]) {
+                        state.firstTimeHints.meterDanger[key] = true;
+                        setTimeout(() => showContextualTip(contextualTips.meterDanger[key], 'danger', 'top', 5000), 500);
+                    }
                 } else if (value <= 30 || value >= 70) {
                     barEl.classList.remove('bg-cyan-500', 'bg-red-500');
                     barEl.classList.add('bg-yellow-500');
                     iconEl.classList.remove('danger');
+                    // First-time warning tip
+                    if (state.firstTimeHints && !state.firstTimeHints.meterWarning[key] && state.visibleMeters[key]) {
+                        state.firstTimeHints.meterWarning[key] = true;
+                        setTimeout(() => showContextualTip(contextualTips.meterWarning[key], 'warning', 'top', 4000), 500);
+                    }
                 } else {
                     barEl.classList.remove('bg-yellow-500', 'bg-red-500');
                     barEl.classList.add('bg-cyan-500');
@@ -1334,6 +1545,12 @@ Good luck!`,
             cardEl.style.transform = 'translateX(0) rotate(0deg)';
             cardEl.style.opacity = 1;
             cardEl.classList.remove('card-swipe-left', 'card-swipe-right');
+
+            // First-choice welcome tip
+            if (state.firstTimeHints && !state.firstTimeHints.firstChoice && state.year === 0) {
+                state.firstTimeHints.firstChoice = true;
+                setTimeout(() => showContextualTip(contextualTips.firstChoice, 'info', 'bottom', 5000), 800);
+            }
         }
 
         // Durkheimian insights based on choice effects
@@ -1470,8 +1687,8 @@ Good luck!`,
             cardEl.style.opacity = 1;
             cardEl.classList.remove('card-swipe-left', 'card-swipe-right');
 
-            // Show tutorial overlay for this step
-            setTimeout(showTutorialOverlay, 400);
+            // Show tutorial overlay after card appears
+            setTimeout(showTutorialOverlay, 200);
         }
 
         function advanceTutorial() {
@@ -1502,76 +1719,102 @@ Good luck!`,
             setTimeout(displayCard, 300);
         }
 
-        function showChoiceFeedback(choiceText, effects, metersBefore) {
-            feedbackChoiceEl.textContent = `You chose: "${choiceText}"`;
+        function showChoiceFeedback(choiceText, effects, metersBefore, tutorialFeedback = null) {
+            feedbackChoiceEl.textContent = `"${choiceText}"`;
 
-            // Build effects display
+            // Build effects display - compact badges (only for visible meters)
             let effectsHtml = '';
-            const meterNames = {
-                solidarity: 'Social Cohesion',
-                productivity: 'Division of Labor',
-                legitimacy: 'Moral Regulation',
-                innovation: 'Social Differentiation'
+            const meterIcons = {
+                solidarity: '👥',
+                productivity: '📈',
+                legitimacy: '🏛️',
+                innovation: '💡'
             };
 
             for (const key in effects) {
                 const value = effects[key];
                 if (value === 0) continue;
 
-                const sign = value > 0 ? '+' : '';
-                const color = value > 0 ? 'text-green-400' : 'text-red-400';
-                const arrow = value > 0 ? '↑' : '↓';
+                // Only show effects for visible meters
+                if (!state.visibleMeters[key]) continue;
 
-                // Show actual change vs intended (due to mechanics like legitimacy inertia)
-                const actualChange = Math.round(state.meters[key] - metersBefore[key]);
-                const actualNote = key === 'legitimacy' && value !== 0
-                    ? ` (${Math.round(value * 0.6)} now, rest pending)`
-                    : '';
+                const sign = value > 0 ? '+' : '';
+                const bgColor = value > 0 ? 'bg-green-900 border-green-700' : 'bg-red-900 border-red-700';
+                const textColor = value > 0 ? 'text-green-400' : 'text-red-400';
 
                 effectsHtml += `
-                    <div class="flex items-center gap-1">
-                        <span class="${color} font-semibold">${arrow} ${sign}${value}</span>
-                        <span class="text-gray-400">${meterNames[key]}${actualNote}</span>
+                    <div class="${bgColor} border rounded-lg px-3 py-1 flex items-center gap-1">
+                        <span>${meterIcons[key]}</span>
+                        <span class="${textColor} font-bold">${sign}${value}</span>
                     </div>
                 `;
             }
 
             feedbackEffectsEl.innerHTML = effectsHtml || '<span class="text-gray-500">No major effects</span>';
 
-            // Generate Durkheimian insight
-            let insightKey = 'balanced';
-            const solidarityEffect = effects.solidarity || 0;
-            const productivityEffect = effects.productivity || 0;
-            const legitimacyEffect = effects.legitimacy || 0;
-            const innovationEffect = effects.innovation || 0;
+            // Handle tutorial mode vs normal mode
+            if (tutorialFeedback) {
+                // Tutorial mode: show explanation and require click to continue
+                feedbackInsightEl.classList.add('hidden');
+                feedbackTutorialSection.classList.remove('hidden');
+                document.getElementById('feedback-tap-hint').classList.add('hidden');
+                feedbackTutorialText.innerHTML = tutorialFeedback;
+                feedbackSplashEl.classList.remove('pointer-events-none');
+                feedbackSplashEl.classList.add('bg-black', 'bg-opacity-50');
+            } else {
+                // Normal mode: show insight and make tap-to-dismiss
+                feedbackInsightEl.classList.remove('hidden');
+                feedbackTutorialSection.classList.add('hidden');
+                document.getElementById('feedback-tap-hint').classList.remove('hidden');
+                feedbackSplashEl.classList.remove('pointer-events-none');
+                feedbackSplashEl.classList.add('bg-black', 'bg-opacity-30');
 
-            // Check for anomie risk
-            if ((productivityEffect > 10 || innovationEffect > 10) && legitimacyEffect < 0) {
-                insightKey = 'anomie_risk';
-            } else if (Math.abs(solidarityEffect) >= Math.abs(productivityEffect) &&
-                       Math.abs(solidarityEffect) >= Math.abs(legitimacyEffect) &&
-                       Math.abs(solidarityEffect) >= Math.abs(innovationEffect)) {
-                insightKey = solidarityEffect > 0 ? 'solidarity_up' : 'solidarity_down';
-            } else if (Math.abs(productivityEffect) >= Math.abs(legitimacyEffect) &&
-                       Math.abs(productivityEffect) >= Math.abs(innovationEffect)) {
-                insightKey = productivityEffect > 0 ? 'productivity_up' : 'productivity_down';
-            } else if (Math.abs(legitimacyEffect) >= Math.abs(innovationEffect)) {
-                insightKey = legitimacyEffect > 0 ? 'legitimacy_up' : 'legitimacy_down';
-            } else if (innovationEffect !== 0) {
-                insightKey = innovationEffect > 0 ? 'innovation_up' : 'innovation_down';
+                // Generate Durkheimian insight
+                let insightKey = 'balanced';
+                const solidarityEffect = effects.solidarity || 0;
+                const productivityEffect = effects.productivity || 0;
+                const legitimacyEffect = effects.legitimacy || 0;
+                const innovationEffect = effects.innovation || 0;
+
+                if ((productivityEffect > 10 || innovationEffect > 10) && legitimacyEffect < 0) {
+                    insightKey = 'anomie_risk';
+                } else if (Math.abs(solidarityEffect) >= Math.abs(productivityEffect) &&
+                           Math.abs(solidarityEffect) >= Math.abs(legitimacyEffect) &&
+                           Math.abs(solidarityEffect) >= Math.abs(innovationEffect)) {
+                    insightKey = solidarityEffect > 0 ? 'solidarity_up' : 'solidarity_down';
+                } else if (Math.abs(productivityEffect) >= Math.abs(legitimacyEffect) &&
+                           Math.abs(productivityEffect) >= Math.abs(innovationEffect)) {
+                    insightKey = productivityEffect > 0 ? 'productivity_up' : 'productivity_down';
+                } else if (Math.abs(legitimacyEffect) >= Math.abs(innovationEffect)) {
+                    insightKey = legitimacyEffect > 0 ? 'legitimacy_up' : 'legitimacy_down';
+                } else if (innovationEffect !== 0) {
+                    insightKey = innovationEffect > 0 ? 'innovation_up' : 'innovation_down';
+                }
+
+                feedbackInsightEl.textContent = getRandomInsight(insightKey);
             }
 
-            feedbackInsightEl.textContent = getRandomInsight(insightKey);
+            // Show the splash
+            feedbackSplashEl.classList.remove('opacity-0');
+            feedbackSplashEl.querySelector('div').classList.remove('scale-95');
 
-            // Show the panel
-            feedbackPanelEl.classList.remove('hidden');
+            // Auto-hide after 6 seconds as fallback (only in normal mode)
+            // User can also tap to dismiss earlier
+            if (!tutorialFeedback) {
+                state.feedbackTimeout = setTimeout(() => {
+                    if (!state.gameOver) {
+                        hideFeedbackSplash();
+                    }
+                }, 6000);
+            }
+        }
 
-            // Auto-hide after 8 seconds
-            setTimeout(() => {
-                if (!state.gameOver) {
-                    feedbackPanelEl.classList.add('hidden');
-                }
-            }, 8000);
+        function hideFeedbackSplash() {
+            feedbackSplashEl.classList.add('opacity-0');
+            feedbackSplashEl.querySelector('div').classList.add('scale-95');
+            feedbackSplashEl.classList.add('pointer-events-none');
+            feedbackSplashEl.classList.remove('bg-black', 'bg-opacity-50', 'bg-opacity-30');
+            document.getElementById('feedback-tap-hint').classList.add('hidden');
         }
 
         function handleChoice(choiceKey) {
@@ -1638,9 +1881,17 @@ Good luck!`,
             updateEra();
             checkAnomie();
 
-            // Show feedback on the choice (only in player mode)
+            // Show feedback on the choice (player mode only)
             if (state.gameMode === 'player') {
-                showChoiceFeedback(choiceText, originalEffects, metersBefore);
+                if (state.inTutorial) {
+                    // Tutorial mode: get feedback text from tutorial card
+                    const tutorialCard = tutorialCards[state.tutorialStep];
+                    const feedbackText = tutorialCard[choiceKey]?.feedback || '';
+                    showChoiceFeedback(choiceText, originalEffects, metersBefore, feedbackText);
+                } else {
+                    // Normal mode: auto-hiding feedback
+                    showChoiceFeedback(choiceText, originalEffects, metersBefore);
+                }
             }
 
             // 7. QUESTLINE TRIGGERS: Check if this choice triggers future cards
@@ -1866,12 +2117,12 @@ Good luck!`,
                 handleChoice(choiceKey);
                 if (!state.gameOver) {
                     if (state.inTutorial) {
-                        // In tutorial mode: advance to next tutorial step
-                        advanceTutorial();
+                        // In tutorial mode: feedback splash will handle advancing
+                        // (user clicks "Next" button)
                     } else {
                         displayCard();
+                        cardContainerEl.classList.add('player-turn'); // Re-enable hover effects
                     }
-                    cardContainerEl.classList.add('player-turn'); // Re-enable hover effects
                 }
             }, 1000);
         }
@@ -1897,18 +2148,33 @@ Good luck!`,
             }
         });
 
-        // Close feedback panel
-        closeFeedbackBtn.addEventListener('click', () => {
-            feedbackPanelEl.classList.add('hidden');
-        });
 
         // Tutorial buttons
         tutorialContinueBtn.addEventListener('click', () => {
             hideTutorialOverlay();
-            // Player will make their choice, then advanceTutorial is called
+            // Player will make their choice, then feedback splash appears
         });
 
         tutorialSkipBtn.addEventListener('click', skipTutorial);
+
+        // Feedback splash "Next" button (tutorial mode)
+        feedbackNextBtn.addEventListener('click', () => {
+            hideFeedbackSplash();
+            advanceTutorial();
+            cardContainerEl.classList.add('player-turn'); // Re-enable hover effects
+        });
+
+        // Feedback splash tap-to-dismiss (normal mode)
+        feedbackSplashEl.addEventListener('click', (e) => {
+            // Only dismiss in normal mode (not tutorial)
+            if (!state.inTutorial && !feedbackSplashEl.classList.contains('pointer-events-none')) {
+                // Clear the auto-hide timeout
+                if (state.feedbackTimeout) {
+                    clearTimeout(state.feedbackTimeout);
+                }
+                hideFeedbackSplash();
+            }
+        });
 
         // === MOBILE SWIPE SUPPORT ===
         let touchStartX = 0;
@@ -1936,14 +2202,14 @@ Good luck!`,
 
             // Highlight the choice being swiped toward
             if (diffX < -30) {
-                choiceATextEl.parentElement.classList.add('border-cyan-500');
-                choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+                choiceADiv.classList.add('border-cyan-400', 'bg-gray-600');
+                choiceBDiv.classList.remove('border-cyan-400', 'bg-gray-600');
             } else if (diffX > 30) {
-                choiceBTextEl.parentElement.classList.add('border-cyan-500');
-                choiceATextEl.parentElement.classList.remove('border-cyan-500');
+                choiceBDiv.classList.add('border-cyan-400', 'bg-gray-600');
+                choiceADiv.classList.remove('border-cyan-400', 'bg-gray-600');
             } else {
-                choiceATextEl.parentElement.classList.remove('border-cyan-500');
-                choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+                choiceADiv.classList.remove('border-cyan-400', 'bg-gray-600');
+                choiceBDiv.classList.remove('border-cyan-400', 'bg-gray-600');
             }
         }, { passive: true });
 
@@ -1956,27 +2222,24 @@ Good luck!`,
             const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
 
             // Reset visual highlights
-            choiceATextEl.parentElement.classList.remove('border-cyan-500');
-            choiceBTextEl.parentElement.classList.remove('border-cyan-500');
+            choiceADiv.classList.remove('border-cyan-400', 'bg-gray-600');
+            choiceBDiv.classList.remove('border-cyan-400', 'bg-gray-600');
 
             // Only register swipe if horizontal movement > vertical and > threshold
             const swipeThreshold = 80;
             if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > diffY) {
-                if (diffX < 0) {
-                    // Swipe left = Choice A
-                    cardEl.classList.add('card-swipe-left');
-                    setTimeout(() => {
-                        handleChoice('choiceA');
-                        setTimeout(displayCard, 300);
-                    }, 200);
-                } else {
-                    // Swipe right = Choice B
-                    cardEl.classList.add('card-swipe-right');
-                    setTimeout(() => {
-                        handleChoice('choiceB');
-                        setTimeout(displayCard, 300);
-                    }, 200);
-                }
+                const choiceKey = diffX < 0 ? 'choiceA' : 'choiceB';
+                cardEl.classList.add(diffX < 0 ? 'card-swipe-left' : 'card-swipe-right');
+                setTimeout(() => {
+                    handleChoice(choiceKey);
+                    if (!state.gameOver) {
+                        if (state.inTutorial) {
+                            // Tutorial mode: feedback splash handles advancing
+                        } else {
+                            setTimeout(displayCard, 300);
+                        }
+                    }
+                }, 200);
             } else {
                 // Reset card position if swipe wasn't far enough
                 cardEl.style.transform = 'translateX(0) rotate(0deg)';
@@ -1999,7 +2262,7 @@ Good luck!`,
 
             victoryModalEl.classList.add('opacity-0', 'invisible');
             submitScoreBtn.disabled = false;
-            submitScoreBtn.textContent = 'Submit Score & View Leaderboard';
+            submitScoreBtn.textContent = 'Save Score';
             showLeaderboard();
         });
 
