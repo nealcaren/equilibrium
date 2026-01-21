@@ -180,6 +180,12 @@
                 <p class="text-red-400 font-semibold text-sm">ANOMIE WARNING</p>
                 <p class="text-red-300 text-xs">Change is outpacing moral regulation - norms are breaking down faster than new ones can form</p>
             </div>
+
+            <!-- Isolation Warning (Egoism risk in Modern era) -->
+            <div id="isolation-warning" class="hidden anomie-warning mt-3 bg-purple-900 border border-purple-500 rounded-lg p-2">
+                <p class="text-purple-400 font-semibold text-sm">ISOLATION WARNING</p>
+                <p class="text-purple-300 text-xs">Social bonds are dissolving - individuals are becoming disconnected from community</p>
+            </div>
         </header>
 
         <!-- Meters -->
@@ -356,6 +362,26 @@
     </div>
 
     <script>
+        // --- HEROICONS (MIT Licensed) ---
+        // Inline SVGs for consistent, dependency-free icons
+        const icons = {
+            // Meter icons
+            solidarity: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" /></svg>`,
+            productivity: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z" /></svg>`,
+            legitimacy: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 10.032a48.36 48.36 0 0 0-7.5.3V21M3 21h18M12 6.75h.008v.008H12V6.75Z" /></svg>`,
+            innovation: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>`,
+            // Warning/tip icons
+            warning: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>`,
+            isolation: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>`,
+            target: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" /></svg>`
+        };
+
+        // Helper to get icon with custom size class
+        function getIcon(name, sizeClass = 'w-5 h-5') {
+            const svg = icons[name] || icons.warning;
+            return svg.replace('class="icon"', `class="icon ${sizeClass} inline-block"`);
+        }
+
         // --- DOM ELEMENTS ---
         const metersContainerEl = document.getElementById('meters-container');
         const cardContainerEl = document.getElementById('card-container');
@@ -375,6 +401,7 @@
 
         // New DOM Elements
         const anomieWarningEl = document.getElementById('anomie-warning');
+        const isolationWarningEl = document.getElementById('isolation-warning');
         const eraNotificationEl = document.getElementById('era-notification');
         const eraTitleEl = document.getElementById('era-title');
         const eraDescriptionEl = document.getElementById('era-description');
@@ -483,22 +510,22 @@
         const meterDefinitions = {
             solidarity: {
                 name: "Social Cohesion",
-                icon: "👥",
+                iconKey: "solidarity",
                 tooltip: "The bonds holding society together. In mechanical solidarity, this comes from similarity. In organic solidarity, from interdependence. Too low = fragmentation. Too high = resistance to change."
             },
             productivity: {
                 name: "Division of Labor",
-                icon: "📈",
+                iconKey: "productivity",
                 tooltip: "Economic specialization and complexity. As people take different jobs, they become interdependent. This is the engine of social change - but it must be balanced with cohesion."
             },
             legitimacy: {
                 name: "Moral Regulation",
-                icon: "🏛️",
+                iconKey: "legitimacy",
                 tooltip: "The strength of norms and institutional trust. When change outpaces regulation, anomie (normlessness) emerges. New rules must form to match new social structures."
             },
             innovation: {
                 name: "Social Differentiation",
-                icon: "💡",
+                iconKey: "innovation",
                 tooltip: "Individual difference and cultural diversity. Organic solidarity requires each person to have their own sphere. Too little = stagnation. Too much without integration = chaos."
             }
         };
@@ -536,7 +563,7 @@
                 },
                 lesson: {
                     title: "Social Cohesion",
-                    content: `<strong>👥 Social Cohesion</strong> measures the bonds holding your society together.<br><br>Too low → society fragments. Too high → resistance to change.<br><br>This is your most important meter. Watch it closely!`,
+                    content: `<strong class="text-cyan-400">Social Cohesion</strong> measures the bonds holding your society together.<br><br>Too low → society fragments. Too high → resistance to change.<br><br>This is your most important meter. Watch it closely!`,
                     highlight: "meters"
                 }
             },
@@ -555,7 +582,7 @@
                 },
                 lesson: {
                     title: "Division of Labor",
-                    content: `<strong>📈 Division of Labor</strong> measures economic specialization.<br><br>As people take different jobs, they become <em>interdependent</em> - they need each other.<br><br>This is the engine of social change!`,
+                    content: `<strong class="text-cyan-400">Division of Labor</strong> measures economic specialization.<br><br>As people take different jobs, they become <em>interdependent</em> - they need each other.<br><br>This is the engine of social change!`,
                     highlight: "meters"
                 }
             },
@@ -593,7 +620,7 @@
                 },
                 lesson: {
                     title: "Danger: Anomie",
-                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change is too fast.<br><br>If the warning appears, a new meter (<strong>🏛️ Moral Regulation</strong>) will be revealed to help you stabilize.<br><br>Balance progress with stability!`,
+                    content: `<strong class="text-red-400">Anomie</strong> = "normlessness" when change is too fast.<br><br>If the warning appears, a new meter (<strong class="text-cyan-400">Moral Regulation</strong>) will be revealed to help you stabilize.<br><br>Balance progress with stability!`,
                     highlight: "anomie"
                 }
             },
@@ -612,7 +639,7 @@
                 },
                 lesson: {
                     title: "Your Mission",
-                    content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.<br><br>As society grows complex, new meters will appear:<br>• <strong>🏛️ Moral Regulation</strong> - when anomie threatens<br>• <strong>💡 Social Differentiation</strong> - in the Transitional era<br><br>Good luck!`,
+                    content: `<strong>Win:</strong> Reach Year 100 with organic solidarity.<br><br>As society grows complex, new meters will appear:<br>• <strong class="text-cyan-400">Moral Regulation</strong> - when anomie threatens<br>• <strong class="text-cyan-400">Social Differentiation</strong> - in the Transitional era<br><br>Good luck!`,
                     highlight: "none"
                 }
             }
@@ -813,8 +840,8 @@
             },
             modern: {
                 // Durkheim: Organic solidarity requires specialization WITH maintained bonds
-                productivity: 55,
-                solidarity: 35,
+                productivity: 70,  // Division of labor must be dominant
+                solidarity: 40,    // Slightly higher bar for maintained bonds
                 noAnomie: true,
                 failureTitle: "The Transition Failed",
                 failureMessages: {
@@ -836,7 +863,7 @@
                 meterEl.innerHTML = `
                     <div class="flex justify-between items-center mb-0.5">
                         <div class="flex items-center">
-                            <span id="icon-${key}" class="status-icon text-base mr-1">${meterInfo.icon}</span>
+                            <span id="icon-${key}" class="status-icon mr-1">${getIcon(meterInfo.iconKey, 'w-4 h-4')}</span>
                             <span class="font-semibold text-sm">${meterInfo.name}</span>
                             <span class="text-gray-500 text-xs ml-1 hidden md:inline">ⓘ</span>
                         </div>
@@ -877,15 +904,15 @@
 
             if (showNotification && state.gameMode === 'player') {
                 const meterInfo = meterDefinitions[meterKey];
-                showMeterRevealNotification(meterInfo.name, meterInfo.icon);
+                showMeterRevealNotification(meterInfo.name, meterInfo.iconKey);
             }
         }
 
-        function showMeterRevealNotification(name, icon) {
+        function showMeterRevealNotification(name, iconKey) {
             // Create a brief notification
             const notification = document.createElement('div');
-            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-pulse';
-            notification.innerHTML = `<span class="text-lg mr-2">${icon}</span> New meter: <strong>${name}</strong>`;
+            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-cyan-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-pulse flex items-center';
+            notification.innerHTML = `<span class="mr-2">${getIcon(iconKey, 'w-5 h-5')}</span> New meter: <strong>${name}</strong>`;
             document.body.appendChild(notification);
 
             setTimeout(() => {
@@ -898,22 +925,25 @@
         // Contextual tip system - non-blocking hints that appear when relevant
         const contextualTips = {
             meterWarning: {
-                solidarity: { icon: '👥', title: 'Cohesion Weakening', text: 'Social bonds are straining. In Durkheim\'s terms, your collective conscience is fragmenting.' },
-                productivity: { icon: '📈', title: 'Rapid Specialization', text: 'Division of labor is accelerating. This creates interdependence—but can outpace moral regulation.' },
-                legitimacy: { icon: '🏛️', title: 'Norms Under Pressure', text: 'Moral regulation is struggling. When rules lose legitimacy, anomie threatens.' },
-                innovation: { icon: '💡', title: 'Differentiation Spreading', text: 'Individual differences are multiplying. Diversity needs integration to become solidarity.' }
+                solidarity: { iconKey: 'solidarity', title: 'Cohesion Weakening', text: 'Social bonds are straining. In Durkheim\'s terms, your collective conscience is fragmenting.' },
+                productivity: { iconKey: 'productivity', title: 'Rapid Specialization', text: 'Division of labor is accelerating. This creates interdependence—but can outpace moral regulation.' },
+                legitimacy: { iconKey: 'legitimacy', title: 'Norms Under Pressure', text: 'Moral regulation is struggling. When rules lose legitimacy, anomie threatens.' },
+                innovation: { iconKey: 'innovation', title: 'Differentiation Spreading', text: 'Individual differences are multiplying. Diversity needs integration to become solidarity.' }
             },
             meterDanger: {
-                solidarity: { icon: '👥', title: 'Solidarity Critical!', text: 'Society is fragmenting. Without bonds—mechanical or organic—collapse follows.' },
-                productivity: { icon: '📈', title: 'Runaway Specialization!', text: 'Change is outpacing society\'s ability to integrate. The worker becomes a cog.' },
-                legitimacy: { icon: '🏛️', title: 'Moral Vacuum!', text: 'Norms have lost their force. Durkheim warned: the market alone cannot ensure order.' },
-                innovation: { icon: '💡', title: 'Chaos of Difference!', text: 'Differentiation without direction. Society has diversity but no coherence.' }
+                solidarity: { iconKey: 'solidarity', title: 'Solidarity Critical!', text: 'Society is fragmenting. Without bonds—mechanical or organic—collapse follows.' },
+                productivity: { iconKey: 'productivity', title: 'Runaway Specialization!', text: 'Change is outpacing society\'s ability to integrate. The worker becomes a cog.' },
+                legitimacy: { iconKey: 'legitimacy', title: 'Moral Vacuum!', text: 'Norms have lost their force. Durkheim warned: the market alone cannot ensure order.' },
+                innovation: { iconKey: 'innovation', title: 'Chaos of Difference!', text: 'Differentiation without direction. Society has diversity but no coherence.' }
             },
             firstChoice: {
-                icon: '🎯', title: 'Your First Decision', text: 'Each choice shapes your society. Watch how the meters respond—and remember, balance is key.'
+                iconKey: 'target', title: 'Your First Decision', text: 'Each choice shapes your society. Watch how the meters respond—and remember, balance is key.'
             },
             anomie: {
-                icon: '⚠️', title: 'Anomie Emerging', text: 'Durkheim\'s key concept: when change outpaces moral regulation, norms break down. Stabilize or face collapse.'
+                iconKey: 'warning', title: 'Anomie Emerging', text: 'Durkheim\'s key concept: when change outpaces moral regulation, norms break down. Stabilize or face collapse.'
+            },
+            isolation: {
+                iconKey: 'isolation', title: 'Isolation Risk (Egoism)', text: 'Durkheim warned: modern societies with weak social bonds produce "egoistic" individuals—disconnected and adrift. Rebuild community ties!'
             }
         };
 
@@ -925,7 +955,7 @@
             tip.className = `contextual-tip tip-${position} tip-${type}`;
             tip.innerHTML = `
                 <div class="flex items-start gap-3">
-                    <span class="text-2xl">${tipData.icon}</span>
+                    <span class="flex-shrink-0">${getIcon(tipData.iconKey, 'w-6 h-6')}</span>
                     <div>
                         <p class="font-semibold text-white text-sm">${tipData.title}</p>
                         <p class="text-gray-300 text-xs mt-1">${tipData.text}</p>
@@ -948,10 +978,10 @@
             state = {
                 year: STARTING_YEAR,
                 meters: {
-                    solidarity: 65,    // High solidarity (collective bonds)
-                    productivity: 40,  // Low productivity (pre-industrial)
-                    legitimacy: 55,    // Moderate legitimacy (traditional authority)
-                    innovation: 40     // Low innovation (traditional)
+                    solidarity: 80,    // Very high - Mechanical Solidarity binds tightly
+                    productivity: 20,  // Very low - pre-industrial, minimal division of labor
+                    legitimacy: 70,    // High - Repressive law is absolute
+                    innovation: 15     // Very low - individuality absorbed by collective
                 },
                 visibleMeters: {
                     solidarity: true,                    // Always visible (core)
@@ -966,9 +996,11 @@
                 hasReachedTransitional: false,
                 hasReachedModern: false,
                 inAnomie: false,
+                inIsolation: false,        // Egoism risk - low solidarity in Modern era
                 // Durkheimian mechanics
                 pendingLegitimacy: 0,      // Legitimacy changes slowly (inertia)
                 anomieTurns: 0,            // Sustained anomie leads to collapse
+                isolationTurns: 0,         // Sustained isolation leads to egoistic collapse
                 anomieResistance: 0,       // Occupational groups stabilize modern society
                 // Tutorial state
                 inTutorial: startTutorial,
@@ -981,6 +1013,7 @@
                     meterWarning: { solidarity: false, productivity: false, legitimacy: false, innovation: false },
                     meterDanger: { solidarity: false, productivity: false, legitimacy: false, innovation: false },
                     anomie: false,
+                    isolation: false,
                     eraTransitional: false,
                     eraModern: false,
                     firstChoice: false
@@ -992,6 +1025,7 @@
             victoryModalEl.classList.add('opacity-0', 'invisible');
             victoryModalEl.querySelector('div').classList.add('scale-95');
             anomieWarningEl.classList.add('hidden');
+            isolationWarningEl.classList.add('hidden');
 
             // Reset feedback splash
             hideFeedbackSplash();
@@ -1155,6 +1189,64 @@
             }
 
             return state.inAnomie;
+        }
+
+        // Check for isolation/egoism condition (Modern era risk)
+        // Durkheim's egoistic suicide = weak social integration, individuals disconnected from community
+        // Distinct from anomie (which is about regulation, not integration)
+        function checkIsolation() {
+            // Isolation is specifically a MODERN era risk
+            // In traditional/transitional societies, low solidarity manifests differently
+            if (state.currentEra !== 'modern') {
+                state.inIsolation = false;
+                isolationWarningEl.classList.add('hidden');
+                return false;
+            }
+
+            const { solidarity, productivity, legitimacy } = state.meters;
+
+            // Isolation occurs in Modern era when:
+            // 1. Solidarity is dangerously low (weak social bonds) AND
+            // 2. Productivity is high (people are economically interdependent but socially isolated)
+            // This is the "egoistic" condition - functional but disconnected
+
+            const weakBonds = solidarity < 35;
+            const highProductivity = productivity > 60;
+            const isolationConditions = weakBonds && highProductivity;
+
+            const wasInIsolation = state.inIsolation;
+            state.inIsolation = isolationConditions;
+
+            if (state.inIsolation) {
+                state.isolationTurns++;
+                isolationWarningEl.classList.remove('hidden');
+
+                // First-time isolation tip
+                if (!wasInIsolation && state.firstTimeHints && !state.firstTimeHints.isolation) {
+                    state.firstTimeHints.isolation = true;
+                    setTimeout(() => showContextualTip(contextualTips.isolation, 'danger', 'bottom', 6000), 1000);
+                }
+
+                // Update warning text to show severity
+                const severity = state.isolationTurns >= 3 ? 'CRITICAL' : state.isolationTurns >= 2 ? 'SEVERE' : 'WARNING';
+                isolationWarningEl.querySelector('p.text-purple-400').textContent = `ISOLATION ${severity}`;
+                if (state.isolationTurns >= 2) {
+                    isolationWarningEl.querySelector('p.text-purple-300').textContent =
+                        `Social bonds remain weak (${state.isolationTurns} turns). Egoism threatens cohesion.`;
+                }
+            } else {
+                // Recovery
+                state.isolationTurns = Math.max(0, state.isolationTurns - 1);
+                if (state.isolationTurns === 0) {
+                    isolationWarningEl.classList.add('hidden');
+                } else {
+                    isolationWarningEl.querySelector('p.text-purple-400').textContent = 'ISOLATION RECOVERING';
+                    isolationWarningEl.querySelector('p.text-purple-300').textContent =
+                        'Social bonds strengthening, but disconnection lingers...';
+                }
+            }
+
+            return state.inIsolation;
         }
 
         // Determine current era - ONE WAY PROGRESSION
@@ -1485,8 +1577,8 @@
                     barEl.classList.remove('bg-cyan-500', 'bg-yellow-500');
                     barEl.classList.add('bg-red-500');
                     iconEl.classList.add('danger');
-                    // First-time danger tip
-                    if (state.firstTimeHints && !state.firstTimeHints.meterDanger[key] && state.visibleMeters[key]) {
+                    // First-time danger tip (only after first choice, not on game start)
+                    if (state.year > 0 && state.firstTimeHints && !state.firstTimeHints.meterDanger[key] && state.visibleMeters[key]) {
                         state.firstTimeHints.meterDanger[key] = true;
                         setTimeout(() => showContextualTip(contextualTips.meterDanger[key], 'danger', 'top', 5000), 500);
                     }
@@ -1494,8 +1586,8 @@
                     barEl.classList.remove('bg-cyan-500', 'bg-red-500');
                     barEl.classList.add('bg-yellow-500');
                     iconEl.classList.remove('danger');
-                    // First-time warning tip
-                    if (state.firstTimeHints && !state.firstTimeHints.meterWarning[key] && state.visibleMeters[key]) {
+                    // First-time warning tip (only after first choice, not on game start)
+                    if (state.year > 0 && state.firstTimeHints && !state.firstTimeHints.meterWarning[key] && state.visibleMeters[key]) {
                         state.firstTimeHints.meterWarning[key] = true;
                         setTimeout(() => showContextualTip(contextualTips.meterWarning[key], 'warning', 'top', 4000), 500);
                     }
@@ -1626,9 +1718,9 @@
                 "Trade-offs everywhere. Every choice shapes what kind of solidarity is possible."
             ],
             anomie_risk: [
-                "⚠️ This pushes toward anomie - change is outpacing moral regulation.",
-                "⚠️ Danger: growing gap between economic change and normative framework.",
-                "⚠️ Durkheim's warning: unregulated expansion leads to normlessness."
+                "Warning: This pushes toward anomie - change is outpacing moral regulation.",
+                "Caution: Growing gap between economic change and normative framework.",
+                "Durkheim's warning: unregulated expansion leads to normlessness."
             ]
         };
 
@@ -1741,12 +1833,6 @@
 
             // Build effects display - compact badges (only for visible meters)
             let effectsHtml = '';
-            const meterIcons = {
-                solidarity: '👥',
-                productivity: '📈',
-                legitimacy: '🏛️',
-                innovation: '💡'
-            };
 
             for (const key in effects) {
                 const value = effects[key];
@@ -1761,7 +1847,7 @@
 
                 effectsHtml += `
                     <div class="${bgColor} border rounded-lg px-3 py-1 flex items-center gap-1">
-                        <span>${meterIcons[key]}</span>
+                        <span>${getIcon(key, 'w-4 h-4')}</span>
                         <span class="${textColor} font-bold">${sign}${value}</span>
                     </div>
                 `;
@@ -1887,16 +1973,16 @@
             // 6. OCCUPATIONAL DENSITY: Professional groups stabilize modern society
             updateAnonieResistance();
 
-            // Clamp all meters with soft limits (5-95) to give recovery room
-            // Absolute collapse only happens if player truly pushes to extremes
+            // Clamp meters to 0-100 range
             for (const key in state.meters) {
-                state.meters[key] = Math.max(5, Math.min(95, state.meters[key]));
+                state.meters[key] = Math.max(0, Math.min(100, state.meters[key]));
             }
 
             state.year += 1;
             updateUI();
             updateEra();
             checkAnomie();
+            checkIsolation();
 
             // Show feedback on the choice (player mode only)
             if (state.gameMode === 'player') {
@@ -2043,6 +2129,12 @@
                     reason: "Anomic Division of Labor",
                     explanation: "Your society achieved remarkable specialization—but the moral framework didn't keep pace. Economic life became amoral, and interdependence bred resentment rather than solidarity.",
                     quote: "\"In the economic order, the anomic division of labor has become chronic... industrial and commercial functions are almost entirely lacking in moral regulation.\" - Durkheim"
+                },
+                egoism: {
+                    check: (m, s) => s.isolationTurns >= 4,
+                    reason: "Egoistic Isolation - Society of Strangers",
+                    explanation: "Your society achieved economic interdependence, but individuals became disconnected from meaningful community. People work together but live alone.",
+                    quote: "\"The bond which unites men to society is weaker, they are more easily detached... The more weakened the groups to which he belongs, the less he depends on them.\" - Durkheim"
                 },
                 organicSolidarityFailure: {
                     check: (m) => m.solidarity <= 0,

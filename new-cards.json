@@ -3,124 +3,124 @@
     {
       "character": "Sacred Keeper",
       "text": "The ancient grove is sacred to our ancestors, but its timber could build a fleet of trading ships to save us from famine.",
-      "choiceA": { "text": "Protect the grove", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 15, "innovation": -10 } },
-      "choiceB": { "text": "Harvest the timber", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": -15, "innovation": 10 } }
+      "choiceA": { "text": "Protect the grove", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 8, "innovation": -5 } },
+      "choiceB": { "text": "Harvest the timber", "effects": { "solidarity": -10, "productivity": 12, "legitimacy": -8, "innovation": 5 } }
     },
     {
       "character": "Clan Judge",
       "text": "A man has stolen grain. Custom demands he be publicly shamed. His family begs for a private fine to preserve their honor.",
-      "choiceA": { "text": "Public shaming", "effects": { "solidarity": 15, "productivity": 0, "legitimacy": 20, "innovation": -10 } },
-      "choiceB": { "text": "Accept the fine", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -10, "innovation": 5 } }
+      "choiceA": { "text": "Public shaming", "effects": { "solidarity": 8, "productivity": 0, "legitimacy": 10, "innovation": -5 } },
+      "choiceB": { "text": "Accept the fine", "effects": { "solidarity": -8, "productivity": 5, "legitimacy": -5, "innovation": 3 } }
     },
     {
       "character": "Nomad Leader",
       "text": "Our people have always moved with the seasons. A nearby kingdom offers us permanent housing if we give up our wandering ways.",
-      "choiceA": { "text": "Remain nomads", "effects": { "solidarity": 20, "productivity": -10, "legitimacy": 10, "innovation": -15 } },
-      "choiceB": { "text": "Settle permanently", "effects": { "solidarity": -25, "productivity": 20, "legitimacy": -5, "innovation": 15 } }
+      "choiceA": { "text": "Remain nomads", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": 5, "innovation": -8 } },
+      "choiceB": { "text": "Settle permanently", "effects": { "solidarity": -12, "productivity": 10, "legitimacy": -3, "innovation": 8 } }
     },
     {
       "character": "Village Midwife",
       "text": "Expectant mothers are beginning to visit the new city infirmary. This leaves our local birthing rituals unattended.",
-      "choiceA": { "text": "Enforce home birth", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": -15 } },
-      "choiceB": { "text": "Allow city visits", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -10, "innovation": 20 } }
+      "choiceA": { "text": "Enforce home birth", "effects": { "solidarity": 8, "productivity": -3, "legitimacy": 5, "innovation": -8 } },
+      "choiceB": { "text": "Allow city visits", "effects": { "solidarity": -5, "productivity": 5, "legitimacy": -5, "innovation": 10 } }
     },
     {
       "character": "Oracle of Truth",
       "text": "Disputes have always been settled by divine sign. Some suggest using 'evidence' and 'witnesses' to determine guilt.",
-      "choiceA": { "text": "Trust the divine sign", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 15, "innovation": -20 } },
-      "choiceB": { "text": "Adopt evidence", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -15, "innovation": 25 } }
+      "choiceA": { "text": "Trust the divine sign", "effects": { "solidarity": 8, "productivity": -3, "legitimacy": 8, "innovation": -10 } },
+      "choiceB": { "text": "Adopt evidence", "effects": { "solidarity": -8, "productivity": 5, "legitimacy": -8, "innovation": 12 } }
     },
     {
       "character": "Master Weaver",
       "text": "A faster weaving technique has been discovered, but it breaks the traditional pattern that identifies our tribe.",
-      "choiceA": { "text": "Keep traditional patterns", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -15 } },
-      "choiceB": { "text": "Adopt fast weaving", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -5, "innovation": 20 } }
+      "choiceA": { "text": "Keep traditional patterns", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -8 } },
+      "choiceB": { "text": "Adopt fast weaving", "effects": { "solidarity": -8, "productivity": 10, "legitimacy": -3, "innovation": 10 } }
     },
     {
       "character": "Elder Council",
       "text": "To ensure stability, we have always restricted how much wealth one family can accumulate. Merchants find this oppressive.",
-      "choiceA": { "text": "Enforce wealth caps", "effects": { "solidarity": 20, "productivity": -20, "legitimacy": 10, "innovation": -10 } },
-      "choiceB": { "text": "Allow accumulation", "effects": { "solidarity": -25, "productivity": 25, "legitimacy": -15, "innovation": 15 } }
+      "choiceA": { "text": "Enforce wealth caps", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 5, "innovation": -5 } },
+      "choiceB": { "text": "Allow accumulation", "effects": { "solidarity": -12, "productivity": 12, "legitimacy": -8, "innovation": 8 } }
     },
     {
       "character": "Temple Architect",
       "text": "We are building a monument to our gods. Should we use the traditional local stone or a cheaper, sturdier brick from afar?",
-      "choiceA": { "text": "Use local stone", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -10 } },
-      "choiceB": { "text": "Use imported brick", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": -5, "innovation": 15 } }
+      "choiceA": { "text": "Use local stone", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 5, "innovation": -5 } },
+      "choiceB": { "text": "Use imported brick", "effects": { "solidarity": -5, "productivity": 8, "legitimacy": -3, "innovation": 8 } }
     },
     {
       "character": "Garrison Captain",
       "text": "Our defense relies on every man being a warrior. Some want to pay a dedicated group of soldiers so they can stay in the fields.",
-      "choiceA": { "text": "Every man a warrior", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -10 } },
-      "choiceB": { "text": "Hire professionals", "effects": { "solidarity": -20, "productivity": 20, "legitimacy": -5, "innovation": 15 } }
+      "choiceA": { "text": "Every man a warrior", "effects": { "solidarity": 10, "productivity": -8, "legitimacy": 5, "innovation": -5 } },
+      "choiceB": { "text": "Hire professionals", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -3, "innovation": 8 } }
     },
     {
       "character": "Old Fisherman",
       "text": "The sea's bounty is for the whole village. Newcomers want to sell their catch to the inland towns for profit.",
-      "choiceA": { "text": "Share catch locally", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 15, "innovation": -10 } },
-      "choiceB": { "text": "Allow export trade", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -10, "innovation": 15 } }
+      "choiceA": { "text": "Share catch locally", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 8, "innovation": -5 } },
+      "choiceB": { "text": "Allow export trade", "effects": { "solidarity": -8, "productivity": 10, "legitimacy": -5, "innovation": 8 } }
     }
   ],
   "transitional": [
     {
       "character": "Steam Engineer",
       "text": "The steam engine can power twenty looms at once. Hand-weavers fear they will lose their dignity and their livelihoods.",
-      "choiceA": { "text": "Mandate steam power", "effects": { "solidarity": -20, "productivity": 30, "legitimacy": -10, "innovation": 20 } },
-      "choiceB": { "text": "Protect hand-weaving", "effects": { "solidarity": 15, "productivity": -20, "legitimacy": 15, "innovation": -15 } }
+      "choiceA": { "text": "Mandate steam power", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": -5, "innovation": 10 } },
+      "choiceB": { "text": "Protect hand-weaving", "effects": { "solidarity": 8, "productivity": -10, "legitimacy": 8, "innovation": -8 } }
     },
     {
       "character": "Metric Standardizer",
       "text": "Our kingdom is a mess of local inches and cubits. A single standard system will make trade easier but erase local history.",
-      "choiceA": { "text": "Standardize weights", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": 15, "innovation": 15 } },
-      "choiceB": { "text": "Keep local measures", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": -10, "innovation": -10 } }
+      "choiceA": { "text": "Standardize weights", "effects": { "solidarity": -5, "productivity": 10, "legitimacy": 8, "innovation": 8 } },
+      "choiceB": { "text": "Keep local measures", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": -5, "innovation": -5 } }
     },
     {
       "character": "Child Welfare Reformer",
       "text": "Child workers are injured at alarming rates, and factories need more skilled adult labor. Banning child labor would hurt poor families but create pressure for adult wages.",
-      "choiceA": { "text": "Ban child labor", "effects": { "solidarity": 10, "productivity": -20, "legitimacy": 10, "innovation": 5 } },
-      "choiceB": { "text": "Allow child labor", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -20, "innovation": -5 } }
+      "choiceA": { "text": "Ban child labor", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": 5, "innovation": 3 } },
+      "choiceB": { "text": "Allow child labor", "effects": { "solidarity": -8, "productivity": 8, "legitimacy": -10, "innovation": -3 } }
     },
     {
       "character": "Patent Clerk",
       "text": "Should an inventor own their idea for twenty years? This encourages new gadgets but prevents others from improving them.",
-      "choiceA": { "text": "Grant strong patents", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": 5, "innovation": 20 } },
-      "choiceB": { "text": "Limit patent rights", "effects": { "solidarity": 10, "productivity": 5, "legitimacy": -5, "innovation": -10 } }
+      "choiceA": { "text": "Grant strong patents", "effects": { "solidarity": -5, "productivity": 5, "legitimacy": 3, "innovation": 10 } },
+      "choiceB": { "text": "Limit patent rights", "effects": { "solidarity": 5, "productivity": 3, "legitimacy": -3, "innovation": -5 } }
     },
     {
       "character": "Streetlighter",
       "text": "Gas lamps will make our streets safe at night. Critics say it disrupts the natural order and encourages late-night vice.",
-      "choiceA": { "text": "Install streetlights", "effects": { "solidarity": -5, "productivity": 15, "legitimacy": 10, "innovation": 20 } },
-      "choiceB": { "text": "Remain in darkness", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 0, "innovation": -15 } }
+      "choiceA": { "text": "Install streetlights", "effects": { "solidarity": -3, "productivity": 8, "legitimacy": 5, "innovation": 10 } },
+      "choiceB": { "text": "Remain in darkness", "effects": { "solidarity": 5, "productivity": -5, "legitimacy": 0, "innovation": -8 } }
     },
     {
       "character": "Suffragette",
       "text": "Women now comprise half of factory workers and teachers. Excluding them from voting creates tension as their economic role expands.",
-      "choiceA": { "text": "Grant women's suffrage", "effects": { "solidarity": 10, "productivity": 5, "legitimacy": 5, "innovation": 20 } },
-      "choiceB": { "text": "Maintain tradition", "effects": { "solidarity": 5, "productivity": -5, "legitimacy": -15, "innovation": -15 } }
+      "choiceA": { "text": "Grant women's suffrage", "effects": { "solidarity": 5, "productivity": 3, "legitimacy": 3, "innovation": 10 } },
+      "choiceB": { "text": "Maintain tradition", "effects": { "solidarity": 3, "productivity": -3, "legitimacy": -8, "innovation": -8 } }
     },
     {
       "character": "Sanitation Officer",
       "text": "To stop the cholera, we must tear down ancient alleys to build modern sewers. This will displace hundreds of families.",
-      "choiceA": { "text": "Build the sewers", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": 15, "innovation": 15 } },
-      "choiceB": { "text": "Avoid displacement", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": -15, "innovation": -10 } }
+      "choiceA": { "text": "Build the sewers", "effects": { "solidarity": -8, "productivity": 8, "legitimacy": 8, "innovation": 8 } },
+      "choiceB": { "text": "Avoid displacement", "effects": { "solidarity": 5, "productivity": -5, "legitimacy": -8, "innovation": -5 } }
     },
     {
       "character": "Textbook Author",
       "text": "Should we teach children a single national language, or allow schools to use the dozens of local dialects?",
-      "choiceA": { "text": "One national language", "effects": { "solidarity": 10, "productivity": 15, "legitimacy": 10, "innovation": 10 } },
-      "choiceB": { "text": "Allow local dialects", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": -15, "innovation": -5 } }
+      "choiceA": { "text": "One national language", "effects": { "solidarity": 5, "productivity": 8, "legitimacy": 5, "innovation": 5 } },
+      "choiceB": { "text": "Allow local dialects", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": -8, "innovation": -3 } }
     },
     {
       "character": "Factory Doctor",
       "text": "Workers are losing limbs to the machines. A mandatory 'injury fund' would protect them but raise costs for owners.",
-      "choiceA": { "text": "Establish injury fund", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 15, "innovation": 5 } },
-      "choiceB": { "text": "Owners keep profit", "effects": { "solidarity": -20, "productivity": 20, "legitimacy": -20, "innovation": 10 } }
+      "choiceA": { "text": "Establish injury fund", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 8, "innovation": 3 } },
+      "choiceB": { "text": "Owners keep profit", "effects": { "solidarity": -10, "productivity": 10, "legitimacy": -10, "innovation": 5 } }
     },
     {
       "character": "Banking Mogul",
       "text": "Anonymous credit will allow people to start businesses without knowing the lender. This replaces trust with contracts.",
-      "choiceA": { "text": "Expand modern credit", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": 5, "innovation": 20 } },
-      "choiceB": { "text": "Trust local lenders", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -15 } }
+      "choiceA": { "text": "Expand modern credit", "effects": { "solidarity": -10, "productivity": 12, "legitimacy": 3, "innovation": 10 } },
+      "choiceB": { "text": "Trust local lenders", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -8 } }
     },
     {
       "character": "Labor Commissioner",
@@ -131,144 +131,144 @@
     {
       "character": "Factory Investor",
       "text": "A consortium wants to build large factories outside town. This would transform our economy but concentrate workers in new ways.",
-      "choiceA": { "text": "Permit the factories", "effects": { "solidarity": -8, "productivity": 15, "legitimacy": -5, "innovation": 10 }, "triggers": [{ "cardId": "factory_conditions", "delay": 8 }] },
+      "choiceA": { "text": "Permit the factories", "effects": { "solidarity": -8, "productivity": 10, "legitimacy": -5, "innovation": 8 }, "triggers": [{ "cardId": "factory_conditions", "delay": 8 }] },
       "choiceB": { "text": "Protect small workshops", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 5, "innovation": -3 } }
     },
     {
       "character": "Education Minister",
       "text": "We could establish public schools to teach reading and arithmetic to all children. Some fear this will give common folk dangerous ideas.",
-      "choiceA": { "text": "Build public schools", "effects": { "solidarity": -5, "productivity": 8, "legitimacy": 5, "innovation": 12 }, "triggers": [{ "cardId": "education_results", "delay": 12 }] },
-      "choiceB": { "text": "Education for elites only", "effects": { "solidarity": 5, "productivity": -3, "legitimacy": 3, "innovation": -8 } }
+      "choiceA": { "text": "Build public schools", "effects": { "solidarity": -3, "productivity": 8, "legitimacy": 5, "innovation": 10 }, "triggers": [{ "cardId": "education_results", "delay": 12 }] },
+      "choiceB": { "text": "Education for elites only", "effects": { "solidarity": 5, "productivity": -3, "legitimacy": 3, "innovation": -5 } }
     },
     {
       "character": "Border Official",
       "text": "Workers from distant regions seek jobs in our growing factories. They bring skills but also unfamiliar customs.",
-      "choiceA": { "text": "Welcome migrant workers", "effects": { "solidarity": -6, "productivity": 10, "legitimacy": -3, "innovation": 8 }, "triggers": [{ "cardId": "migrant_community", "delay": 7 }] },
-      "choiceB": { "text": "Restrict immigration", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -5 } }
+      "choiceA": { "text": "Welcome migrant workers", "effects": { "solidarity": -5, "productivity": 8, "legitimacy": -3, "innovation": 6 }, "triggers": [{ "cardId": "migrant_community", "delay": 7 }] },
+      "choiceB": { "text": "Restrict immigration", "effects": { "solidarity": 8, "productivity": -6, "legitimacy": 5, "innovation": -4 } }
     }
   ],
   "modern": [
     {
       "character": "Deepfake Monitor",
       "text": "Digital clones can now replicate any citizen's voice and face. We should require a digital 'watermark' on all media.",
-      "choiceA": { "text": "Mandate watermarks", "effects": { "solidarity": 10, "productivity": -5, "legitimacy": 15, "innovation": 5 } },
-      "choiceB": { "text": "Absolute free speech", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -15, "innovation": 15 } }
+      "choiceA": { "text": "Mandate watermarks", "effects": { "solidarity": 5, "productivity": -3, "legitimacy": 8, "innovation": 3 } },
+      "choiceB": { "text": "Absolute free speech", "effects": { "solidarity": -8, "productivity": 5, "legitimacy": -8, "innovation": 8 } }
     },
     {
       "character": "Smart City Architect",
       "text": "We can install sensors to optimize traffic and energy, but this creates a permanent record of every citizen's movements.",
-      "choiceA": { "text": "Enable smart sensors", "effects": { "solidarity": -10, "productivity": 25, "legitimacy": -5, "innovation": 20 } },
-      "choiceB": { "text": "Prioritize privacy", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 10, "innovation": -10 } }
+      "choiceA": { "text": "Enable smart sensors", "effects": { "solidarity": -5, "productivity": 12, "legitimacy": -3, "innovation": 10 } },
+      "choiceB": { "text": "Prioritize privacy", "effects": { "solidarity": 5, "productivity": -5, "legitimacy": 5, "innovation": -5 } }
     },
     {
       "character": "Neuro-Link Tech",
       "text": "A brain-computer interface could allow people to work at the speed of thought, but it may cause permanent mental strain.",
-      "choiceA": { "text": "Approve neural links", "effects": { "solidarity": -20, "productivity": 30, "legitimacy": -10, "innovation": 25 } },
-      "choiceB": { "text": "Ban neural implants", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -20 } }
+      "choiceA": { "text": "Approve neural links", "effects": { "solidarity": -10, "productivity": 15, "legitimacy": -5, "innovation": 12 } },
+      "choiceB": { "text": "Ban neural implants", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -10 } }
     },
     {
       "character": "Space Colonist",
       "text": "Life on Mars is harsh. To survive, we must abandon Earth's democratic traditions for a strict military hierarchy.",
-      "choiceA": { "text": "Enforce hierarchy", "effects": { "solidarity": 20, "productivity": 15, "legitimacy": -10, "innovation": -15 } },
-      "choiceB": { "text": "Maintain democracy", "effects": { "solidarity": -10, "productivity": -15, "legitimacy": 15, "innovation": 10 } }
+      "choiceA": { "text": "Enforce hierarchy", "effects": { "solidarity": 10, "productivity": 8, "legitimacy": -5, "innovation": -8 } },
+      "choiceB": { "text": "Maintain democracy", "effects": { "solidarity": -5, "productivity": -8, "legitimacy": 8, "innovation": 5 } }
     },
     {
       "character": "Lab-Meat Scientist",
       "text": "Cultured meat is efficient and humane, but it will bankrupt the traditional farming communities that have fed us for eons.",
-      "choiceA": { "text": "Subsidize lab-meat", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -5, "innovation": 20 } },
-      "choiceB": { "text": "Protect traditional farms", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -15 } }
+      "choiceA": { "text": "Subsidize lab-meat", "effects": { "solidarity": -8, "productivity": 10, "legitimacy": -3, "innovation": 10 } },
+      "choiceB": { "text": "Protect traditional farms", "effects": { "solidarity": 10, "productivity": -8, "legitimacy": 5, "innovation": -8 } }
     },
     {
       "character": "Digital Historian",
       "text": "The internet is disappearing as old servers fail. We should fund a massive state archive to preserve our digital culture.",
-      "choiceA": { "text": "Fund the archive", "effects": { "solidarity": 15, "productivity": -5, "legitimacy": 10, "innovation": 5 } },
-      "choiceB": { "text": "Let the data fade", "effects": { "solidarity": -15, "productivity": 5, "legitimacy": -10, "innovation": -5 } }
+      "choiceA": { "text": "Fund the archive", "effects": { "solidarity": 8, "productivity": -3, "legitimacy": 5, "innovation": 3 } },
+      "choiceB": { "text": "Let the data fade", "effects": { "solidarity": -8, "productivity": 3, "legitimacy": -5, "innovation": -3 } }
     },
     {
       "character": "Algorithm Auditor",
       "text": "Our hiring algorithm is 30% more efficient but consistently ignores candidates from certain zip codes.",
-      "choiceA": { "text": "Keep the algorithm", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": -15, "innovation": 10 } },
-      "choiceB": { "text": "Return to human hiring", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 15, "innovation": -10 } }
+      "choiceA": { "text": "Keep the algorithm", "effects": { "solidarity": -10, "productivity": 12, "legitimacy": -8, "innovation": 5 } },
+      "choiceB": { "text": "Return to human hiring", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 8, "innovation": -5 } }
     },
     {
       "character": "Energy Grid AI",
       "text": "I can prevent blackouts by cutting power to luxury districts during peak hours. This ensures the hospitals stay running.",
-      "choiceA": { "text": "Authorize AI rationing", "effects": { "solidarity": 10, "productivity": 10, "legitimacy": 0, "innovation": 15 } },
-      "choiceB": { "text": "Manual human control", "effects": { "solidarity": 5, "productivity": -15, "legitimacy": -5, "innovation": -10 } }
+      "choiceA": { "text": "Authorize AI rationing", "effects": { "solidarity": 5, "productivity": 5, "legitimacy": 0, "innovation": 8 } },
+      "choiceB": { "text": "Manual human control", "effects": { "solidarity": 3, "productivity": -8, "legitimacy": -3, "innovation": -5 } }
     },
     {
       "character": "Gene Therapist",
       "text": "We can cure a rare blindness, but the procedure is so expensive it will drain our entire national health budget for a year.",
-      "choiceA": { "text": "Fund the cure", "effects": { "solidarity": 10, "productivity": -10, "legitimacy": 15, "innovation": 20 } },
-      "choiceB": { "text": "Save the budget", "effects": { "solidarity": -5, "productivity": 10, "legitimacy": -10, "innovation": -5 } }
+      "choiceA": { "text": "Fund the cure", "effects": { "solidarity": 5, "productivity": -5, "legitimacy": 8, "innovation": 10 } },
+      "choiceB": { "text": "Save the budget", "effects": { "solidarity": -3, "productivity": 5, "legitimacy": -5, "innovation": -3 } }
     },
     {
       "character": "Universal Translator",
       "text": "A chip in the ear allows everyone to understand every language perfectly. This will boost trade but kill unique cultures.",
-      "choiceA": { "text": "Deploy the chips", "effects": { "solidarity": -15, "productivity": 25, "legitimacy": 5, "innovation": 20 } },
-      "choiceB": { "text": "Preserve language", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 10, "innovation": -15 } }
+      "choiceA": { "text": "Deploy the chips", "effects": { "solidarity": -8, "productivity": 12, "legitimacy": 3, "innovation": 10 } },
+      "choiceB": { "text": "Preserve language", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 5, "innovation": -8 } }
     }
   ],
   "universal": [
     {
       "character": "Inheritance Taxer",
       "text": "Wealthy families pass their fortunes down, creating a permanent aristocracy. Should we tax inheritances at 50%?",
-      "choiceA": { "text": "Tax inheritances", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 15, "innovation": 5 } },
-      "choiceB": { "text": "Allow full transfer", "effects": { "solidarity": -15, "productivity": 15, "legitimacy": -15, "innovation": 0 } }
+      "choiceA": { "text": "Tax inheritances", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 8, "innovation": 3 } },
+      "choiceB": { "text": "Allow full transfer", "effects": { "solidarity": -8, "productivity": 8, "legitimacy": -8, "innovation": 0 } }
     },
     {
       "character": "Defense Secretary",
       "text": "A neighbor is threatening us. Should we draft all young adults into a year of mandatory service to prepare?",
-      "choiceA": { "text": "Mandatory service", "effects": { "solidarity": 25, "productivity": -15, "legitimacy": 10, "innovation": -5 } },
-      "choiceB": { "text": "Professional army only", "effects": { "solidarity": -15, "productivity": 10, "legitimacy": -5, "innovation": 10 } }
+      "choiceA": { "text": "Mandatory service", "effects": { "solidarity": 12, "productivity": -8, "legitimacy": 5, "innovation": -3 } },
+      "choiceB": { "text": "Professional army only", "effects": { "solidarity": -8, "productivity": 5, "legitimacy": -3, "innovation": 5 } }
     },
     {
       "character": "Judicial Reformer",
       "text": "Should judges be elected by the people to ensure they represent our values, or appointed for life to ensure they are impartial?",
-      "choiceA": { "text": "Elect judges", "effects": { "solidarity": 10, "productivity": 0, "legitimacy": -15, "innovation": 5 } },
-      "choiceB": { "text": "Appoint for life", "effects": { "solidarity": -5, "productivity": 0, "legitimacy": 20, "innovation": -5 } }
+      "choiceA": { "text": "Elect judges", "effects": { "solidarity": 5, "productivity": 0, "legitimacy": -8, "innovation": 3 } },
+      "choiceB": { "text": "Appoint for life", "effects": { "solidarity": -3, "productivity": 0, "legitimacy": 10, "innovation": -3 } }
     },
     {
       "character": "Infrastructure Lead",
       "text": "We need to build a highway through a historic neighborhood to reduce traffic. Do we exercise eminent domain?",
-      "choiceA": { "text": "Seize the land", "effects": { "solidarity": -20, "productivity": 25, "legitimacy": -10, "innovation": 10 } },
-      "choiceB": { "text": "Protect the homes", "effects": { "solidarity": 15, "productivity": -15, "legitimacy": 10, "innovation": -10 } }
+      "choiceA": { "text": "Seize the land", "effects": { "solidarity": -10, "productivity": 12, "legitimacy": -5, "innovation": 5 } },
+      "choiceB": { "text": "Protect the homes", "effects": { "solidarity": 8, "productivity": -8, "legitimacy": 5, "innovation": -5 } }
     },
     {
       "character": "Art Endowment",
       "text": "Should the state fund avant-garde art that many citizens find offensive, or only fund traditional and patriotic works?",
-      "choiceA": { "text": "Fund all art", "effects": { "solidarity": -10, "productivity": 0, "legitimacy": -10, "innovation": 20 } },
-      "choiceB": { "text": "Fund traditional only", "effects": { "solidarity": 15, "productivity": 0, "legitimacy": 15, "innovation": -15 } }
+      "choiceA": { "text": "Fund all art", "effects": { "solidarity": -5, "productivity": 0, "legitimacy": -5, "innovation": 10 } },
+      "choiceB": { "text": "Fund traditional only", "effects": { "solidarity": 8, "productivity": 0, "legitimacy": 8, "innovation": -8 } }
     },
     {
       "character": "Whistleblower",
       "text": "A major company is dumping waste in the river. If I speak up, they might go bankrupt and lay off thousands.",
-      "choiceA": { "text": "Protect the leaker", "effects": { "solidarity": 10, "productivity": -20, "legitimacy": 20, "innovation": 10 } },
-      "choiceB": { "text": "Silence the report", "effects": { "solidarity": -15, "productivity": 20, "legitimacy": -25, "innovation": -5 } }
+      "choiceA": { "text": "Protect the leaker", "effects": { "solidarity": 5, "productivity": -10, "legitimacy": 10, "innovation": 5 } },
+      "choiceB": { "text": "Silence the report", "effects": { "solidarity": -8, "productivity": 10, "legitimacy": -12, "innovation": -3 } }
     },
     {
       "character": "Zoning Commissioner",
       "text": "Business owners want to build shops in residential areas. It makes life easier but brings noise and strangers.",
-      "choiceA": { "text": "Mixed-use zoning", "effects": { "solidarity": -10, "productivity": 20, "legitimacy": -5, "innovation": 15 } },
-      "choiceB": { "text": "Strict residential", "effects": { "solidarity": 15, "productivity": -10, "legitimacy": 5, "innovation": -10 } }
+      "choiceA": { "text": "Mixed-use zoning", "effects": { "solidarity": -5, "productivity": 10, "legitimacy": -3, "innovation": 8 } },
+      "choiceB": { "text": "Strict residential", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 3, "innovation": -5 } }
     },
     {
       "character": "Copyright Lawyer",
       "text": "Should people be allowed to sample and remix others' work for free? It encourages creativity but hurts the original artist.",
-      "choiceA": { "text": "Allow remixing", "effects": { "solidarity": 5, "productivity": 5, "legitimacy": -10, "innovation": 20 } },
-      "choiceB": { "text": "Protect ownership", "effects": { "solidarity": 0, "productivity": 10, "legitimacy": 15, "innovation": -15 } }
+      "choiceA": { "text": "Allow remixing", "effects": { "solidarity": 3, "productivity": 3, "legitimacy": -5, "innovation": 10 } },
+      "choiceB": { "text": "Protect ownership", "effects": { "solidarity": 0, "productivity": 5, "legitimacy": 8, "innovation": -8 } }
     },
     {
       "character": "Elderly Care Reformer",
       "text": "Should families be legally required to care for their elderly parents, or should the state build professional care homes?",
-      "choiceA": { "text": "Family responsibility", "effects": { "solidarity": 20, "productivity": -15, "legitimacy": 10, "innovation": -10 } },
-      "choiceB": { "text": "State-run homes", "effects": { "solidarity": -20, "productivity": 15, "legitimacy": 15, "innovation": 15 } }
+      "choiceA": { "text": "Family responsibility", "effects": { "solidarity": 10, "productivity": -8, "legitimacy": 5, "innovation": -5 } },
+      "choiceB": { "text": "State-run homes", "effects": { "solidarity": -10, "productivity": 8, "legitimacy": 8, "innovation": 8 } }
     },
     {
       "character": "Olympic Committee",
       "text": "Hosting the Games will put us on the map but requires massive debt and displacing local residents for stadiums.",
-      "choiceA": { "text": "Host the Games", "effects": { "solidarity": 10, "productivity": 10, "legitimacy": -20, "innovation": 15 } },
-      "choiceB": { "text": "Decline the bid", "effects": { "solidarity": 0, "productivity": -5, "legitimacy": 10, "innovation": -10 } }
+      "choiceA": { "text": "Host the Games", "effects": { "solidarity": 5, "productivity": 5, "legitimacy": -10, "innovation": 8 } },
+      "choiceB": { "text": "Decline the bid", "effects": { "solidarity": 0, "productivity": -3, "legitimacy": 5, "innovation": -5 } }
     }
   ]
 }

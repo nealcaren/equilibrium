@@ -15,6 +15,12 @@
       "choiceB": { "text": "Allow trade customs", "effects": { "solidarity": -5, "productivity": 10, "legitimacy": -5, "innovation": 8 } }
     },
     {
+      "character": "Village Heretic",
+      "text": "A young man questions the old rituals, saying the gods care more about deeds than ceremony. Some find his ideas refreshing; elders call it dangerous.",
+      "choiceA": { "text": "Punish the deviant", "effects": { "solidarity": 10, "productivity": 0, "legitimacy": 8, "innovation": -10 } },
+      "choiceB": { "text": "Tolerate his views", "effects": { "solidarity": -8, "productivity": 3, "legitimacy": -5, "innovation": 12 } }
+    },
+    {
       "character": "Guild Master",
       "text": "Our craft guilds maintain quality and brotherhood. Skilled apprentices want to specialize in new techniques they've developed.",
       "choiceA": { "text": "Traditional methods only", "effects": { "solidarity": 8, "productivity": -5, "legitimacy": 5, "innovation": -8 } },
