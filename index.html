@@ -2073,7 +2073,7 @@
                     quote: "\"When the conscience collective becomes too rigid, it loses the plasticity required to adapt to changing circumstances.\" - Durkheim"
                 },
                 prematureModernization: {
-                    check: (m) => m.productivity >= 100,
+                    check: (m) => m.productivity >= 100 && m.solidarity < 40,
                     reason: "Change Outran Understanding",
                     explanation: "The division of labor expanded before people could develop new forms of connection. They became interdependent strangers—needing each other but not knowing how to be together.",
                     quote: "\"If the division of labor does not produce solidarity, it is because the relations between the organs are not regulated.\" - Durkheim"
@@ -2106,7 +2106,7 @@
                     quote: "\"The forced division of labor is... a further source of anomie. Labor is divided spontaneously only if society is constituted in such a way that social inequalities exactly express natural inequalities.\" - Durkheim"
                 },
                 chaosOfChange: {
-                    check: (m) => m.innovation >= 100,
+                    check: (m) => m.innovation >= 100 && m.legitimacy < 30,
                     reason: "Differentiation Without Direction",
                     explanation: "Difference multiplied faster than society could make sense of it. Innovation is necessary—but only integration makes it meaningful. Your society had diversity without coherence.",
                     quote: "\"It is not enough for there to be rules; they must also be just. The regulation must keep pace with the transformation.\" - Durkheim"
@@ -2133,7 +2133,7 @@
                     quote: "\"A group is not only a moral authority which dominates the life of its members; it is also a source of life sui generis.\" - Durkheim"
                 },
                 hyperSpecialization: {
-                    check: (m) => m.productivity >= 100,
+                    check: (m) => m.productivity >= 100 && m.solidarity < 35,
                     reason: "The Worker Becomes a Cog",
                     explanation: "Specialization exceeded the point of meaningful integration. People became so narrowly defined by their function that they lost connection to the whole.",
                     quote: "\"As work becomes more divided, the worker becomes weaker... he is no longer anything but an inert piece of machinery.\" - Durkheim"
