@@ -170,14 +170,24 @@
                     Traditional Era
                 </div>
             </div>
-            <!-- Year Progress Bar -->
+            <!-- Year Progress Bar with Era Markers -->
             <div class="mt-2 px-2">
                 <div class="flex justify-between text-xs text-gray-500 mb-1">
                     <span>Year 0</span>
-                    <span>Year 100</span>
+                    <span class="text-gray-600">|25</span>
+                    <span class="text-gray-600">|50</span>
+                    <span>Year 75</span>
                 </div>
-                <div class="w-full bg-gray-700 rounded-full h-2">
+                <div class="w-full bg-gray-700 rounded-full h-2 relative">
                     <div id="year-progress-bar" class="bg-gradient-to-r from-purple-500 via-indigo-500 to-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    <!-- Era transition markers -->
+                    <div class="absolute top-0 h-2 w-px bg-gray-500" style="left: 33.33%"></div>
+                    <div class="absolute top-0 h-2 w-px bg-gray-500" style="left: 66.66%"></div>
+                </div>
+                <div class="flex justify-between text-xs mt-1">
+                    <span class="text-purple-400 w-1/3 text-center">Traditional</span>
+                    <span class="text-indigo-400 w-1/3 text-center">Transitional</span>
+                    <span class="text-green-400 w-1/3 text-center">Modern</span>
                 </div>
             </div>
 
@@ -820,8 +830,36 @@
         // --- GAME STATE ---
         let state;
         let simInterval;
-        const WIN_YEAR = 100;
+        const WIN_YEAR = 75;
         const STARTING_YEAR = 0;
+
+        // Era transition years - equal thirds for educational pacing
+        const ERA_TRANSITIONS = {
+            transitional: 25,  // Year 25: Traditional → Transitional
+            modern: 50         // Year 50: Transitional → Modern
+        };
+
+        // Theory-driven requirements for era transitions
+        const ERA_REQUIREMENTS = {
+            transitional: {
+                // Durkheim: Division of labor must begin emerging
+                productivity: 45,
+                failureTitle: "Society Stagnated",
+                failureMessage: "Without emerging specialization, the great transition cannot begin. Durkheim showed that division of labor is the engine of social evolution—your society remained trapped in undifferentiated tradition."
+            },
+            modern: {
+                // Durkheim: Organic solidarity requires specialization WITH maintained bonds
+                productivity: 55,
+                solidarity: 35,
+                noAnomie: true,
+                failureTitle: "The Transition Failed",
+                failureMessages: {
+                    productivity: "Incomplete Transition: The division of labor never developed enough to create true interdependence. Organic solidarity requires specialized roles that need each other.",
+                    solidarity: "Bonds Dissolved Before New Ones Formed: High specialization without maintained cohesion leads to fragmentation, not organic solidarity. Durkheim warned this is anomic, not organic.",
+                    anomie: "Trapped in Normlessness: Your society couldn't establish new moral regulation to match its changed structures. Without norms, there is no solidarity—only chaos."
+                }
+            }
+        };
 
         function initializeMeters() {
             metersContainerEl.innerHTML = '';
@@ -1189,26 +1227,59 @@
         // Determine current era - ONE WAY PROGRESSION
         // Once you advance to a new era, you can't go back
         function determineEra() {
-            const solidarityScore = calculateSolidarityScore();
-            const { productivity, innovation } = state.meters;
-            const divisionOfLabor = (productivity + innovation) / 2;
-
-            // Check if we should advance to next era (but never go back)
-            if (state.currentEra === 'traditional') {
-                // Advance to transitional when division of labor increases significantly
-                if (divisionOfLabor >= 50 || solidarityScore >= 45) {
-                    return 'transitional';
-                }
+            // Time-based era transitions for educational pacing
+            // Each era is 25 years: Traditional (0-24), Transitional (25-49), Modern (50-74)
+            if (state.year < ERA_TRANSITIONS.transitional) {
                 return 'traditional';
-            } else if (state.currentEra === 'transitional') {
-                // Advance to modern when organic solidarity conditions are met
-                if (divisionOfLabor >= 65 && state.meters.solidarity >= 40) {
-                    return 'modern';
-                }
+            } else if (state.year < ERA_TRANSITIONS.modern) {
                 return 'transitional';
             }
-            // Once modern, stay modern
             return 'modern';
+        }
+
+        // Check if requirements are met to advance to the next era
+        // Returns { canAdvance: boolean, failureReason?: string }
+        function checkEraTransitionRequirements(targetEra) {
+            const reqs = ERA_REQUIREMENTS[targetEra];
+            if (!reqs) return { canAdvance: true };
+
+            const { productivity, solidarity } = state.meters;
+
+            if (targetEra === 'transitional') {
+                // Traditional → Transitional: Need emerging division of labor
+                if (productivity < reqs.productivity) {
+                    return {
+                        canAdvance: false,
+                        failureTitle: reqs.failureTitle,
+                        failureMessage: reqs.failureMessage
+                    };
+                }
+            } else if (targetEra === 'modern') {
+                // Transitional → Modern: Need specialization + maintained bonds + no anomie
+                if (productivity < reqs.productivity) {
+                    return {
+                        canAdvance: false,
+                        failureTitle: reqs.failureTitle,
+                        failureMessage: reqs.failureMessages.productivity
+                    };
+                }
+                if (solidarity < reqs.solidarity) {
+                    return {
+                        canAdvance: false,
+                        failureTitle: reqs.failureTitle,
+                        failureMessage: reqs.failureMessages.solidarity
+                    };
+                }
+                if (reqs.noAnomie && state.inAnomie) {
+                    return {
+                        canAdvance: false,
+                        failureTitle: reqs.failureTitle,
+                        failureMessage: reqs.failureMessages.anomie
+                    };
+                }
+            }
+
+            return { canAdvance: true };
         }
 
         function updateEra() {
@@ -1216,7 +1287,16 @@
             const previousEra = state.currentEra;
 
             if (newEra !== previousEra) {
-                // Show era transition notification
+                // Check if requirements are met for this transition
+                const reqCheck = checkEraTransitionRequirements(newEra);
+
+                if (!reqCheck.canAdvance) {
+                    // Requirements not met - game over with theory-driven message
+                    showEraTransitionFailure(reqCheck.failureTitle, reqCheck.failureMessage, previousEra);
+                    return;
+                }
+
+                // Requirements met - show era transition notification
                 let transitionKey = null;
                 if (newEra === 'transitional' && previousEra === 'traditional') {
                     transitionKey = 'toTransitional';
@@ -1226,8 +1306,6 @@
                 } else if (newEra === 'modern' && previousEra === 'transitional') {
                     transitionKey = 'toModern';
                     state.hasReachedModern = true;
-                } else if (newEra === 'traditional') {
-                    transitionKey = 'toTraditional';
                 }
 
                 if (transitionKey) {
@@ -1244,6 +1322,21 @@
             const eraInfo = eras[state.currentEra];
             eraBadgeEl.textContent = eraInfo.name;
             eraBadgeEl.className = `text-sm font-semibold ${eraInfo.color} rounded-lg px-3 py-1`;
+        }
+
+        // Show game over when era transition requirements aren't met
+        function showEraTransitionFailure(title, message, failedEra) {
+            state.gameOver = true;
+            if (simInterval) clearInterval(simInterval);
+            cardContainerEl.classList.remove('player-turn');
+
+            collapseYearEl.textContent = state.year;
+            collapseTitleEl.textContent = title;
+            collapseSubtitleEl.textContent = `Failed to advance beyond the ${failedEra} era`;
+            collapseReasonEl.textContent = message;
+
+            gameOverModalEl.classList.remove('opacity-0', 'invisible');
+            gameOverModalEl.querySelector('div').classList.remove('scale-95');
         }
 
         // Update the solidarity meter's name and tooltip based on current era
