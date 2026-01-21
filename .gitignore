@@ -24,3 +24,8 @@ Thumbs.db
 playthrough*.py
 batch_playthrough.py
 test_game.py
+
+# Local test/draft files
+new-slides.md
+test_full.py
+test_new.py
