@@ -998,7 +998,6 @@
                 inAnomie: false,
                 inIsolation: false,        // Egoism risk - low solidarity in Modern era
                 // Durkheimian mechanics
-                pendingLegitimacy: 0,      // Legitimacy changes slowly (inertia)
                 anomieTurns: 0,            // Sustained anomie leads to collapse
                 isolationTurns: 0,         // Sustained isolation leads to egoistic collapse
                 anomieResistance: 0,       // Occupational groups stabilize modern society
@@ -1008,6 +1007,7 @@
                 // Questline system
                 pendingCards: [],          // Cards triggered by previous choices [{cardId, triggerYear}]
                 questlineHistory: [],      // Track which questlines have been triggered
+                choicesSwapped: false,     // Randomize choice positions to prevent pattern-matching
                 // Contextual first-time hints (replaces blocking tutorial)
                 firstTimeHints: {
                     meterWarning: { solidarity: false, productivity: false, legitimacy: false, innovation: false },
@@ -1649,10 +1649,20 @@
 
             state.currentCard = selectedCard;
 
+            // Randomly swap choice positions to prevent pattern-matching
+            // (students can't just always click left for "tradition")
+            state.choicesSwapped = Math.random() > 0.5;
+
             cardCharacterEl.textContent = selectedCard.character;
             cardTextEl.textContent = selectedCard.text;
-            choiceATextEl.textContent = selectedCard.choiceA.text;
-            choiceBTextEl.textContent = selectedCard.choiceB.text;
+
+            if (state.choicesSwapped) {
+                choiceATextEl.textContent = selectedCard.choiceB.text;
+                choiceBTextEl.textContent = selectedCard.choiceA.text;
+            } else {
+                choiceATextEl.textContent = selectedCard.choiceA.text;
+                choiceBTextEl.textContent = selectedCard.choiceB.text;
+            }
 
             cardEl.style.transform = 'translateX(0) rotate(0deg)';
             cardEl.style.opacity = 1;
@@ -1693,7 +1703,7 @@
             legitimacy_up: [
                 "Moral authority strengthens. Durkheim emphasized that norms must keep pace with change.",
                 "Institutions gain trust. Legitimate rules help prevent anomie.",
-                "Regulatory capacity grows. Note: full effect takes time (legitimacy has inertia)."
+                "Regulatory capacity grows. Strong moral regulation helps prevent anomie."
             ],
             legitimacy_down: [
                 "Moral authority weakens. When rules lose legitimacy, anomie threatens.",
@@ -1786,6 +1796,9 @@
                 choiceA: tutorialCard.choiceA,
                 choiceB: tutorialCard.choiceB
             };
+
+            // Tutorial keeps choices in consistent positions for teaching
+            state.choicesSwapped = false;
 
             cardCharacterEl.textContent = state.currentCard.character;
             cardTextEl.textContent = state.currentCard.text;
@@ -1924,51 +1937,11 @@
             const originalEffects = { ...state.currentCard[choiceKey].effects };
             const choiceText = state.currentCard[choiceKey].text;
             const metersBefore = { ...state.meters };
-            const effects = { ...originalEffects };
 
-            // === DURKHEIMIAN MECHANICS ===
-
-            // 1. LEGITIMACY INERTIA: Moral regulation changes slowly
-            // Only 60% applies immediately; 40% is pending (requires stability)
-            if (effects.legitimacy) {
-                const immediate = effects.legitimacy * 0.6;
-                const pending = effects.legitimacy * 0.4;
-                state.meters.legitimacy += immediate;
-                state.pendingLegitimacy += pending;
-                delete effects.legitimacy; // Don't apply again below
+            // Apply effects directly - what you see is what you get
+            for (const key in originalEffects) {
+                state.meters[key] += originalEffects[key];
             }
-
-            // 2. INNOVATION SCALING: Differentiation requires integration
-            // Innovation gains are reduced when solidarity/legitimacy are fragile
-            if (effects.innovation && effects.innovation > 0) {
-                const integrationFactor = Math.min(
-                    state.meters.solidarity,
-                    state.meters.legitimacy
-                ) / 100;
-                effects.innovation = effects.innovation * (0.3 + 0.7 * integrationFactor);
-            }
-
-            // 3. ERA-SPECIFIC LEGITIMACY EFFECTS (Repressive vs Restitutive Law)
-            if (state.currentEra === 'traditional') {
-                // Repressive law: legitimacy gains also boost solidarity (shared punishment)
-                if (state.meters.legitimacy > state.meters.legitimacy) {
-                    // This activates on legitimacy increases (handled via pending)
-                }
-            }
-
-            // Apply remaining effects
-            for (const key in effects) {
-                state.meters[key] += effects[key];
-            }
-
-            // 4. PROCESS PENDING LEGITIMACY (gradual resolution)
-            // 20% of pending legitimacy resolves each turn
-            const resolving = state.pendingLegitimacy * 0.25;
-            state.meters.legitimacy += resolving;
-            state.pendingLegitimacy *= 0.75;
-
-            // 5. ERA-SPECIFIC SIDE EFFECTS
-            applyEraSideEffects();
 
             // 6. OCCUPATIONAL DENSITY: Professional groups stabilize modern society
             updateAnonieResistance();
@@ -2022,25 +1995,7 @@
             checkGameOver();
         }
 
-        // Era-specific side effects (Repressive vs Restitutive law)
-        function applyEraSideEffects() {
-            const { solidarity, legitimacy, productivity } = state.meters;
-
-            if (state.currentEra === 'traditional') {
-                // Repressive law: High legitimacy reinforces collective conscience
-                if (legitimacy > 60) {
-                    state.meters.solidarity += 2; // Shared punishment binds community
-                }
-            } else if (state.currentEra === 'modern') {
-                // Restitutive law: Legitimacy supports economic stability
-                if (legitimacy > 50) {
-                    // Contract law enables complex exchange
-                    state.meters.productivity += 1;
-                }
-            }
-        }
-
-        // Occupational groups as hidden stabilizer
+        // Occupational groups provide anomie resistance
         function updateAnonieResistance() {
             const { solidarity, productivity, innovation } = state.meters;
             const divisionOfLabor = (productivity + innovation) / 2;
@@ -2066,9 +2021,15 @@
                 },
                 repressiveExcess: {
                     check: (m) => m.legitimacy >= 100 && m.innovation < 25,
-                    reason: "Repression Devoured Its Own",
-                    explanation: "Punishment in mechanical solidarity reinforces shared values—but your society made punishment the purpose rather than the means. The community was crushed by its own need for conformity.",
+                    reason: "Moral Regulation Became Oppressive",
+                    explanation: "Your Moral Regulation meter hit 100% while Social Differentiation stayed below 25%. Rigid enforcement of traditional norms crushed all individual expression. The community suffocated under its own rules.",
                     quote: "\"Repressive law corresponds to the heart of the collective conscience... but when punishment becomes the purpose rather than the means, society suffocates.\" - Durkheim"
+                },
+                stiflingConformity: {
+                    check: (m) => m.solidarity >= 100 && m.innovation < 25,
+                    reason: "Collective Conscience Crushed All Individuality",
+                    explanation: "Your Social Cohesion meter hit 100% while Social Differentiation stayed below 25%. The bonds of similarity became so tight that no individual difference could survive. Society froze in place.",
+                    quote: "\"The individual personality is absorbed into the collective personality... the individual has no sphere of action peculiar to himself.\" - Durkheim"
                 },
                 sacredOrderViolated: {
                     check: (m) => m.legitimacy <= 0,
@@ -2216,14 +2177,20 @@
             }, 1000);
         }
 
-        function handlePlayerChoice(choiceKey) {
+        function handlePlayerChoice(visualChoice) {
             if (state.gameOver || state.gameMode !== 'player') return;
 
+            // Translate visual position to actual choice (accounting for random swap)
+            let actualChoice = visualChoice;
+            if (state.choicesSwapped) {
+                actualChoice = visualChoice === 'choiceA' ? 'choiceB' : 'choiceA';
+            }
+
             cardContainerEl.classList.remove('player-turn'); // Disable hover effects during animation
-            cardEl.classList.add(choiceKey === 'choiceA' ? 'card-swipe-left' : 'card-swipe-right');
+            cardEl.classList.add(visualChoice === 'choiceA' ? 'card-swipe-left' : 'card-swipe-right');
 
             setTimeout(() => {
-                handleChoice(choiceKey);
+                handleChoice(actualChoice);
                 if (!state.gameOver) {
                     if (state.inTutorial) {
                         // In tutorial mode: feedback splash will handle advancing
