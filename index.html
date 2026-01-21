@@ -47,13 +47,6 @@
              transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
              cursor: pointer;
         }
-        .solidarity-spectrum {
-            background: linear-gradient(to right, #a855f7, #6366f1, #22d3ee, #22c55e);
-            position: relative;
-        }
-        .solidarity-marker {
-            transition: left 0.5s ease-in-out;
-        }
         .anomie-warning {
             animation: anomie-pulse 1s ease-in-out infinite;
         }
@@ -180,20 +173,6 @@
                     <span class="text-indigo-400 w-1/3 text-center">Transitional</span>
                     <span class="text-green-400 w-1/3 text-center">Modern</span>
                 </div>
-            </div>
-
-            <!-- Solidarity Type Spectrum -->
-            <div class="mt-4 bg-gray-800 rounded-lg p-3 cursor-help" title="This spectrum shows your society's type of solidarity. Mechanical (left) = unity through similarity. Organic (right) = unity through interdependence. Your goal is to move right while maintaining cohesion.">
-                <div class="flex justify-between text-xs text-gray-400 mb-1">
-                    <span>Mechanical Solidarity</span>
-                    <span>Organic Solidarity</span>
-                </div>
-                <div class="solidarity-spectrum h-3 rounded-full relative">
-                    <div id="solidarity-marker" class="solidarity-marker absolute w-4 h-4 bg-white rounded-full border-2 border-gray-900 -top-0.5" style="left: 25%;"></div>
-                </div>
-                <p id="solidarity-type-label" class="text-sm text-purple-400 mt-2 font-semibold">Mechanical Solidarity</p>
-                <p id="solidarity-description" class="text-xs text-gray-500 mt-1">Strong collective conscience, shared beliefs</p>
-                <p id="solidarity-basis" class="text-xs text-gray-600 mt-1 italic">Basis: <span id="basis-indicator" class="text-purple-400">Similarity</span></p>
             </div>
 
             <!-- Anomie Warning -->
@@ -395,9 +374,6 @@
         const startPlayerGameBtn = document.getElementById('start-player-game-btn');
 
         // New DOM Elements
-        const solidarityMarkerEl = document.getElementById('solidarity-marker');
-        const solidarityTypeLabelEl = document.getElementById('solidarity-type-label');
-        const solidarityDescriptionEl = document.getElementById('solidarity-description');
         const anomieWarningEl = document.getElementById('anomie-warning');
         const eraNotificationEl = document.getElementById('era-notification');
         const eraTitleEl = document.getElementById('era-title');
@@ -1032,7 +1008,6 @@
             }
 
             updateUI();
-            updateSolidarityType();
             updateEra();
             updateMeterVisibility();
             updateSolidarityMeterLabel(); // Set era-appropriate label for solidarity meter
@@ -1115,34 +1090,6 @@
                 color: 'text-green-400',
                 description: 'Unity through difference - interdependence binds society'
             };
-        }
-
-        function updateSolidarityType() {
-            const score = calculateSolidarityScore();
-            const typeInfo = getSolidarityType();
-
-            // Update marker position (adjust for marker width)
-            solidarityMarkerEl.style.left = `calc(${score}% - 8px)`;
-
-            // Update labels
-            solidarityTypeLabelEl.textContent = typeInfo.label;
-            solidarityTypeLabelEl.className = `text-sm mt-2 font-semibold ${typeInfo.color}`;
-            solidarityDescriptionEl.textContent = typeInfo.description;
-
-            // Update basis indicator - shows WHAT cohesion is based on
-            const basisEl = document.getElementById('basis-indicator');
-            if (basisEl) {
-                if (score < 40) {
-                    basisEl.textContent = 'Similarity';
-                    basisEl.className = 'text-purple-400';
-                } else if (score < 60) {
-                    basisEl.textContent = 'Similarity → Interdependence';
-                    basisEl.className = 'text-indigo-400';
-                } else {
-                    basisEl.textContent = 'Interdependence';
-                    basisEl.className = 'text-green-400';
-                }
-            }
         }
 
         // Check for anomie condition
@@ -1715,8 +1662,6 @@
             removeAllHighlights();
             if (lesson.highlight === 'meters') {
                 metersContainerEl.classList.add('tutorial-highlight');
-            } else if (lesson.highlight === 'solidarity') {
-                document.querySelector('.solidarity-spectrum')?.parentElement?.classList.add('tutorial-highlight');
             } else if (lesson.highlight === 'choices') {
                 choiceADiv.classList.add('tutorial-highlight');
                 choiceBDiv.classList.add('tutorial-highlight');
@@ -1735,7 +1680,6 @@
 
         function removeAllHighlights() {
             metersContainerEl.classList.remove('tutorial-highlight');
-            document.querySelector('.solidarity-spectrum')?.parentElement?.classList.remove('tutorial-highlight');
             choiceADiv.classList.remove('tutorial-highlight');
             choiceBDiv.classList.remove('tutorial-highlight');
         }
@@ -1951,7 +1895,6 @@
 
             state.year += 1;
             updateUI();
-            updateSolidarityType();
             updateEra();
             checkAnomie();
 
